@@ -1,9 +1,6 @@
 
 var XHR = null;
 
-var isIE=window.ActiveXObject?true:false;
-console.log('Is this browser Internet Explore ? '+isIE);
-
  function getXHR()
  {
 	 if(window.ActiveXObject) 

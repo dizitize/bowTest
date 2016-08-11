@@ -22,6 +22,7 @@
    
 <script type="text/javascript" src="javascript/byteCheck.js"></script>	
 <script type="text/javascript" src="javascript/httpRequest.js"></script>	
+<script type="text/javascript" src="javascript/isAvaliableBOM.js"></script>	
 <script type="text/javascript" src="Script_trouble_solver/jsonPlugIn/json2.js" ></script>
 
 
@@ -195,7 +196,6 @@
    	      return;
    	  
 	  }else{
-		 
 			    pwd.value="";
 			    pwd.placeholder='값을 입력하세요';
 		    	return;
@@ -451,7 +451,6 @@
 		  </tr>
 	  </tbody>
 	  
-<%--  	     
      <tfoot>
 			<tr>
 	        	<td id="${i.index}_comment_board_idx" colspan="2" align="center"><span style="font-size: 20px;">덧글 영역</span></td>
@@ -489,10 +488,10 @@
                     </tr>
 	         </c:when>
 	   </c:choose>
-	  </tfoot>     --%>     
+	  </tfoot>    
   </table>
  
-        <%--  <div id="comment-collapse" class="collapse" align="left">
+          <div id="comment-collapse" class="collapse" align="left">
 		   <c:choose>
 			    <c:when test="${dto.password==1}">
 				    <form action="bbsCommentWriteNormal.bow" method="post" name="comment_area">
@@ -515,22 +514,7 @@
 		      </c:when>
 		     
 		  </c:choose>
-		  </div>  --%>
+		  </div>  
   </div>
-  <script>
-  
-  if(isIE)
-  {
-	  document.getElementById("passwordV").attachEvent("keyup", IEevent);
-      /* document.getElementById("passwordV").addEventListener("keyup",IEevent,null); */
-      
-      function IEevent()
-      {
-   	  alert();   
-      }
-  }
-  
-  
-  </script>
 </body>
 </html>

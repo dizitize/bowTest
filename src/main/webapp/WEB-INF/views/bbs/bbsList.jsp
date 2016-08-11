@@ -14,11 +14,17 @@
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
   
   <script type="text/javascript" src="javascript/httpRequest.js"></script>
- 
+  <!-- BOM cookie -->
+ 	  <script type="text/javascript" src="javascript/cookie.js"></script>
+  <!-- internetExplore version check -->
+	  <script type="text/javascript" src="javascript/versionCheck_IE.js"></script>
+	  <script type="text/javascript" src="javascript/isAvaliableBOM.js"></script>
+
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 
 <link rel="stylesheet" href="css/commons.css">
+
 <script>
    function bbsAjax(command,params,tagId,method){
 	   
@@ -45,8 +51,6 @@
 	   bbsAjax("/boardSrc")
    	}
  */
- 
- 
  
  function byteCheck(val,maxByte){
 	 
@@ -79,42 +83,6 @@
 	 return bool;
  }
  
- function get_version_of_IE() { 
-
-	 var word; 
-	 var version = "N/A"; 
-
-	 var agent = navigator.userAgent.toLowerCase();
-	/*  alert("agent:"+agent); */
-	 var name = navigator.appName; 
-     /* alert("name:"+name); */
-	 // IE old version ( IE 10 or Lower ) 
-	 if ( name == "Microsoft Internet Explorer" ) word = "msie "; 
-
-	 else { 
-		 // IE 11 
-		 if ( agent.search("trident") > -1 ) word = "trident/.*rv:"; 
-
-		 // Microsoft Edge  
-		 else if ( agent.search("edge/") > -1 ) word = "edge/"; 
-	 } 
-
-	 var reg = new RegExp( word + "([0-9]{1,})(\\.{0,}[0-9]{0,1})" ); 
-
-	/*  alert(agent); */
-	 
-	 if (  reg.exec( agent ) != null  ) version = RegExp.$1 + RegExp.$2; 
-	
-	 version = parseInt(version);
-	 
-	 var v =/[0-9]{1}/.test(version);
-	 
-	return v;
-} 
-
- 
- 
- 
  function validation(){
 
 	 /* input value */
@@ -127,18 +95,14 @@
 		  if(isIE){
 			 
 			  alert("검색어를 입력하세요");
-			  input.focus();
-			  input.value=null;
+			  input.value="";
 		  }
 		  else
 		  {
-		     input.focus();
-		     input.value=null;
+		     input.value="";
 		     input.placeholder="검색어를 입력하세요";
 		  }
-	   
-		  
-		  return;
+		    return;
 	  }
 	 
 	 /* if choose src option ,set maxByte*/
@@ -155,120 +119,75 @@
 	 if(bool)
 	 {
 		 console.log('searching keyword:'+noBlankVal);
-		 input.focus();
 		 input.value=noBlankVal;
 		 window.document.optionSrc.submit();
 	 }
 	 else
 	 {
-	    input.focus();
-	    input.value=null;
+		    input.value="";
 	    input.placeholder="한글"+parseInt(maxByte/3)+"자/영문"+maxByte+"자 입력 가능.";
 	   
 	 }
  }
  
  
- var option_value='${option_value}';
- 
-function onFocus(){
-	
-	if(option_value!='')
-	{
-       window.document.optionSrc.option_value.focus();
+	 var option_value='${option_value}';
+	 
+	function onFocus(){
+		
+		if(option_value!='')
+		{
+	       window.document.optionSrc.option_value.focus();
+		}
 	}
-}
 
-window.onkeydown = function( event ) {
+	window.onkeydown = function( event )
+	{
+	
+	    if ( option_value!='' && event.keyCode === 27 ) {
+	      
+	        location.href="bbsListNormal.bow";
+	    }
+	}
 
-    if ( option_value!='' && event.keyCode === 27 ) {
-      
-        location.href="bbsListNormal.bow";
-    }
-}
-
- 
-    	 if(isIE)
+    	 if( isIE )
     	{
-    		console.log("ieTest");
-    	
-		 /*   var ie_version=document.cookie.getCookie("ie_version"); */
-	
-		 var versionCheck=get_version_of_IE();
-		 var ck = getCookie("ie_version");
+    	 var ckKey ="ie_test";
+		 var ckValue="value_test";	
+		 var version =get_version_of_IE(); 
+		 var isCkAlive = confirmCookie(ckKey,ckValue);
 		 
-		 	if(versionCheck==true && ck==null)
-			{
-			 setCookie("ie_version", "ie_version", 1); 
-			 alert("Internet Explore 11 버젼 사용을 권고 합니다.");
-	         }  
-				
-    	} 
-	
-     function getCookie(key)
-     {
-    	 var name = key+"=";
-    	 var cks =document.cookie.split("; ");
-    	 
-    	
-    	 for(var a = 0 ; a <cks.length; a++)
-   		 {
-   		    var ck =cks[a];
-   		    
-             while(ck.charAt(0)==' ')
-           	 {
-           	   ck = ck.substring(1);
-           	 }
-             
-             if(ck.indexOf(name)==0)
-           	 {
-           	    return ck.substring(name.length, ck.length);
-           	 }
-   		 }
-    	 
-    	 return "";
-     }
-    	 
-    	 
-        
-	function setCookie(key,value,expired_day)
-	{
-	    var duration = new Date();
-	
-	    duration.setTime(duration.getTime()+(expired_day*24*60*60*1000));
-
-	    var expires="expires"+duration.toUTCString();
-	
-	     document.cookie=key+"="+value+";"+expires;
-	}
-
-
+		 console.log("IE 업데이트를 권고 했나요? "+isCkAlive);
+		 
+			 if(!isCkAlive)
+			 {
+				 confirm("해당 사이트는 원도우"+version+" 버전을 지원 하지 않습니다.\n 11 버전으로 업그레이드 하세요!\n 확인버튼을 누르시면 업데이트 페이지를 생성 합니다.")==true?window.open("https://support.microsoft.com/ko-kr/kb/949104"):"";
+				 setCookie(ckKey, ckValue, 1); 
+			 }
+	   }
 </script>
-
 </head>
 <body onload="onFocus()">
  <div class="container" style="width:1500px;">
     <h1>BOW-TECH_BBS_TEST_1</h1>
     <table class="table table-bordered" style="table-layout:fixed;">
 	  <tr>
-		    <th colspan="7" align="center">
-		           <form action="boardSrcNormal.bow" method="post" name="optionSrc" onsubmit="return false;">	       
-			           <select name="option" style="height: 30px;">
-						         <option value="subject">제목</option>
-						         <option value="writer">작성자</option>
-			            </select>
-			            <input type="text" name="option_value" style="height:30px; width:300px;" onkeypress="if(event.keyCode==13)validation();" value="${option_value}" onfocus="this.value=this.value" placeholder="빈칸없는 keyword 검색">     
-			            <input type="button" style="height:30px; width:70px;" id="submitBtn" value="검색" onclick="validation()">
-			          
-			          <input type="button" value="ie확인" onclick="get_version_of_IE()">
-					  
-					    <c:if test="${option_value ne null}">
-				            <span class="badge" style="background-color:red;font-size:15px;">
-				                    <a href="bbsListNormal.bow"style="color:white;">검색 종료</a>
-				            </span> 
-			           </c:if>
-			       </form>
-		     </th>
+		  <th colspan="7" align="center" style="padding-top:10px;">
+	           <form action="boardSrcNormal.bow" method="post" name="optionSrc" onsubmit="return false;">	       
+		           <select name="option" style="height: 30px;">
+					         <option value="subject">제목</option>
+					         <option value="writer">작성자</option>
+		            </select>
+		            <input type="text" name="option_value" style="height:30px; width:300px;" onkeypress="if(event.keyCode==13)validation();" value="${option_value}" onfocus="this.value=this.value" placeholder="빈칸없는 keyword 검색">     
+		            <input type="button" style="height:30px; width:70px;" id="submitBtn" value="검색" onclick="validation()">
+		          
+				    <c:if test="${option_value ne null}">
+			            <span class="badge" style="background-color:red;font-size:15px;">
+			                    <a href="bbsListNormal.bow"style="color:white;">검색 종료</a>
+			            </span> 
+		           </c:if>
+		       </form>
+		   </th>
 	   </tr>
        <tr>
   	         <th class="col-md-1">No.</th>
@@ -277,13 +196,6 @@ window.onkeydown = function( event ) {
   	         <th class="col-md-1">조회수</th>
   	         <th class="col-md-1">작성일</th>
 	   </tr>  
- <%--  <c:set var="bbsListzz" value="${bbsList}"></c:set>
-  <c:forEach var="field" items="${bbsListzz['class'].declearFields}">
-  <tr><td>${field.name}</td></tr>
-   <tr><td>testtest</td></tr> 
-  </c:forEach>	  --%>    
- 
-  
   
    <c:choose>	               
      <c:when test="${empty bbsList}">
@@ -304,16 +216,14 @@ window.onkeydown = function( event ) {
 	  	            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	  	            <span class="glyphicon glyphicon-option-vertical" aria-hidden="true"></span>
 	  	            <font style="font-size: 14px;">${dto.list_idx}-${dto.list_se_idx}</font>
-	  	            <c:set var="test" value="${dto.list_idx}"/>
-	  	             <span style="color:red;">${test[Name]}</span>
 	  	          </c:otherwise>
 	  	     </c:choose>
 	  	</td>
 		  	
-		<td colspan="3" class="overflow" >
+		<td colspan="3" class="overflow">
 		<c:choose>
             <c:when test="${!empty option_cp&&!empty option_value}">					  	             
-	                 <a href="bbsContentNormal.bow?board_idx=${dto.board_idx}&cp=${option_cp}&option=${option}&option_value=${option_value}"> 
+	                  <a href="bbsContentNormal.bow?board_idx=${dto.board_idx}&cp=${option_cp}&option=${option}&option_value=${option_value}"> 
 	                 &nbsp;&nbsp;
 	                   <c:choose>
                                 <c:when test="${dto.lev!=0}">
@@ -337,10 +247,10 @@ window.onkeydown = function( event ) {
 	                            </c:when>
 	                    </c:choose>
 	                     ${dto.subject}
-	                   <%--  <c:if test="${dto.news>=1}">
+	                 </a>
+	                  <c:if test="${dto.news>=1}">
 	                      <span class="badge" style="background-color: #61b0d5;">${dto.news}</span>
-	                    </c:if> --%>
-	                 </a> 			  	                
+	                    </c:if>		  	                
             </c:when>
             
             <c:otherwise>

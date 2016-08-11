@@ -3,7 +3,8 @@ package bow.bbs;
 public class Paging {
 
 	
-public String pagination(String url ,int cp, int ps, int ls, int totalCnt, int totalP ,String option ,String option_value) {
+public String pagination(String url ,int cp, int ps, int ls, int totalCnt, int totalP ,String option ,String option_value) 
+{
 
 		int userG = cp % ps == 0 ? cp / ps - 1 : cp / ps;
 		int maxUserG = totalP % ps == 0 ? (totalP / ps) - 1 : totalP / ps;
@@ -59,7 +60,7 @@ public String pagination(String url ,int cp, int ps, int ls, int totalCnt, int t
 				
 							if(a==cp)
 							 {
-								 sb.append("'style='color:red;'>"+a);
+								 sb.append("' style='color:red;'>"+a);
 							 }
 							 else
 							 {
