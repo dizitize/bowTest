@@ -1,0 +1,50 @@
+@CHARSET "UTF-8";
+
+/* ::-webkit-input-placeholder {
+   color: white;
+} */
+
+   .overflow{
+			 white-space: nowrap;
+			 text-overflow: ellipsis;
+			 overflow: hidden;
+		     width:100%; 
+		   }  
+		   
+		   
+   .overflow2{
+    display: inline-block;
+    width: 90%;
+    text-overflow: ellipsis;
+	overflow: hidden;
+   
+   }		   
+		  
+th{
+    text-align: center;
+ 
+ }	
+ 
+ select {
+    border:1px solid #ccc;
+    vertical-align:top;
+    height:20px;
+}
+input, select{
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+ 
+ .pagination{
+
+ align:center;
+
+clear:left;
+
+clear:right;
+
+clear:both;
+                 
+                 
+            }
