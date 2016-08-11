@@ -157,14 +157,14 @@
 		 var version =get_version_of_IE(); 
 		 var isCkAlive = confirmCookie(ckKey,ckValue);
 		 
-		 console.log("IE 업데이트를 권고 했나요? "+isCkAlive);
-		 
+
 			 if(!isCkAlive)
 			 {
 				 confirm("해당 사이트는 원도우"+version+" 버전을 지원 하지 않습니다.\n 11 버전으로 업그레이드 하세요!\n 확인버튼을 누르시면 업데이트 페이지를 생성 합니다.")==true?window.open("https://support.microsoft.com/ko-kr/kb/949104"):"";
 				 setCookie(ckKey, ckValue, 1); 
 			 }
 	   }
+		
 </script>
 </head>
 <body onload="onFocus()">
