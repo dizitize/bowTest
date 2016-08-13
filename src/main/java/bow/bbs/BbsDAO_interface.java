@@ -21,7 +21,7 @@ public interface BbsDAO_interface {
 	    public List<CommentDTO> commentList(int board_idx);
 	    public int commentInsert(CommentDTO dto);
 	    public int commentUpdate(CommentDTO dto);
-	    public int commentDelete(Map<String,Integer>cmt_idx_pwd);
+	    public int commentDelete(int comment_board_idx);
 	    
 	    
 //	    NormalVersion 
@@ -43,4 +43,6 @@ public interface BbsDAO_interface {
 	    public int afterRewriteNavi(int ref , int sunbun);
 	    public int afterWriteNavi();
 	    
+	    
+	    public int cmtPwdCheck(Long cmt_idx , Long password);
 }

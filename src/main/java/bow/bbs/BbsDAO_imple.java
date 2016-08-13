@@ -82,11 +82,19 @@ public class BbsDAO_imple implements BbsDAO_interface {
 		return sqlMap.update("commentUpdate",dto);
 	}
 	
-	public int commentDelete(Map<String, Integer> cmt_idx_pwd) {
+	public int commentDelete(int cmt_idx) {
 		// TODO Auto-generated method stub
-		return sqlMap.delete("commentDelete",cmt_idx_pwd);
+		return sqlMap.delete("commentDelete",cmt_idx);
 	}
 	
+    public int cmtPwdCheck(Long cmt_idx, Long password) {
+		
+		Map<String,Long>map = new HashMap<String, Long>();
+		map.put("comment_board_idx", cmt_idx);
+		map.put("password", password);
+		
+		return sqlMap.selectOne("cmtPwdCheckNormal",map);
+	}
 	
 	
 	
@@ -251,5 +259,7 @@ public class BbsDAO_imple implements BbsDAO_interface {
 		// TODO Auto-generated method stub
 		return sqlMap.selectOne("afterWriteNaviNormal");
 	}
+	
+	
 	
 }

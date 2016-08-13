@@ -377,16 +377,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
    <update id="commentUpdate" parameterType="commentDTO">
    
-     update comment_board set content =#{content} ,writedate = #{sysdate} ,password = #{password} where comment_board_idx =#{comment_board_idx}
+     update comment_board set content =#{content}, writer=#{writer}, writedate = #{sysdate} ,password = #{password} where comment_board_idx =#{comment_board_idx}
    
    </update>
 
 
-  <delete id="commentDelte" parameterType="map">
+  <delete id="commentDelete" parameterType="int">
   
-    delete from comment_board where  comment_board_idx =#{comment_board_idx} and password =#{password}
+    delete from comment_board where comment_board_idx =#{comment_board_idx} 
   
   </delete>
+
+  <select id="cmtPwdCheckNormal" parameterType="map" resultType="int">
+  
+   select count(*) from comment_board where comment_board_idx=#{comment_board_idx} and password = #{password}
+  
+  </select>
+
 
 
 </mapper>

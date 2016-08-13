@@ -133,7 +133,7 @@
 				</td>
 			</tr>
 			<tr>
-				<td><textarea rows="40" cols="60"rows="40" cols="60" style="width: 100%; height: 700px;" class="txtarea-content" name="content"oninput="fnChkByte(document.getElementsByTagName('textarea')[0],4000,'t')" required>${dto.content}</textarea>
+				<td><textarea rows="40" cols="60" rows="40" cols="60" style="width: 100%; height: 700px;" class="txtarea-content" name="content" oninput="fnChkByte(document.getElementsByTagName('textarea')[0],4000,'t')" required>${dto.content}</textarea>
 			<tr>
 				<td colspan="2" style="text-align: right;"><span id="t">0</span>/4000</td>
 			</tr>

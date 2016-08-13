@@ -1,14 +1,13 @@
 package bow.controller;
 
-import java.util.HashMap;
+import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,7 +16,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import bow.bbs.BbsDAO_interface;
-
 import bow.bbs.BbsDTOnorm;
 import bow.bbs.CommentDTO;
 import bow.bbs.Paging;
@@ -551,14 +549,10 @@ public class BbsControllerNormal {
    					
    						if(dto!=null && option!=null)
    						{
-   							
 	   							if(option=="delete")
 	   							{
-	   								Map<String,Integer> map = new HashMap<String, Integer>();
-	   								map.put("password", dto.getPassword());
-	   								map.put("comment_board_idx", dto.getComment_board_idx());
 	   								
-				   							 if(bbsDao.commentDelete(map)==1)
+				   							 if(bbsDao.commentDelete(dto.getComment_board_idx())==1)
 												{
 											
 													mav.setViewName("redirect:/bbsContentNormal.bow?board_idx="+dto.getBoard_idx());										  
@@ -605,4 +599,52 @@ public class BbsControllerNormal {
           return mav;
    	} 
     
+    @RequestMapping("/bbsCmtPwdCheck.bow")
+    public @ResponseBody String cmt_pwd_check(HttpServletRequest req) throws  IOException
+    {
+    	Long pwd=3L;
+    	Long cmt_idx=0L;
+       
+     try{
+    	   
+    	   ObjectMapper mapper = new ObjectMapper();
+    	   
+			    String pwd_s =mapper.writeValueAsString(req.getParameter("password"));
+	    	    System.out.println("패스워드 길이: "+pwd_s.length());
+	    	  
+	    	   String cmt =mapper.writeValueAsString(req.getParameter("cmt_board_idx"));
+	    	   System.out.println("cmt_idx 길이: "+cmt.length());
+	    	   
+	    	   
+	    	   System.out.println("pwd json before:>"+pwd_s);
+	    	   pwd_s=pwd_s.substring(1, pwd_s.length()-1);
+	    	   System.out.println("pwd json after:>"+pwd_s);
+	    	   System.out.println("파싱 후 pwd 길이: "+pwd_s.length());
+	    	   
+	    	   System.out.println("cmt before parsing json :>>"+cmt);
+	           cmt=cmt.substring(1, cmt.length()-1);
+	           System.out.println("cmt before parsing json :>>"+cmt);
+	           System.out.println("파싱 후 cmt_idx 길이: "+cmt.length());
+           
+           
+	    	   if(pwd_s.equals("")||pwd_s==null)return "{\"result\":false}";
+	    	       
+	    	   pwd= Long.parseLong(pwd_s);
+	    	   cmt_idx = Long.parseLong(cmt);
+    		
+    	}catch(NumberFormatException e)
+    	{
+    	   e.printStackTrace();
+    	   return "{\"result\":false}";
+    	}
+    	
+    	   int result =bbsDao.cmtPwdCheck(cmt_idx, pwd);
+    	
+    	boolean resultB =result==1?true:false;
+    	System.out.println("bbsCmtPwdCheck.bow?comment_idx:"+cmt_idx+",password:"+pwd);
+    	String returnValue="{\"result\":"+resultB+"}";
+    	System.out.println(returnValue);
+    	return returnValue ;
+    	
+    }
 }

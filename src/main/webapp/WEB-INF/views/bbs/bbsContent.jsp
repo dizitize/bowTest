@@ -173,15 +173,34 @@
 
 
  
-    	 
+    	 /*value =board_idx , key = deleteorupdate , id_key */
   function sendSubmit(value,key,id_key)
   {
-
-	var board_idx =value;
-	/* alert(board_idx); */
-	var pwd = document.getElementById("passwordV");
-	var pwdValue=pwd.value;
-	    pwdValue =pwdValue.substring(0,9);
+	   var  board_idx=value 
+	       ,cmt_idx=0 
+	       ,command_option
+	 	   ,pwd = document.getElementById("passwordV")
+	 	   ,pwdValue=pwd.value;
+ 	       
+ 	      pwdValue =pwdValue.substring(0,9);		 
+ 		 
+ 	     console.log(typeof(value));
+    		 
+    if(typeof(value)=="number")
+   	{
+    	console.log("typeof number");
+   	    board_idx = value;
+   	}
+    else if(typeof(value)=="object")
+   	{
+   	    console.log("typeof object");
+   	    cmt_idx = value.cmt_idx;
+   	    key=value.command_option;
+   	    pwd=document.getElementById(value.index_password);
+   	    pwdValue=pwd.value;
+   	    
+   	    console.log("comment 관련\n cmt_idx: "+cmt_idx+ " key: "+key+"  pwdValue: "+pwdValue);
+   	}
 	
 	/* console.log(pwd.value); */
 	/* console.log(pwd.value.length); */
@@ -196,24 +215,42 @@
    	      return;
    	  
 	  }else{
-			    pwd.value="";
-			    pwd.placeholder='값을 입력하세요';
-		    	return;
+		     pwd.value="";
+		     pwd.placeholder='값을 입력하세요';
+	    	 return;
    	        }
 	}
 	
-	var checkCommand="checkPwdNormal.bow";
+	var checkCmtCommand="bbsCmtPwdCheck.bow"
+	   ,checkCommand="checkPwdNormal.bow"
 	
-	var deleteCommand ="bbsDeleteNormal.bow";
-	var updateCommand ="bbsUpdateFormNormal.bow";
+	   , deleteCommand ="bbsDeleteNormal.bow"
+	   , updateCommand ="bbsUpdateFormNormal.bow"
+	
+	   , cmtUpdate_command="bbsCommentUpdateNormal.bow"
+	   , cmtListShow=""
+	   , params;
 	
 	/* var updateCmmentCommand="";
 	var deleteCommentCommand=""; */
 	
 	pwdValue=pwdValue.replace(/\D/g,""); 
-	var params ="password="+pwdValue+"&board_idx="+board_idx;
+	
+	
+	if(cmt_idx!="")
+		{
+		      params="password="+pwdValue+"&cmt_board_idx="+cmt_idx;
+		      checkCommand=checkCmtCommand;
+		     
+		   console.log("param information: "+params);
+		}
+	else
+		{
+		      params="password="+pwdValue+"&board_idx="+board_idx;
+		}
+	
 	    
- 	sendRequest(checkCommand, params, getResult, 'POST'); 
+ 	 sendRequest(checkCommand, params, getResult, 'POST'); 
 	  
  		function getResult()
  		{
@@ -230,8 +267,19 @@
 			              {
 					           	     if(confirm('정말로 삭제 하시겠습니까?'))
 					           		 {
-					           	    	
-					           		    resultSend(deleteCommand,board_idx,pwdValue,'POST');
+					           	    	 if(cmt_idx!="")
+					           	    	 {
+					           	    	   alert("코멘트 delete 입니다.");
+					            		  /* 삭제 하고나서 코멘트 div에 ajax로 코멘트 리스트를 다시 뿌려준다*/
+					            		   params+="&option=delete";
+						            	   sendRequest(cmtUpdate_command, params, commentListShow, method);  
+					           	    	 }
+					           	    	 else
+					           	    	 {
+					           	    		 
+					           	    	  resultSend(deleteCommand,board_idx,pwdValue,'POST');
+					           	    	 }	 
+					           	    	 
 					           		 }
 					           	     else
 					           	     {
@@ -245,12 +293,22 @@
 			              }
 			              else if(result && delOrUpdate=='update')
 			              {
-			            	   /* alert(result); */
-			            	   pwdValue=pwdValue.replace(/\s/g,"");
-			            	   
-			            	   alert(pwd.value.length);
-			            	   /* alert(pwd.value); */
-			            	  resultSend(updateCommand, board_idx, pwdValue,'POST'); 
+			            	  
+			            	  pwdValue=pwdValue.replace(/\s/g,"");
+			            	 
+			            	  if(cmt_idx!="")
+		            		  {
+		            		           alert("코멘트 업데이트 입니다.");
+		            		           params+="&option=delete";
+					            	   sendRequest(cmtUpdate_command, params, commentListShow, method);
+		            		           /* 삭제 하고나서 코멘트 div에 ajax로 코멘트 리스트를 다시 뿌려준다*/
+		            		  }
+			            	  else
+			            	  {
+			            		   /* alert(result); */
+				            	   /* alert(pwd.value); */
+				            	  resultSend(updateCommand, board_idx, pwdValue,'POST'); 
+			            	  }	  
 			              }
 			              else
 		            	  {
@@ -259,12 +317,13 @@
 			            		   alert('비밀번호가 틀립니다.');
 			            		   pwd.value="";
 			            	   
-			            	  }else{
+			            	  }
+			            	  else
+			            	  {
 			            		  
 			            		  pwd.value="";
-				                     pwd.placeholder="비밀번호가 틀립니다.";  
+				                  pwd.placeholder="비밀번호가 틀립니다.";  
 				                   /*   pwd.focus(); */
-			            		  
 			            	  }
 		            	  }
 		    	}
@@ -279,11 +338,8 @@
  		     /* var form =document.body.pwdCheck;  */
  	            /* form.setAttribute("type","hidden"); */
 	 		    form.setAttribute("action",commandURL);
-	 		   
 	 	        form.setAttribute("method", method); 
  	            
-	 	        
-	 	        
 	      var pwd = document.createElement("INPUT");
 	            pwd.setAttribute("type", "hidden");
 		 	    pwd.setAttribute("name", "password");
@@ -305,7 +361,13 @@
  		  form.submit();
  	 }
  	
- 	
+ 	function commentListShow()
+ 	{
+ 		/* 수정 및 삭제 후에 리스트를 뿌려주는 함수 입니다. 렛스고~  */
+ 	}
+ 	 
+
+ 	 
   } 
 
  
@@ -425,7 +487,6 @@
 							      <input type="password" id="passwordV" placeholder="수정&삭제 비밀번호" oninput="validNumb(this);" required="required" maxlength="10">
 							      <input type="button" name="updateForm"  value="수정" onclick="sendSubmit(${dto.board_idx},'update','passwordV');">
 						          <input type="button" name="del_content" value="삭제" onclick="sendSubmit(${dto.board_idx},'delete','passwordV');">
-						       
 							  </div>
 			    </form>  
 					     </c:when>
@@ -451,7 +512,7 @@
 		  </tr>
 	  </tbody>
 	  
-     <tfoot>
+      <tfoot>
 			<tr>
 	        	<td id="${i.index}_comment_board_idx" colspan="2" align="center"><span style="font-size: 20px;">덧글 영역</span></td>
             </tr>
@@ -463,8 +524,8 @@
 				            <div style="display: inline-block;"> <span >&nbsp;No. ${cmt.list_idx}&nbsp;&nbsp;&nbsp;<b>${cmt.writer}</b></span> 
 				            <label>Password:</label>
 				            <input type="password" id="${i.index}_password">
-							<input type="button" value="수정" onclick="updateForm('${cmt.comment_board_idx}','update','${i.index}_password')">
-							<input type="button" value="삭제" onclick="updateForm('${cmt.comment_board_idx}','delete','${i.index}_password')"></div>
+							<input type="button" value="수정" onclick="sendSubmit( {cmt_idx : '${cmt.comment_board_idx}' ,command_option : 'update', index_password : '${i.index}_password'})">
+							<input type="button" value="삭제" onclick="sendSubmit( {cmt_idx : '${cmt.comment_board_idx}' ,command_option : 'delete', index_password : '${i.index}_password'})"></div>
 					    <pre style=" word-wrap: break-word;white-space: pre-wrap;white-space: -moz-pre-wrap;white-space: -pre-wrap;white-space: -o-pre-wrap;word-break:break-all;">${cmt.content}</pre>			
 				       </td>
 					</tr>
@@ -495,26 +556,26 @@
 		   <c:choose>
 			    <c:when test="${dto.password==1}">
 				    <form action="bbsCommentWriteNormal.bow" method="post" name="comment_area">
-				      <div class="container">
-					       <div>
-						      <span>작성자:</span><input type="text" class="input-writer" name="writer" oninput="fnChkByte(this,30,null,null)" required>
+				      <div class="container" align="left">
+					       <div align="left">
+						      <span style="display: block;">작성자:</span><input type="text" class="input-writer" name="writer" oninput="fnChkByte(this,30,null,null)" required>
 						   </div>
-						   <div>
+						   <div align="left">
 						      <textarea name="content" style="width: 600px;" oninput="fnChkByte(this,'2000','t',null)" required></textarea>
-						      <br><span id="t">0</span>/2000
+						      <br><span id="t" style="display: inline-block;">0</span>/2000
 						   </div>    
-						   <div>
+						   <div align="left">
 						       <span>비밀번호</span>
-						       <input type="password" name="password" oninput="fnChkByte(this,'10',null,'num')" required="required">
+						        <input type="password" name="password" oninput="fnChkByte(this,'10',null,'num')" required="required" style="display: block;">
 				                <input type="submit" value="덧글입력">
 						   </div>  
 						<input type="hidden" name="board_idx" value="${dto.board_idx}">
 					 </div>	
 				    </form>
 		      </c:when>
-		     
 		  </c:choose>
 		  </div>  
   </div>
+  
 </body>
 </html>
