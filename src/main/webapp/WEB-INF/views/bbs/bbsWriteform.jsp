@@ -60,7 +60,6 @@
        	    	 {
         	    	 inputArr[a].value='';
        	    	     inputArr[a].placeholder='필수 입력 사항 입니다.';
-       	    	     inputArr[a].style.background="#61b0d5";
        	    	     isOk=false;
        	    	 }
         	     else
@@ -87,16 +86,18 @@
 				<td><span>작성자 : </span><input type="text" class="input-writer"  name="writer" oninput="fnChkByte(this,'30',null,null)" required  onkeypress="if(event.keyCode==13)validWrite();"></td>
 			</tr>
 			<tr>
-				<td><span>제&nbsp;&nbsp;&nbsp;목 : </span><input type="text" class="input-subject" name="subject"maxlength="50" size="50" oninput="fnChkByte(this,'60',null,null)" onkeypress="if(event.keyCode==13)validWrite();" required >
+				<td><span>제&nbsp;&nbsp;&nbsp;목 : </span><input type="text" class="input-subject" name="subject" maxlength="61" size="80" oninput="fnChkByte(this,'60',null,null)" onkeypress="if(event.keyCode==13)validWrite();" required >
 				</td>
 			</tr>
 			<tr>
 				<td><textarea rows="40" cols="60" style="width: 100%; height: 700px;" class="txtarea-content" name="content"oninput="fnChkByte(document.getElementsByTagName('textarea')[0],4000,'t')" required ></textarea>
+			    </td>
+			</tr>
 			<tr>
 				<td><span id="t">0</span>/4000</td>
 			</tr>
 			<tr>
-				<td><span>비밀번호 : </span><input type="password" name="password" oninput="fnChkByte(this,'10',null,'num')" maxlength="10" onkeypress="if(event.keyCode==13)validWrite();" required></td>
+				<td><span>비밀번호 : </span><input type="password" name="password" oninput="fnChkByte(this,'9',null,'num')" maxlength="10" onkeypress="if(event.keyCode==13)validWrite();" required placeholder="숫자 9자리 입력"></td>
 			</tr>
 			<tr>
 				

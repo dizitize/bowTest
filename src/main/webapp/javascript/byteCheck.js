@@ -3,7 +3,7 @@
 // num = 숫자 writeByte = 적을 곳
 function fnChkByte(obj, maxByte, writeByte, num){
 
-	obj.style.background='white';
+	/*obj.style.background='white';*/
 	
 	// 문자열 	
 	var str = obj.value;
@@ -28,12 +28,24 @@ function fnChkByte(obj, maxByte, writeByte, num){
     
      
     
-    if( num!==null && /\D/g.test(str))
+    if( num!=null && /\D/g.test(str))
 	{
-	   obj.value="";
+    	 alert("공백 및 문자 입력 불가");
+    	 document.getElementById(writeByte).innerText = 0; 
+	  obj.placeholder="공백 및 문자입력 불가";
+	  obj.value="";
+	  return;
 	  /* fnChkByte(obj, maxByte,writeByte, num);*/
-	   return;
-	} 
+	   
+	}
+   else if(num!==null && /\D/g.test(str))
+	{
+       obj.value="";
+       document.getElementById(writeByte).innerText = 0;
+  	   obj.placeholder="문자나 공백입력 불가 입니다.";
+  	   alert("공백 입력 불가");
+  	   return;
+	}
     
 //                문자열 하나씩 쪼개서 각문자 byte 계산 for 문을 통해서 가용 가능ㄹ한 문자열 갯수 까지만 저장
 			
@@ -42,13 +54,15 @@ function fnChkByte(obj, maxByte, writeByte, num){
 //                	  쪼갠 temp
 					  one_char = str.charAt(i);
 						
-						        //byte 계산을 한다 escape() 아스키값이 없을 경우엔 유니코드 값을 변경하여 읽기 시작한다. 
-					  
+					  /*byte 계산을 한다 deprecated => escape() 
+					    encodeURIComponent
+					     아스키값이 없을 경우엔 유니코드 값을 변경하여 읽기 시작한다.*/ 
+				     	  
 					  if((/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/gi.test(one_char)))
 					  {
 							  rbyte +=3;
 					  }
-					  else if(escape(one_char)=='%0A')
+					  else if(encodeURIComponent(one_char)=='%0A')
 				 	  {
 					          rbyte += 2;          
 				 	  }
@@ -71,7 +85,7 @@ function fnChkByte(obj, maxByte, writeByte, num){
 				 
 					if(num!=null)
 					{ 
-						  
+						 
 						    //유효 처리된 rlen 문자의 갯수를 담아둔
 						    str2 = str.substr(0,rlen);     
 						    //허용된 문자열 길이 rlen 에서 원래 받은 문자열에서 rlen 까지 잘라서 파라미터를 제공한 tag에 인자를 리턴한다.
@@ -89,7 +103,7 @@ function fnChkByte(obj, maxByte, writeByte, num){
 						    
 						    writeByte!=null?document.getElementById(writeByte).innerText = rbyte:'';
 						    alert("한글 "+parseInt(maxByte/3)+"자 / 영문 "+maxByte+"자를 초과 입력할 수 없습니다.");
-						    fnChkByte(obj, maxByte,writeByte, num);
+						    fnChkByte(obj, maxByte,writeByte, null);
 					}
 			}
 			else
@@ -100,40 +114,3 @@ function fnChkByte(obj, maxByte, writeByte, num){
 					}
 			} 
 	}
-
-
-
-function validNumb(chaNode,num)
-{
-    var length =chaNode.maxLength;
-    
-    /* write information about inputText value into placeholder area  */
-    var lengthPlaceholder ='';
-    /* if num option value is not null, write information of character that korean & english value into placeholder area */
-    if(num!=null)
-	{
-    	lengthPlaceholder ='한글 '+parseInt(length/3)+'자 / 영문 '+length+'자 허용';
-	}
-    else
-	{
-    	lengthPlaceholder ='공백 없는 숫자 '+chaNode.maxLength+'자 허용';
-	}
-    /* value */
-    var tst = chaNode.value;
-    /* result variable for testing */
-    var bool =true;
-   
-    /* check space area in the value and return boolean value */
-	if(/[\D]/gmi.test(tst))
-		{
-		bool=false;
-		chaNode.value="";	
-		chaNode.placeholder=lengthPlaceholder;
-		
-		}else
-		{
-			bool=true;
-		}	
-	   
-	   return bool;
-     }

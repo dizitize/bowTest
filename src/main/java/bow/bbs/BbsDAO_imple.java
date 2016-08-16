@@ -62,12 +62,16 @@ public class BbsDAO_imple implements BbsDAO_interface {
 	public List<CommentDTO>commentList(int board_idx) {
 		
 		List<CommentDTO> comments = sqlMap.selectList("commentList",board_idx);
+	
 		for(CommentDTO i :comments)
 		{
-			 
 			 i.setContent(i.getContent().replaceAll("<","&lt;"));
 	         i.setContent(i.getContent().replaceAll(">","&gt;"));
 	         i.setContent(i.getContent().replaceAll("\r\n","<br>"));
+	       
+	         i.setWriter(i.getWriter().replaceAll("<","&lt;"));
+	         i.setWriter(i.getWriter().replaceAll(">","&gt;"));
+	         i.setWriter(i.getWriter().replaceAll("\r\n","<br>"));
 		}
 		
 		
@@ -113,7 +117,11 @@ public class BbsDAO_imple implements BbsDAO_interface {
 		 System.out.println("dao update readnum 완료 boarad_idx:"+board_idx);
 		 
 		 BbsDTOnorm dto = sqlMap.selectOne("bbsContentNormal", board_idx);
-		 
+		 dto.setSubject(dto.getSubject().replaceAll("<","&lt;"));
+		 dto.setSubject(dto.getSubject().replaceAll(">","&gt;"));
+	
+		 dto.setWriter(dto.getWriter().replaceAll("<","&lt;"));
+		 dto.setWriter(dto.getWriter().replaceAll(">","&gt;"));
 		return dto;
 	}
 	

@@ -19,7 +19,8 @@
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-   
+
+<script type="text/javascript" src="javascript/validCharacter.js"></script>   
 <script type="text/javascript" src="javascript/byteCheck.js"></script>	
 <script type="text/javascript" src="javascript/httpRequest.js"></script>	
 <script type="text/javascript" src="javascript/isAvaliableBOM.js"></script>	
@@ -270,9 +271,25 @@
 					           	    	 if(cmt_idx!="")
 					           	    	 {
 					           	    	   alert("코멘트 delete 입니다.");
+					           	          
 					            		  /* 삭제 하고나서 코멘트 div에 ajax로 코멘트 리스트를 다시 뿌려준다*/
 					            		   params+="&option=delete";
-						            	   sendRequest(cmtUpdate_command, params, commentListShow, method);  
+					            		   method="POST";
+					            		   console.log("params: "+params+" method: "+method);
+						            	   
+					            		   sendRequest(cmtUpdate_command, params, deleteNode, method);  
+					            		  
+					            		   function deleteNode()
+					            		   {
+					            			   if(XHR.readyState==4 && XHR.status==200)
+				            				   {
+				            				       var result =XHR.responseText;
+				            				       
+				            				   }
+					            			   
+					            			   
+					            		   }
+					            		   
 					           	    	 }
 					           	    	 else
 					           	    	 {
@@ -287,6 +304,7 @@
 					           	    	
 					           	    		pwd.value="";
 						           	    	pwd.placeholder='수정&삭제 비밀번호';
+						           	    	
 					           	    	
 					           	    	    return;
 					           	     }
@@ -299,8 +317,13 @@
 			            	  if(cmt_idx!="")
 		            		  {
 		            		           alert("코멘트 업데이트 입니다.");
-		            		           params+="&option=delete";
-					            	   sendRequest(cmtUpdate_command, params, commentListShow, method);
+		            		           params+="&option=update";
+		            		           method="POST";
+		            		           console.log(params+" method="+method);
+		            		           
+		            		           
+		            		           
+					            	   sendRequest(cmtUpdate_command, params, cmtUpdate_command, method);
 		            		           /* 삭제 하고나서 코멘트 div에 ajax로 코멘트 리스트를 다시 뿌려준다*/
 		            		  }
 			            	  else
@@ -323,6 +346,8 @@
 			            		  
 			            		  pwd.value="";
 				                  pwd.placeholder="비밀번호가 틀립니다.";  
+				                  document.getElementById("p").innerText=0;
+				                  alert('비밀번호가 틀립니다.');
 				                   /*   pwd.focus(); */
 			            	  }
 		            	  }
@@ -360,6 +385,8 @@
  	    
  		  form.submit();
  	 }
+ 	 
+  }
  	
  	function commentListShow()
  	{
@@ -367,87 +394,13 @@
  	}
  	 
 
- 	 
-  } 
-
- 
-    
-  /*빈 문자열 및 공백 체크 하는 bool test function  */
-  /* 파라미터 값으로 체크 할 node를 입력 받는다  값이 아닌 노드 정보를 받는당!!!!
-     true는 문제 없음 false 문제 있음 */  
-  
-     /*valid method get inputTextElement and return boolean value after checking element validation of submit */
-    function validNumb(chaNode,num)
-    {
-	    var length =chaNode.maxLength;
-	    /* write information about inputText value into placeholder area  */
-	    var lengthPlaceholder ='';
-	    /* if num option value is not null, write information of character that korean & english value into placeholder area */
-	    if(num!=null)
-    	{
-	    	if(isIE)
-	    	{
-      		  
-      		  alert('한글 '+parseInt(length/3)+'자 / 영문 '+length+'자 허용');
-      	   
-      	    }else{
-      		  
-      		lengthPlaceholder ='한글 '+parseInt(length/3)+'자 / 영문 '+length+'자 허용';
-      	  }
-	    	
-    	}
-	    else
-    	{
-	    	if(isIE)
-	    	{
-	    		 /* alert('공백 없는 숫자 '+chaNode.maxLength+'자 허용'); */
-      		}
-	    	else
-    		{
-	    		lengthPlaceholder ='공백 없는 숫자 '+chaNode.maxLength+'자 허용';
-    		}
-	    	
-    	}
-	    /* value */
-	    var tst = chaNode.value;
-	    /* result variable for testing */
-	    var bool =true;
-       
-	    /* check space area in the value and return boolean value */
-    	if(/[\D]/gmi.test(tst))
-   		{
-    		if(isIE)
-	    	{
-    		   	alert('공백 없는 숫자 '+chaNode.maxLength+'자 허용'); 
-    			chaNode.value="";
-    			bool=false; 
-      		}
-	    	else
-    		{
-	    		bool=false;
-	    		chaNode.value="";	
-	    		chaNode.placeholder=lengthPlaceholder;
-    		}
-    		
-    		
-   		}else
-   		{
-   			bool=true;
-   		}	
-    	   
-    	   return bool;
-    }
-    
-
-   
-    
+ 	
   </script>
 <title>Insert title here</title>
 </head>
 <body>  
    <div class="container">
-  <h1>BOW-TECH_BBS_CONTENT</h1>
-
+  <h5>BOW-TECH_BBS_CONTENT</h5>
 	<table class="table table-bordered">
 		<thead>
 			<tr>
@@ -480,14 +433,19 @@
 						            </c:choose>
 						    <input type="button" name="reply" value="답글 작성" onclick="location.href='${replyForm}'">
 						  
-						    <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#collapse-1">수정 및 삭제</button>
+						    <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#collapse-1" id="gate">수정 및 삭제</button>
 				<form onsubmit="return false;" name="pwdCheck">     
 							  <div id="collapse-1" class="collapse" align="left" >
 							    
-							      <input type="password" id="passwordV" placeholder="수정&삭제 비밀번호" oninput="validNumb(this);" required="required" maxlength="10">
+							      <input type="password" id="passwordV" placeholder="수정&삭제 비밀번호" oninput="fnChkByte(this,'9','p','num')" required="required" maxlength="10"> 
+							      <span id="p">0</span>/9
+							      <br>
 							      <input type="button" name="updateForm"  value="수정" onclick="sendSubmit(${dto.board_idx},'update','passwordV');">
 						          <input type="button" name="del_content" value="삭제" onclick="sendSubmit(${dto.board_idx},'delete','passwordV');">
+							    
+     						     
 							  </div>
+							 
 			    </form>  
 					     </c:when>
 					     <c:otherwise>	 
@@ -511,24 +469,31 @@
  --%>            </td>
 		  </tr>
 	  </tbody>
-	  
+<%-- 	  
       <tfoot>
 			<tr>
-	        	<td id="${i.index}_comment_board_idx" colspan="2" align="center"><span style="font-size: 20px;">덧글 영역</span></td>
+	        	<td id="${i.index}_comment_board_idx" colspan="2" align="center"><em style="font-size: 20px;">&lt;&nbsp;덧글 영역&nbsp;&gt;</em></td>
             </tr>
        <c:choose>
            <c:when test="${comments!=null}">
                 <c:forEach var="cmt" items="${comments}" varStatus="i">
-				    <tr>
-				        <td colspan="2" id="${i.index}_content">
-				            <div style="display: inline-block;"> <span >&nbsp;No. ${cmt.list_idx}&nbsp;&nbsp;&nbsp;<b>${cmt.writer}</b></span> 
-				            <label>Password:</label>
-				            <input type="password" id="${i.index}_password">
-							<input type="button" value="수정" onclick="sendSubmit( {cmt_idx : '${cmt.comment_board_idx}' ,command_option : 'update', index_password : '${i.index}_password'})">
-							<input type="button" value="삭제" onclick="sendSubmit( {cmt_idx : '${cmt.comment_board_idx}' ,command_option : 'delete', index_password : '${i.index}_password'})"></div>
+                <br>
+				    <tr id="${i.index}_content">
+				        <td colspan="2" >
+				        <span >&nbsp;No. ${cmt.list_idx}&nbsp;&nbsp;&nbsp;<b>${cmt.writer}</b></span>     
+				        <br>
 					    <pre style=" word-wrap: break-word;white-space: pre-wrap;white-space: -moz-pre-wrap;white-space: -pre-wrap;white-space: -o-pre-wrap;word-break:break-all;">${cmt.content}</pre>			
+				        <div style="display: inline-block;"> 
+				            
+				            <label style="font-size: 10px;">Password:</label>
+				            <input type="password"  oninput="validNumb(this);" required="required" maxlength="10" id="${i.index}_password">
+							<input type="button" value="수정" onclick="sendSubmit( {cmt_idx : '${cmt.comment_board_idx}' ,command_option : 'update', index_password : '${i.index}_password'})">
+							<input type="button" value="삭제" onclick="sendSubmit( {cmt_idx : '${cmt.comment_board_idx}' ,command_option : 'delete', index_password : '${i.index}_password'})">
+					   </div>
+				       
 				       </td>
 					</tr>
+					  <br>
                 </c:forEach>  
                 <c:if test="${dto.password==1}">
                    <tr>
@@ -549,9 +514,9 @@
                     </tr>
 	         </c:when>
 	   </c:choose>
-	  </tfoot>    
+	  </tfoot>    --%> 
   </table>
- 
+ <%-- 
           <div id="comment-collapse" class="collapse" align="left">
 		   <c:choose>
 			    <c:when test="${dto.password==1}">
@@ -574,7 +539,7 @@
 				    </form>
 		      </c:when>
 		  </c:choose>
-		  </div>  
+		  </div>   --%>
   </div>
   
 </body>

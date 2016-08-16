@@ -164,12 +164,39 @@
 				 setCookie(ckKey, ckValue, 1); 
 			 }
 	   }
-		
+    	 
+    	 
+     var BOM = {
+    		codeName : navigator.appCodeName,
+    		name : navigator.appName,
+    		version : navigator.appVersion,
+    		online : navigator.onLine
+     }
+
+    	 
+    	var nodeInfo =
+    	    {
+    	     body       : window.document.body,
+    	     childNodes : body.childNodes
+    	    }
+    	            
+     
+        for(var a in childNodes)
+        	{
+        	  var temp = childNodes[a].getElementsByTagName("BUTTON");
+        	  
+        	}
+     
+     
+    	 
+   
+     
 </script>
 </head>
 <body onload="onFocus()">
  <div class="container" style="width:1500px;">
-    <h1>BOW-TECH_BBS_TEST_1</h1>
+ <!-- <input type="text" name="escape_val" placeholder="unicode_test"> <input type="button" name="escape_bt" value="escape_test_bt"> -->  
+    <h5>BOW-TECH_BBS_TEST_1</h5>
     <table class="table table-bordered" style="table-layout:fixed;">
 	  <tr>
 		  <th colspan="7" align="center" style="padding-top:10px;">
@@ -183,7 +210,7 @@
 		          
 				    <c:if test="${option_value ne null}">
 			            <span class="badge" style="background-color:red;font-size:15px;">
-			                    <a href="bbsListNormal.bow"style="color:white;">검색 종료</a>
+			                    <a href="bbsListNormal.bow"style="color:white;">검색 종료 </a>
 			            </span> 
 		           </c:if>
 		       </form>
@@ -200,7 +227,7 @@
    <c:choose>	               
      <c:when test="${empty bbsList}">
  	  <tr>
-         <td colspan="7" style="text-align:center;">게시된 글이 없습니다.</td>
+         <td colspan="7" style="text-align:center;">검색 된 글이 없습니다.</td>
 	  </tr>
    </c:when>
     
@@ -260,10 +287,10 @@
 	                     
 	                     <c:choose>
 	                          <c:when test="${dto.list_se_idx==0 && dto.lev==0}">
-	                             <b><font style="font-size: 19px;">&nbsp;&nbsp;${dto.subject}</font></b>
+	                             <font style="font-size: 19px;">&nbsp;&nbsp;${dto.subject}</font>
 	                          </c:when>
 	                          <c:when test="${dto.list_se_idx==0 && dto.lev!=0}">
-	                                         ${dto.subject}
+                                  <font style="font-size: 19px;">&nbsp;&nbsp;${dto.subject}</font>
 	                          </c:when>
 	                     </c:choose>
 	           

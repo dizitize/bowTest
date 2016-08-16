@@ -68,7 +68,7 @@
 
 	
 		 <!--dao  -->
-		<bean id="bow.bbs" class="bow.bbs.BbsDAO_imple">
+		<bean id="bow.bbs.bbsDao" class="bow.bbs.BbsDAO_imple">
 		   <constructor-arg ref="sqlSessionTemplate" name="sqlMap"></constructor-arg>
 		</bean> 
 	     

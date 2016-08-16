@@ -153,10 +153,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 </select>
 
 
-
-
-
-
 <insert id="bbsWriteNormal" parameterType="bbsDTOnorm">
  <![CDATA[
      insert into board (board_idx,subject, content, writer,lev, sunbun, 
@@ -173,10 +169,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	                  )    
  ]]>
 </insert>
-
-
-
-
 
 <select id="passwordConfirm" parameterType="map" resultType="int">
 
@@ -233,9 +225,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <select id="lookForCommentsReply" parameterType="int" resultType="int">
 
-    select sum(total)
+<!--     select sum(total)
    from  ( select count(*) as total from comment_board where board_idx =#{board_idx}
              union all
+           select count(*) as total from board 
+             where 
+            ref = (select ref from board where board_idx =#{board_idx})
+            and 
+            lev =(select lev+1 from board where board_idx =#{board_idx})
+            and
+            lev_point=(select lev_me from board where board_idx =#{board_idx})
+         ) -->
+    select sum(total)
+   from  (
            select count(*) as total from board 
              where 
             ref = (select ref from board where board_idx =#{board_idx})
@@ -356,16 +358,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <!-- tree comment Start tree comment Start tree comment Start tree comment Start tree comment Start -->
 
   <select id="commentList" parameterType="int" resultType="commentDTO">
- select row_number() over (order by a.comment_board_idx) as list_idx , a.*
- from
-     (
-     select * from comment_board 
-     where board_idx =#{board_idx} 
+   select row_number() over (order by a.comment_board_idx) as list_idx , a.*
+    from
+    ( select * from comment_board 
+     where board_idx =#{board_idx}
      order by comment_board_idx desc
      )a
      order by list_idx desc
   </select>
-
+ <!-- select * from 
+ ( 
+  select row_number() over (order by a.comment_board_idx) as list_idx , a.*
+  from
+     (
+     select * from comment_board 
+     where board_idx =556
+     order by comment_board_idx desc
+     )a
+     order by list_idx desc
+  ) where list_idx >= ((#{cp}-1)*#{ls})+1 and list_idx <=#{cp}*#{ls}   --> 
 
   <insert id="commentInsert" parameterType="commentDTO">
       

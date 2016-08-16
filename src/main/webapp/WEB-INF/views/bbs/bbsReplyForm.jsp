@@ -92,16 +92,21 @@ function validWrite(){
 			</tr>
 			<tr>
 				<td>
-				   <span>제&nbsp;&nbsp;&nbsp;목 : </span><input type="text" name="subject" size="70" oninput="fnChkByte(this,'60',null,null)" required  onkeypress="if(event.keyCode==13)validWrite();">
+				   <span>제&nbsp;&nbsp;&nbsp;목 : </span><input type="text" name="subject" size="70" maxlength="61"  oninput="fnChkByte(this,'60',null,null)" required  onkeypress="if(event.keyCode==13)validWrite();">
 				</td>
 			</tr>
 			<tr>
-				<td><textarea class="txtarea-content" style="width: 100%; height: 700px;"name="content"oninput="fnChkByte(document.getElementsByTagName('textarea')[0],4000,'t')" required></textarea>
+				<td><textarea class="txtarea-content" style="width: 100%; height: 700px;"name="content" oninput="fnChkByte(document.getElementsByTagName('textarea')[0],4000,'t');" required></textarea>
 			<tr>
 				<td><span id="t">0</span>/4000</td>
 			</tr>
 			<tr>
-				<td><span>비밀번호: </span><input type="password" name="password" oninput="fnChkByte(this,'10',null,'num')" required  onkeypress="if(event.keyCode==13)validWrite();"></td>
+				<td>
+				   <span>비밀번호: </span>
+				   <input type="password" name="password" oninput="fnChkByte(this,'9','p','num');" required maxlength="10" placeholder="숫자 9자리 입력"  onkeypress="if(event.keyCode==13)validWrite();">
+				   &nbsp;<span id="p">0</span>/9 
+				</td>
+	              		
 			</tr>
 			<tr>
 	       <td>
@@ -109,7 +114,7 @@ function validWrite(){
 	           <input type="hidden" name="ref" value="${dto.ref}">
 	           <input type="hidden" name="lev" value="${dto.lev}">
 	           <input type="hidden" name="board_idx" value="${dto.board_idx}">
-	           <input type="button" value="댓글 달기" onclick="validWrite();">
+	           <input type="button" value="답글 달기" onclick="validWrite();">
 	           <input type="button" value="뒤로" onclick="history.go(-1)">
 	       </td>
 	    </tr>

@@ -129,11 +129,11 @@
 				<span>작성자 : </span><input type="text" name="writer" value="${dto.writer}" oninput="fnChkByte(this,'30',null,null)" onkeypress="if(event.keyCode==13)validWrite();" required></td>
 			</tr>
 			<tr>
-				<td><span>제&nbsp;&nbsp;&nbsp;목 :  </span><input type="text" name="subject" size="50" oninput="fnChkByte(this,'60',null,null)" value="${dto.subject}" onkeypress="if(event.keyCode==13)validWrite();" required>
+				<td><span>제&nbsp;&nbsp;&nbsp;목 :  </span><input type="text" name="subject" size="50" oninput="fnChkByte(this,'60',null,null)" value="${dto.subject}" onkeypress="if(event.keyCode==13)validWrite();" required >
 				</td>
 			</tr>
 			<tr>
-				<td><textarea rows="40" cols="60" rows="40" cols="60" style="width: 100%; height: 700px;" class="txtarea-content" name="content" oninput="fnChkByte(document.getElementsByTagName('textarea')[0],4000,'t')" required>${dto.content}</textarea>
+				<td><textarea rows="40" cols="60" rows="40" cols="60" style="width: 100%; height: 700px;" class="txtarea-content" name="content" oninput="fnChkByte(document.getElementsByTagName('textarea')[0],4000,'t');" required>${dto.content}</textarea>
 			<tr>
 				<td colspan="2" style="text-align: right;"><span id="t">0</span>/4000</td>
 			</tr>

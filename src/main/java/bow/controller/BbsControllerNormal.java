@@ -128,12 +128,10 @@ public class BbsControllerNormal {
    					System.out.println(dto.getPassword());
    						if(bbsDao.bbsWrite_normal(dto)==1)
    						{
-   							
    						     mav.setViewName("redirect:/bbsListNormal.bow");
    						     mav.addObject("cp", 1);
    						    /* rt.addFlashAttribute("ddd", "hello");*/
    						     mav.addObject("board_idx_animate", bbsDao.afterWriteNavi());
-   						     
    						     /*System.out.println("write.bow_Currp:"+currentPage());*/
    						     return mav;
    						}
@@ -249,7 +247,7 @@ public class BbsControllerNormal {
     	 System.out.println("패스워드 길이: "+password.length());
     	 
     	 if(password.equals("")||password==null)return  "{\"result\":false}";
-    	   pwd= Integer.parseInt(password);
+    	   pwd=  Integer.parseInt(password);
      	   board_idxs = Integer.parseInt(board_idx);
     		
     	}catch(NumberFormatException e)
@@ -457,7 +455,6 @@ public class BbsControllerNormal {
     	}
     	System.out.println("==========================boardSrc들어옴===========================");
     	
-    	    	
     	   int src_cp =0; 
     	   try
     	   {
@@ -580,7 +577,6 @@ public class BbsControllerNormal {
 			   										mav.addObject("location", "bbsContentNormal.bow?board_idx="+dto.getBoard_idx());  
 			   										  /*bbs sql error */ 
 			   									}
-			   								
 	   							}
    						}
    						else
@@ -647,4 +643,7 @@ public class BbsControllerNormal {
     	return returnValue ;
     	
     }
+    
+  
+    
 }

@@ -643,7 +643,82 @@ document.writeln("escape() = <font color='red'>" + escape(chr) + "</font><br />"
 document.writeln("encodeURI() = <font color='blue'>" + encodeURI(chr) + "</font><br />");
 document.writeln("encodeURIComponent() = <font color='orange'>" + encodeURIComponent(chr) + "</font><br />");
 
+
+function charTest()
+{
+	var str = undefined; 
+   	
+	for(var i = 0 ; i < 100; i++)
+	{
+	  str +="this is 아무의미없는 문자열";
+	}
+	
+	var strLen = str.length;
+	var strByteLen = 0 ;
+	
+	console.time("일반 for문");
+	for(var a = 0 ; a < strLen ; a++)
+	{
+      if(encodeURIComponent(str.charAt(a)).length > 4)
+   	  {
+    	 /*  console.log(str.charAt(a));
+    	  console.log(encodeURIComponent(str.charAt(a)));
+    	  console.log(encodeURIComponent(str.charAt(a)).length); */
+    	  
+   	     strByteLen += 3;
+   	  }
+      else if(encodeURIComponent(str.charAt(a)) == "%A7")
+   	  {
+   	    strByteLen += 3;
+   	  }
+      else if(encodeURIComponent(str.charAt(a)) != "%0D")
+   	  {
+   	    strByteLen++;
+   	  }
+	}
+	console.log(strByteLen+"bytes");
+	console.timeEnd("일반 for문");
+	
+	
+	console.time("개선된 for문");
+	strByteLen= 
+    (function(s,b,i,c)
+	   {
+	     for(b=i=0; c=s.charCodeAt(i++); b+=c>>11?3:c>>7?2:1);
+   		     return b
+       }
+    )(str); 
+
+	console.log(strLen+"Bytes");
+	console.timeEnd("개선된 for문");
+	
+	
+	
+	
+	console.time("encodeURI방식");
+	strByteLen=~-encodeURI(str).split(/%..|./).length;
+	
+	console.log(strLen+"Bytes");
+	console.timeEnd("encodeURI방식");
+	
+	
+	
+	console.log("정규식방식");
+	strByteLen =str.replace(/[\0-\x7f]|([0-\u07ff]|(.))/g,"$&$1$2").length;
+	console.log(strByteLen+"bytes");
+	console.timeEnd("정규식방식");
+	
+	
+}
+
+
+
+
 </script>
+
+<input type="button" value="byteCheck" onclick="charTest()">
+
+
  <input type="button" onclick="location.href='bbsListNormal.bow?cp=1'" value="일반 게시판가기">
   <input type="button" value="javascript구성 퍼포먼스~ 게시판보기" id="bbsList" onclick="javascript:bbsAjax('bbsList.bow',null,'POST');">
 <!--  <input type="button" value="validation 게시판" onclick="javascript:show('bbsList.bow', null, 'commonDiv', 'POST');"> -->
