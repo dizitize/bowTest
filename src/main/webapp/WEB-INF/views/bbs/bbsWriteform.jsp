@@ -20,30 +20,27 @@
  	    var regex1 =/(\b(\w*(\s*)\s*\w+\3)\b)+/igm; */
  	     
  	    var isOk=false;
- 	       
  	        
  	       var inputArr =document.getElementsByTagName("INPUT");
  	       var txtArea =document.getElementsByTagName("TEXTAREA")[0];
  	       
- 	     
  	    	   var txtTemp =txtArea.value;
  	    	   
  	    	  txtTemp=  txtTemp.replace(/^\s*/g,"");
-              txtTemp=  txtTemp.replace(/\s*$/g,"");
+ 	    	    console.log("첫번째 replace"+txtTemp);
               
-              if(txtTemp=='')
+ 	    	  txtTemp=  txtTemp.replace(/\s*$/g,"");
+                console.log("두번째 replace"+txtTemp);
+              
+                if(txtTemp=='')
            	  {
            	     txtArea.placeholder="필수 입력사항 입니다.";
-           	     txtArea.style.background="#61b0d5";
-           	    
+           	     /* txtArea.style.background="#61b0d5"; */
            	  }else
       		  {
-           		 
            		 txtArea.value=txtTemp;
            		 isOk=true;
-             		 
       		  }
-              
     	
  	       /* 0=writer 1=subject  2=password */
  	        for(var a =0 ; a< 3 ; a++)
@@ -97,7 +94,9 @@
 				<td><span id="t">0</span>/4000</td>
 			</tr>
 			<tr>
-				<td><span>비밀번호 : </span><input type="password" name="password" oninput="fnChkByte(this,'9',null,'num')" maxlength="10" onkeypress="if(event.keyCode==13)validWrite();" required placeholder="숫자 9자리 입력"></td>
+				<td><span>비밀번호 : </span><input type="password" name="password" oninput="fnChkByte(this,'9','p','num')" maxlength="10" onkeypress="if(event.keyCode==13)validWrite();" required placeholder="숫자 9자리 입력">
+				 &nbsp;<span id="p">0</span>/9
+				</td>
 			</tr>
 			<tr>
 				

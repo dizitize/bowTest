@@ -100,6 +100,7 @@
 		  else
 		  {
 		     input.value="";
+		     alert("검색어를 입력하세요");
 		     input.placeholder="검색어를 입력하세요";
 		  }
 		    return;
@@ -149,7 +150,6 @@
 	        location.href="bbsListNormal.bow";
 	    }
 	}
-
     	 if( isIE )
     	{
     	 var ckKey ="ie_test";
@@ -157,7 +157,6 @@
 		 var version =get_version_of_IE(); 
 		 var isCkAlive = confirmCookie(ckKey,ckValue);
 		 
-
 			 if(!isCkAlive)
 			 {
 				 confirm("해당 사이트는 원도우"+version+" 버전을 지원 하지 않습니다.\n 11 버전으로 업그레이드 하세요!\n 확인버튼을 누르시면 업데이트 페이지를 생성 합니다.")==true?window.open("https://support.microsoft.com/ko-kr/kb/949104"):"";
@@ -165,32 +164,12 @@
 			 }
 	   }
     	 
-    	 
      var BOM = {
     		codeName : navigator.appCodeName,
     		name : navigator.appName,
     		version : navigator.appVersion,
     		online : navigator.onLine
      }
-
-    	 
-    	var nodeInfo =
-    	    {
-    	     body       : window.document.body,
-    	     childNodes : body.childNodes
-    	    }
-    	            
-     
-        for(var a in childNodes)
-        	{
-        	  var temp = childNodes[a].getElementsByTagName("BUTTON");
-        	  
-        	}
-     
-     
-    	 
-   
-     
 </script>
 </head>
 <body onload="onFocus()">

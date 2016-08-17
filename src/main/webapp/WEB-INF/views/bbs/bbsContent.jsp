@@ -436,13 +436,15 @@
 						    <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#collapse-1" id="gate">수정 및 삭제</button>
 				<form onsubmit="return false;" name="pwdCheck">     
 							  <div id="collapse-1" class="collapse" align="left" >
-							    
+							      <div>
 							      <input type="password" id="passwordV" placeholder="수정&삭제 비밀번호" oninput="fnChkByte(this,'9','p','num')" required="required" maxlength="10"> 
 							      <span id="p">0</span>/9
 							      <br>
+							      </div>
+							      <div style="margin-top:5px;">
 							      <input type="button" name="updateForm"  value="수정" onclick="sendSubmit(${dto.board_idx},'update','passwordV');">
 						          <input type="button" name="del_content" value="삭제" onclick="sendSubmit(${dto.board_idx},'delete','passwordV');">
-							    
+							      </div>
      						     
 							  </div>
 							 

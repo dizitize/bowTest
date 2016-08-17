@@ -10,11 +10,12 @@ public String pagination(String url ,int cp, int ps, int ls, int totalCnt, int t
 		int maxUserG = totalP % ps == 0 ? (totalP / ps) - 1 : totalP / ps;
 
 		StringBuffer sb = new StringBuffer();
+		
         sb.append("<ul class=\"pagination\">");
         sb.append("<li>");
 		if (userG != 0) {
 			
-				if (userG >= 1) 
+				if (userG-1!=0) 
 				{
 					sb.append("<a href='" + url + "?cp=1");
 						
