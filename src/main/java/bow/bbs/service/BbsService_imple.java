@@ -87,7 +87,7 @@ public class BbsService_imple implements BbsService {
 					  System.out.println("ex:"+board_idx+password);
 					  return result;
 				  }
-			   System.out.println("pwd 체크하고 dao 들어갑니다");
+			        System.out.println("pwd 체크하고 dao 들어갑니다");
 		            result=bbsDao.pwdCheck(map)==1? SQL_GET_DATA_OK : SQL_GET_NO_DATA;
 		            System.out.println("pwdcheck 결과 입니다:"+result);
 		}

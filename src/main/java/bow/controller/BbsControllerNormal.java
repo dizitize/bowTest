@@ -43,7 +43,6 @@ public class BbsControllerNormal {
 	{		
 		return currPage;
 	}	*/
-    	
 //	처음 리스트 보여주기
     @RequestMapping(value="/bbsListNormal.bow")
 	public ModelAndView list(HttpServletRequest req )
@@ -55,15 +54,6 @@ public class BbsControllerNormal {
     	ModelAndView mav = new ModelAndView();		
 		
     	 int currPage=1;
-        /* String storedCp=req.getParameter("storedCp");*/
-         
-         
-   // 파라미터로 받은 보여줄 페이지 정보 cp 검증    
-/*    	 if(storedCp.equals("")||storedCp!=null)
-    	 {
-    	    	 
-    	 }
-    	 */
     	 
     String currPageStr=req.getParameter("cp");
     
@@ -114,7 +104,7 @@ public class BbsControllerNormal {
    	}
     
     @RequestMapping("/bbsWriteNormal.bow")
-   	public ModelAndView write(HttpServletRequest req, BbsDTOnorm dto,RedirectAttributes rt)
+   	public ModelAndView write(HttpServletRequest req, BbsDTOnorm dto, RedirectAttributes rt)
    	{
    		ModelAndView mav = new ModelAndView();
    		
@@ -122,17 +112,12 @@ public class BbsControllerNormal {
    		{
    				if(dto!=null)
    				{
-   					System.out.println(dto.getSubject());
-   					System.out.println(dto.getContent());
-   					System.out.println(dto.getWriter());
-   					System.out.println(dto.getPassword());
    						if(bbsDao.bbsWrite_normal(dto)==1)
    						{
    						     mav.setViewName("redirect:/bbsListNormal.bow");
    						     mav.addObject("cp", 1);
-   						    /* rt.addFlashAttribute("ddd", "hello");*/
-   						     mav.addObject("board_idx_animate", bbsDao.afterWriteNavi());
-   						     /*System.out.println("write.bow_Currp:"+currentPage());*/
+   						     /* rt.addFlashAttribute("ddd", "hello");*/
+   						     mav.addObject("board_idx_animate", bbsDao.afterWriteNavi(dto));
    						     return mav;
    						}
    						else
@@ -146,7 +131,7 @@ public class BbsControllerNormal {
    				}
    		}else
    		{
-   			 mav.addObject("msg", "잘못된 접근방식 입니다.");
+   			 mav.addObject("msg", "허용되지 않은 접근방식 입니다.");
    		}
    		
    		 mav.addObject("location", "bbsListNormal.bow");

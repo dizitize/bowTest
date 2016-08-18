@@ -41,7 +41,7 @@ public interface BbsDAO_interface {
 	    
 	    public int pageNavi(int board_idx);
 	    public int afterRewriteNavi(int ref , int sunbun);
-	    public int afterWriteNavi();
+	    public int afterWriteNavi(BbsDTOnorm dto);
 	    
 	    
 	    public int cmtPwdCheck(Long cmt_idx , Long password);

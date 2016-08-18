@@ -26,11 +26,7 @@
 <script type="text/javascript" src="javascript/isAvaliableBOM.js"></script>	
 <script type="text/javascript" src="Script_trouble_solver/jsonPlugIn/json2.js" ></script>
 
-
-
   <script>
-
-  
   function check(name,progid){
 	  
 	  var installed;
@@ -54,7 +50,6 @@
 		 {
 		    installed =false;
 		 }
-			 
 					 if(installed)
 					 {
 						msg = '설치됨';
@@ -67,113 +62,7 @@
      }
   }
 	 var ex =check('Adobe PDF Link Helper','AcroIEHelperShim.AcroIEHelperShimObj');
-   /* console.log(ex); */
   
-  /* tagType = input 등등 */
-  /* tagName = input 등등 name="tagName" */
-   /*    function getTagValue(tagType,tagname){
-	       
-           tagType==null?alert('noTageType'):tagType=tagType.toUpperCase();	 
-          
-           var inputs =document.getElementsByTagName(tagType);	  
-    	   var targetValue =null;
-    	   
-                for(var a =0 ; a < inputs.length ; a++)
-        	   {
-        	      if(inputs[a].name ===tagname)
-       	    	  {
-        	    	  targetValue =inputs[a].value;
-       	    	  }
-        	   }
-              
-             return targetValue;   
-      }         
-     */
-        
-/*      function pwdCheck(url)
-     {
-    	 var board_idx= getTagValue('input', 'board_idx');
-    	 var pwd= getTagValue('input', 'password');
-    	 var params='password='+pwd+'&board_idx='+board_idx;
-    
-    	     sendRequest(url, params, check, 'POST');
-    	 
-    	     function check()
-    	     {
-    	    	 if(XHR.readyState==4)
-    			 {
-    			    if(XHR.status==200)
-    		    	{
-                     var result = XHR.responseText;   
-                         result =JSON.parse(result);
-                           alert(result.msg);
-    		    	}
-   	    		 }
-    	     }
-     }
-    	 */
-    /*javascript 용 위쪽-------------------------------------------------------------------   */
-  
-/*    function updateForm(index,option){
-	   
-	   var mother = document.getElementById("comment_table");
-	 
-			   var content = index+'_content';
-			   var comment_board_idx = index+'_comment_board_idx'; 
-			   var password = index+'_password';
-			   
-			
-			   
-	   var pwd =document.getElementById(password);
-	   var pwdV=pwd.value;
-	   
-	   var cmt_idx =document.getElementById(comment_board_idx).firstChild.nextSibling;
-	   var cmt_idxV=cmt_idx.value;
-	   
-	   
-	   var content = document.getElementById(content);
-	   var contentV = content.textContent;
-	   
-	   var ctt_c =document.createElement("TEXTAREA");
-				    ctt_c.setAttribute("name", "content");
-				    ctt_c.setAttribute("id", "content");
-				    ctt_c.setAttribute("onclick","fnChkByte(this,'2000','t',null)");
-                    ctt_c.innerHTML=contentV;  
-				    
-	    var spn = document.createElement("span");
-			        spn.setAttribute("id", "t");
-			        spn.setAttribute("value", "0");
-	    
-		
-		content.removeChild(content.firstChild);
-		content.appendChild(ctt_c);
-		content.appendChild(spn);
-	
-	   
-	   var params="password="+pwd+"&comment_board_idx="+cmt_idx+"&option="+option;
-	   
-		   
-	   sendRequest(url, params, optionCk, 'POST');
-	  	 
-	   
-	     function optionCk()
-	     {
-	    	 if(XHR.readyState==4)
-			 {
-			    if(XHR.status==200)
-		    	{
-                 var result = XHR.responseText;   
-                  alert();  
-                  result =JSON.parse(result);
-                       alert(result.msg);
-		    	}
-			 }
-	     } 
-   } 
-    	 */
-
-
- 
     	 /*value =board_idx , key = deleteorupdate , id_key */
   function sendSubmit(value,key,id_key)
   {
@@ -203,8 +92,6 @@
    	    console.log("comment 관련\n cmt_idx: "+cmt_idx+ " key: "+key+"  pwdValue: "+pwdValue);
    	}
 	
-	/* console.log(pwd.value); */
-	/* console.log(pwd.value.length); */
 	var delOrUpdate =key;
 	
 	if(pwdValue.replace(/\s/g,"")=="" || pwdValue==null)
@@ -237,19 +124,16 @@
 	
 	pwdValue=pwdValue.replace(/\D/g,""); 
 	
-	
 	if(cmt_idx!="")
 		{
 		      params="password="+pwdValue+"&cmt_board_idx="+cmt_idx;
 		      checkCommand=checkCmtCommand;
-		     
-		   console.log("param information: "+params);
+		      console.log("param information: "+params);
 		}
 	else
 		{
 		      params="password="+pwdValue+"&board_idx="+board_idx;
 		}
-	
 	    
  	 sendRequest(checkCommand, params, getResult, 'POST'); 
 	  
@@ -284,17 +168,13 @@
 					            			   if(XHR.readyState==4 && XHR.status==200)
 				            				   {
 				            				       var result =XHR.responseText;
-				            				       
 				            				   }
-					            			   
-					            			   
 					            		   }
 					            		   
 					           	    	 }
 					           	    	 else
 					           	    	 {
-					           	    		 
-					           	    	  resultSend(deleteCommand,board_idx,pwdValue,'POST');
+					           	    	    resultSend(deleteCommand,board_idx,pwdValue,'POST');
 					           	    	 }	 
 					           	    	 
 					           		 }
@@ -304,14 +184,12 @@
 					           	    	
 					           	    		pwd.value="";
 						           	    	pwd.placeholder='수정&삭제 비밀번호';
-						           	    	
 					           	    	
 					           	    	    return;
 					           	     }
 			              }
 			              else if(result && delOrUpdate=='update')
 			              {
-			            	  
 			            	  pwdValue=pwdValue.replace(/\s/g,"");
 			            	 
 			            	  if(cmt_idx!="")
@@ -320,9 +198,6 @@
 		            		           params+="&option=update";
 		            		           method="POST";
 		            		           console.log(params+" method="+method);
-		            		           
-		            		           
-		            		           
 					            	   sendRequest(cmtUpdate_command, params, cmtUpdate_command, method);
 		            		           /* 삭제 하고나서 코멘트 div에 ajax로 코멘트 리스트를 다시 뿌려준다*/
 		            		  }
@@ -338,12 +213,12 @@
 			            	  if(isIE){
 			            		  
 			            		   alert('비밀번호가 틀립니다.');
+			            		   document.getElementById("p").innerText=0;
 			            		   pwd.value="";
 			            	   
 			            	  }
 			            	  else
 			            	  {
-			            		  
 			            		  pwd.value="";
 				                  pwd.placeholder="비밀번호가 틀립니다.";  
 				                  document.getElementById("p").innerText=0;
@@ -360,8 +235,6 @@
  		  
  	  var form = document.createElement("FORM");  
  		
- 		     /* var form =document.body.pwdCheck;  */
- 	            /* form.setAttribute("type","hidden"); */
 	 		    form.setAttribute("action",commandURL);
 	 	        form.setAttribute("method", method); 
  	            
@@ -370,8 +243,6 @@
 		 	    pwd.setAttribute("name", "password");
 		 	    pwd.setAttribute("value", password); 
 
-	   /*  form.appendChild(document.getElementById("passwordV")); */
-		 	   /*  console.log(password); */
 		 	    form.appendChild(pwd);   
 		 	    
 		 	var inp1 = document.createElement("INPUT");
@@ -392,9 +263,6 @@
  	{
  		/* 수정 및 삭제 후에 리스트를 뿌려주는 함수 입니다. 렛스고~  */
  	}
- 	 
-
- 	
   </script>
 <title>Insert title here</title>
 </head>
@@ -434,6 +302,7 @@
 						    <input type="button" name="reply" value="답글 작성" onclick="location.href='${replyForm}'">
 						  
 						    <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#collapse-1" id="gate">수정 및 삭제</button>
+		
 				<form onsubmit="return false;" name="pwdCheck">     
 							  <div id="collapse-1" class="collapse" align="left" >
 							      <div>
@@ -445,9 +314,7 @@
 							      <input type="button" name="updateForm"  value="수정" onclick="sendSubmit(${dto.board_idx},'update','passwordV');">
 						          <input type="button" name="del_content" value="삭제" onclick="sendSubmit(${dto.board_idx},'delete','passwordV');">
 							      </div>
-     						     
 							  </div>
-							 
 			    </form>  
 					     </c:when>
 					     <c:otherwise>	 
@@ -461,14 +328,7 @@
 						        </c:choose> 
 					    </c:otherwise>
 				</c:choose> 
-             <%--    <input type="hidden" name="cp" value="${cp}">
-				<input type="hidden" name="writer" value="${dto.writer}">
-				<input type="hidden" name="board_idx" value="${dto.board_idx}">
-				<input type="hidden" name="content" value=" ${dto.content}">
-				<input type="hidden" name="subject" value="${dto.subject}">
-				<input type="hidden" name="ref" value="${dto.ref}">
-				<input type="hidden" name="sundbun" value="${dto.sunbun}"> 
- --%>            </td>
+             </td>
 		  </tr>
 	  </tbody>
 <%-- 	  

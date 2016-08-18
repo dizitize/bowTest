@@ -263,9 +263,9 @@ public class BbsDAO_imple implements BbsDAO_interface {
 		return sqlMap.selectOne("afterRewriteNaviNormal", map);
 	}
 	
-	public int afterWriteNavi() {
+	public int afterWriteNavi(BbsDTOnorm dto) {
 		// TODO Auto-generated method stub
-		return sqlMap.selectOne("afterWriteNaviNormal");
+		return sqlMap.selectOne("afterWriteNaviNormal",dto);
 	}
 	
 	

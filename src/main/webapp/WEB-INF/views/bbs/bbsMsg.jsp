@@ -2,18 +2,10 @@
     pageEncoding="UTF-8"%>
 
 <script>
-       alert("${msg}");
+           alert("${msg}");
        
        <%if(request.getAttribute("location")!=null)
            {%> 
-           location.replace("${location}");
-           
-           <%}%>
-          
-       
-         
-       
-       
-       
-      
+                location.replace("${location}");
+         <%}%>
 </script>

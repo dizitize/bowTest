@@ -15,10 +15,6 @@
     
    function validWrite(){
 	   
-/* 	   var regex1 =/(\b\w*(\s*)\s*\w+\2\b)+/igm;
- 	    var regex1 =/^[\s]*|(\b(\w*(\s*)\s*\w+\2)\b)+|[\s]*$/igm; 
- 	    var regex1 =/(\b(\w*(\s*)\s*\w+\3)\b)+/igm; */
- 	     
  	    var isOk=false;
  	        
  	       var inputArr =document.getElementsByTagName("INPUT");
@@ -35,7 +31,6 @@
                 if(txtTemp=='')
            	  {
            	     txtArea.placeholder="필수 입력사항 입니다.";
-           	     /* txtArea.style.background="#61b0d5"; */
            	  }else
       		  {
            		 txtArea.value=txtTemp;
@@ -43,9 +38,9 @@
       		  }
     	
  	       /* 0=writer 1=subject  2=password */
- 	        for(var a =0 ; a< 3 ; a++)
+ 	        for(var a =0 ,temp; a< 3 ; a++)
         	{
-        	     var temp= inputArr[a].value;
+        	       temp= inputArr[a].value;
         	     
         	       temp=  temp.replace(/^\s*/g,"");
 	               temp=  temp.replace(/\s*$/g,"");
@@ -64,7 +59,6 @@
        	    	   inputArr[a].value=temp;
        	    	 }
         	}
- 
  	       
  	     if(isOk==true)
   	     {
@@ -99,7 +93,6 @@
 				</td>
 			</tr>
 			<tr>
-				
 				<td><input type="button" value="작성" name="write" onclick="validWrite();"> 
 				    <input type="button" value="취소" onclick="location.href='bbsListNormal.bow'">
 			   </td>
@@ -108,37 +101,5 @@
 	</form>
 	</div>
 </body>
-<script>
-	    /*길이~~~  */
-         /*  var length = document.getElementById("dd").attributes.length; */
-	     /*  var formData =document.getElementById("write")
-	      formData.addEventListener("click", function checkForm(){ */
-	    	 /*  var xyz = document.getElementsByName("xyz");
-	    	  xyz[0].style.color="red"; // make the first one red */
-		   /* var writer =document.getElementsByTagName("INPUT")[0].name; */
-		   /* var writer =document.getElementsByTagName("INPUT")[0].value; */
-		/*    var writer =document.getElementsByTagName("INPUT");
-		   var contentText =document.getElementsByTagName("TEXTAREA")[0];
-		   var booleanCard =true;
-		  
-		   if(contentText.value===null || contentText.value==='')
-		       booleanCard=false;		  
-		       
-		       contentText.placeholder="입력 바랍니다"; 
-		       
 
-		    for(var a = 0 ;a <=2; a++)
-		    {		    		    	
-               if(writer[a].value===null || writer[a].value==='')
-	           {
-	               writer[a].placeholder="입력 바랍니다";	   
-            	   booleanCard=false;
-	           }			    	
-		    }
-		        if(booleanCard===true)
-			   {
-			       document.writeOk.submit();	   
-			   }
-	   });     */
-	</script>
 </html>
