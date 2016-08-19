@@ -72,7 +72,7 @@
 	 	   ,pwd = document.getElementById("passwordV")
 	 	   ,pwdValue=pwd.value;
  	       
- 	      pwdValue =pwdValue.substring(0,9);		 
+ 	      pwdValue = pwdValue.substring(0,9);		 
  		 
  	     console.log(typeof(value));
     		 
@@ -94,19 +94,11 @@
 	
 	var delOrUpdate =key;
 	
-	if(pwdValue.replace(/\s/g,"")=="" || pwdValue==null)
+	if(pwdValue.replace(/\s/g,"")=="" || pwdValue==null || pwdValue==undefined)
 	{
-	  if(isIE)
-	  {
-  		  alert('값을 입력하세요.');
-  		  pwd.value="";
-   	      return;
-   	  
-	  }else{
 		     pwd.value="";
-		     pwd.placeholder='값을 입력하세요';
+		     alert('값을 입력하세요.');
 	    	 return;
-   	        }
 	}
 	
 	var checkCmtCommand="bbsCmtPwdCheck.bow"
@@ -119,8 +111,6 @@
 	   , cmtListShow=""
 	   , params;
 	
-	/* var updateCmmentCommand="";
-	var deleteCommentCommand=""; */
 	
 	pwdValue=pwdValue.replace(/\D/g,""); 
 	
@@ -152,7 +142,7 @@
 			              {
 					           	     if(confirm('정말로 삭제 하시겠습니까?'))
 					           		 {
-					           	    	 if(cmt_idx!="")
+					           	    	 if(cmt_idx!=0)
 					           	    	 {
 					           	    	   alert("코멘트 delete 입니다.");
 					           	          
@@ -266,8 +256,7 @@
   </script>
 <title>Insert title here</title>
 </head>
-<body>  
-   <div class="container">
+<body><div class="container">
   <h5>BOW-TECH_BBS_CONTENT</h5>
 	<table class="table table-bordered">
 		<thead>
@@ -331,31 +320,27 @@
              </td>
 		  </tr>
 	  </tbody>
-<%-- 	  
+	  
       <tfoot>
-			<tr>
-	        	<td id="${i.index}_comment_board_idx" colspan="2" align="center"><em style="font-size: 20px;">&lt;&nbsp;덧글 영역&nbsp;&gt;</em></td>
+			<tr>                                                                                  <!--&lt; or &#60; Entity name Browsers may not support all entity names, but the support for numbers is good.--> 
+	        	<td id="${i.index}_comment_board_idx" colspan="2" align="center"><em style="font-size: 20px;">&#60;&nbsp;덧글 영역&nbsp;&#62;</em></td>
             </tr>
        <c:choose>
            <c:when test="${comments!=null}">
                 <c:forEach var="cmt" items="${comments}" varStatus="i">
-                <br>
 				    <tr id="${i.index}_content">
 				        <td colspan="2" >
 				        <span >&nbsp;No. ${cmt.list_idx}&nbsp;&nbsp;&nbsp;<b>${cmt.writer}</b></span>     
 				        <br>
 					    <pre style=" word-wrap: break-word;white-space: pre-wrap;white-space: -moz-pre-wrap;white-space: -pre-wrap;white-space: -o-pre-wrap;word-break:break-all;">${cmt.content}</pre>			
 				        <div style="display: inline-block;"> 
-				            
 				            <label style="font-size: 10px;">Password:</label>
 				            <input type="password"  oninput="validNumb(this);" required="required" maxlength="10" id="${i.index}_password">
 							<input type="button" value="수정" onclick="sendSubmit( {cmt_idx : '${cmt.comment_board_idx}' ,command_option : 'update', index_password : '${i.index}_password'})">
 							<input type="button" value="삭제" onclick="sendSubmit( {cmt_idx : '${cmt.comment_board_idx}' ,command_option : 'delete', index_password : '${i.index}_password'})">
 					   </div>
-				       
 				       </td>
-					</tr>
-					  <br>
+				    </tr>
                 </c:forEach>  
                 <c:if test="${dto.password==1}">
                    <tr>
@@ -376,9 +361,9 @@
                     </tr>
 	         </c:when>
 	   </c:choose>
-	  </tfoot>    --%> 
+	  </tfoot>    
   </table>
- <%-- 
+
           <div id="comment-collapse" class="collapse" align="left">
 		   <c:choose>
 			    <c:when test="${dto.password==1}">
@@ -393,7 +378,7 @@
 						   </div>    
 						   <div align="left">
 						       <span>비밀번호</span>
-						        <input type="password" name="password" oninput="fnChkByte(this,'10',null,'num')" required="required" style="display: block;">
+						        <input type="password" name="password" oninput="fnChkByte(this,'9',null,'num')" maxlength="10" required style="display: block;">
 				                <input type="submit" value="덧글입력">
 						   </div>  
 						<input type="hidden" name="board_idx" value="${dto.board_idx}">
@@ -401,8 +386,36 @@
 				    </form>
 		      </c:when>
 		  </c:choose>
-		  </div>   --%>
+	  </div>   
   </div>
+  
+  <script>
+     
+    var arr = new Array();
+  
+    arr['DIV'] = "Korea";
+    
+    console.log(arr['DIV']);
+  
+    
+    var mother = document.documentElement;
+                 /* 
+                  docuement.documentElement 
+
+  Tip: The difference between this property and the document.body property, 
+       is that the document.body element returns the <body> element, 
+       while the document.documentElement returns the <html> element.
+                   */
+        mother.body;
+    
+      console.log(mother.children.length);
+      console.log(mother.children.firstChild.nodeName);
+    
+    
+    
+  
+  </script>
+  
   
 </body>
 </html>

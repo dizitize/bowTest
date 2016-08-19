@@ -57,7 +57,7 @@ public String pagination(String url ,int cp, int ps, int ls, int totalCnt, int t
 			sb.append("</li>");
 		}
 
-		if (totalP >= 1) {
+		if (totalP > 0) {
 			for (int a = userG * ps + 1; (userG * ps) + ps >= a; a++) {
 				sb.append("<li>");
 				sb.append("<a href='" + url + "?cp=" + a);

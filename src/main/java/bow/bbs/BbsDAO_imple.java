@@ -145,7 +145,6 @@ public class BbsDAO_imple implements BbsDAO_interface {
              e.setWriter(e.getWriter().replaceAll("\r\n","<br>"));
 	     }
 		
-		
 		return dtoList;
 	}
 	
@@ -168,7 +167,6 @@ public class BbsDAO_imple implements BbsDAO_interface {
 		return sqlMap.update("updateContentNormal", dto);
 	}
 	
-	
 	public int deleteContent_normal(int board_idx) {
 	
     	int result =sqlMap.selectOne("lookForCommentsReply",board_idx);
@@ -187,8 +185,6 @@ public class BbsDAO_imple implements BbsDAO_interface {
 	            System.out.println("afterdelete  : "+result);
 				result= sqlMap.delete("deleteContentNormal",board_idx);
 				System.out.println("delete : "+result);
-               
-				
 		    }
 			
 			return result;

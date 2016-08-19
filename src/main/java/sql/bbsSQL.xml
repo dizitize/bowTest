@@ -59,8 +59,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                               )
 </insert>
 
-
-
 <update id="updateContent" parameterType="bbsDTO">
     update board set subject = #{subject}, 
                      content = #{content}, 
@@ -98,7 +96,46 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <select id="bbsListNormal" resultType="bbsDTOnorm">
  <![CDATA[
-        
+         select  f.* ,( select  case when list_se_idx=0 then to_char(list_idx) else to_char(list_idx)||' - '||to_char(list_se_idx) end   
+	                  from   
+				    (
+				        select 
+				              a_a.board_idx , a_a.ref , a_a.lev ,a_a.lev_me , a_a.lev_point, g_g.rn as list_idx ,          
+				              (select count(ref) from board where ref =a_a.ref and sunbun>=a_a.sunbun and a_a.lev != 0)as list_se_idx
+				               from 
+				                  board a_a,
+				                  (
+				                    select row_number() over (order by ref) as rn , ref 
+				                    from (select ref from board group by ref order by ref desc) 
+				                    order by rn desc
+				                   )g_g
+				               where a_a.ref =g_g.ref 
+				               order by a_a.ref desc , a_a.sunbun asc
+				    )
+				    where ref=f.ref and lev=f.lev-1 and lev_me=f.lev_point 
+                ) as list_idx_pointer  
+   from
+    (
+     select t.* ,rownum as inx 
+      from
+       (select 
+          a.board_idx , a.subject ,a.writer, a.ref , a.lev, a.lev_me , a.lev_point, a.sunbun , g.rn as list_idx ,
+          (select count(*)from comment_board where board_idx=a.board_idx)as news,
+          (select count(ref) from board where ref =a.ref and sunbun>=a.sunbun and a.lev != 0)as list_se_idx,
+          to_char(a.writedate,'yyyy"년 "mm"월 "dd"일  " hh24"시 "mm"분"') as datechar,
+          a.writedate ,a.readnum         
+           from 
+              board a,
+              (
+                select row_number() over (order by ref) as rn , ref 
+                from (select ref from board group by ref order by ref desc) 
+                order by rn desc
+               )g
+           where a.ref =g.ref 
+           order by a.ref desc , a.sunbun asc
+         )t
+       )f
+       where inx >= (#{cp}-1)*#{ls}+1 and inx <= #{cp}*#{ls}   
 
  ]]>
 </select>
