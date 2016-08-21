@@ -106,7 +106,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				                  board a_a,
 				                  (
 				                    select row_number() over (order by ref) as rn , ref 
-				                    from (select ref from board group by ref order by ref desc) 
+				                    from (select ref from board where lev=0) 
 				                    order by rn desc
 				                   )g_g
 				               where a_a.ref =g_g.ref 
@@ -128,7 +128,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
               board a,
               (
                 select row_number() over (order by ref) as rn , ref 
-                from (select ref from board group by ref order by ref desc) 
+                from (select ref from board where lev=0) 
                 order by rn desc
                )g
            where a.ref =g.ref 
@@ -382,7 +382,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
       
     insert into comment_board values(  
                                     comment_board_idx_seq.nextval,#{board_idx}, 
-                                    #{content}, #{writer}, sysdate, #{password}
+                                    #{content}, #{writer}, sysdate, #{password} ,0,0
                                    )       
   </insert>
 

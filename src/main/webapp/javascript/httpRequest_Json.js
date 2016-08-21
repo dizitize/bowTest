@@ -1,6 +1,6 @@
-var XHR = null;
+var json_XHR = null;
 
- function getXHR()
+ function json_getXHR()
  {
 	 if(window.ActiveXObject) 
 	 {
@@ -17,7 +17,7 @@ var XHR = null;
 	 }	 
  }
  
- function sendRequest(url,params,callback,method)
+ function json_sendRequest(url,params,callback,method)
  {
 	 XHR= getXHR();
 	 

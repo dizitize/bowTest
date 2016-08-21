@@ -523,43 +523,49 @@ public class BbsControllerNormal {
    	public ModelAndView commentUpdate(HttpServletRequest req, CommentDTO dto)
    	{
    		ModelAndView mav = new ModelAndView();
-   		
-   		
+   		System.out.println("bbsCommentUpdateNormal.bow 진입 입니다.");
+   	
    				if(req.getMethod().equals("POST"))
    				{	
    					String option =req.getParameter("option");
-   					
+   					System.out.println("option :"+option);
+   					System.out.println("dto :"+dto);
    						if(dto!=null && option!=null)
    						{
-	   							if(option=="delete")
+	   							if(option.equals("delete"))
 	   							{
-	   								
+	   								System.out.println("delete 진입");
 				   							 if(bbsDao.commentDelete(dto.getComment_board_idx())==1)
 												{
 											
-													mav.setViewName("redirect:/bbsContentNormal.bow?board_idx="+dto.getBoard_idx());										  
+													/*mav.setViewName("redirect:/bbsContentNormal.bow?board_idx="+dto.getBoard_idx());	*/	
+				   								      mav.addObject("result",true);
+				   								      mav.setViewName("bbs/cmtResult");
 												}
 												else
 												{
 													mav.setViewName("bbs/bbsMsg");
 													mav.addObject("msg", "값이 일치하지않습니다. 삭제 불가   errcode:BBSwSQER"); 
-													mav.addObject("location", "bbsContentNormal.bow?board_idx="+dto.getBoard_idx());  
+													mav.addObject("result","false");
+													/*mav.addObject("location", "bbsContentNormal.bow?board_idx="+dto.getBoard_idx());*/  
 													  /*bbs sql error */ 
 												}
 	   							}
-	   							else if(option=="update")
+	   							else if(option.equals("update"))
 	   							{
 			   	   								
 			   	   							 if(bbsDao.commentUpdate(dto)==1)
 			   									{
-			   								
-			   										mav.setViewName("redirect:/bbsContentNormal.bow?board_idx="+dto.getBoard_idx());										  
+			   	   							        mav.addObject("result","true");
+			   	   							        mav.setViewName("bbs/bbsMsg");
+			   										/*mav.setViewName("redirect:/bbsContentNormal.bow?board_idx="+dto.getBoard_idx());*/										  
 			   									}
 			   									else
 			   									{
 			   										mav.setViewName("bbs/bbsMsg");
+			   										mav.addObject("result","false");
 			   										mav.addObject("msg", "값이 일치하지않습니다. 수정불가   errcode:BBSwSQER"); 
-			   										mav.addObject("location", "bbsContentNormal.bow?board_idx="+dto.getBoard_idx());  
+			   										/*mav.addObject("location", "bbsContentNormal.bow?board_idx="+dto.getBoard_idx());*/  
 			   										  /*bbs sql error */ 
 			   									}
 	   							}
@@ -583,17 +589,16 @@ public class BbsControllerNormal {
     @RequestMapping("/bbsCmtPwdCheck.bow")
     public @ResponseBody String cmt_pwd_check(HttpServletRequest req) throws  IOException
     {
-    	Long pwd=3L;
+    	Long pwd=0L;
     	Long cmt_idx=0L;
        
      try{
-    	   
-    	   ObjectMapper mapper = new ObjectMapper();
+    	       ObjectMapper mapper = new ObjectMapper();
     	   
 			    String pwd_s =mapper.writeValueAsString(req.getParameter("password"));
 	    	    System.out.println("패스워드 길이: "+pwd_s.length());
 	    	  
-	    	   String cmt =mapper.writeValueAsString(req.getParameter("cmt_board_idx"));
+	    	   String cmt =mapper.writeValueAsString(req.getParameter("comment_board_idx"));
 	    	   System.out.println("cmt_idx 길이: "+cmt.length());
 	    	   
 	    	   

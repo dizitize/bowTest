@@ -252,11 +252,15 @@
                                    </c:choose>
 	                            </c:when>
 	                    </c:choose>
-	                     ${dto.subject}
+	                    <%--  ${dto.subject} --%>
+	                       <span style="font-size: 17px;" class="subject_after" 
+                                   id="<c:if test="${dto.news>=1}">${dto.news}</c:if>">
+                                         
+                                      :&nbsp;&nbsp;${dto.subject}</span> 
 	                 </a>
-	                  <c:if test="${dto.news>=1}">
+	                 <%--  <c:if test="${dto.news>=1}">
 	                      <span class="badge" style="background-color: #61b0d5;">${dto.news}</span>
-	                    </c:if>		  	                
+	                    </c:if> --%>		  	                
             </c:when>
             
             <c:otherwise>
@@ -266,16 +270,32 @@
 	                     
 	                     <c:choose>
 	                          <c:when test="${dto.list_se_idx==0 && dto.lev==0}">
-	                             <font style="font-size: 19px;">&nbsp;&nbsp;${dto.subject}</font>
-	                          </c:when>
+	                            <%--  <font style="font-size: 19px;">&nbsp;&nbsp;${dto.subject}</font> --%>
+	                              
+<%--***  SUBJECT-LEV0  start line ***** 답글이 아닌 LEV=0 SUBJECT 만약 코멘트 글일 있다면 해당 코멘트 갯수를 달기위한  if statement ****--%>
+	                                   <c:choose>
+		                             <%-- lev=0 이면서 답글이  있다면 --%>
+		                                   <c:when test="${dto.news>=1}">
+				                                 <span style="font-size: 17px;" class="subject_after" id="${dto.news}">
+				                                       ${dto.subject}
+				                                 </span>
+		                                   </c:when>
+		                                   
+		                             <%-- lev=0 이면서 답글이 없다면 --%>
+		                                   <c:otherwise>
+			                                     <span style="font-size: 17px;">
+				                                       ${dto.subject}
+				                                 </span>
+		                                   </c:otherwise>
+	                                   </c:choose>
+<%--***  SUBJECT-LEV0  end line ***** 답글이 아닌 LEV=0 SUBJECT 만약 코멘트 글일 있다면 해당 코멘트 갯수를 달기위한  if statement ****--%>
+	                            </c:when>
 	                          <c:when test="${dto.list_se_idx==0 && dto.lev!=0}">
                                   <font style="font-size: 19px;">&nbsp;&nbsp;${dto.subject}</font>
 	                          </c:when>
 	                     </c:choose>
 	           
                         <c:if test="${dto.list_se_idx!=0}">
-                        <!-- <i class="fa fa-chevron-circle-right" aria-hidden="true" style="color:#61b0d5;">&nbsp;&nbsp;</i> -->
-                       
                               <c:choose>
                                 <c:when test="${dto.lev!=0}">
                                    <c:choose>
@@ -297,14 +317,15 @@
                                    </c:choose>
                                      
                                    <font style="font-size: 13px; color: gray;"><b>${dto.list_idx_pointer}</b>번 답글&nbsp;&nbsp;</font> 
-                                   <font style="font-size: 17px;"> :&nbsp;&nbsp;${dto.subject}</font>
+                                   <div style="display: inline-block; font-size: 17px;" class="subject_after" 
+                                   id="<c:if test="${dto.news>=1}">${dto.news}</c:if>">
+                                         
+                                      :&nbsp;&nbsp;${dto.subject}</div> 
                                 </c:when>
                              </c:choose>
                         </c:if> 
                    </span> 
-           	      <%--  <c:if test="${dto.news>=1}">
-           	       <font class="badge" style="position:absolute; background-color: #31b0d5; font-size: 10px;">comment: ${dto.news}</font>
-           	       </c:if> --%>
+           	    
                 </a>	
   	         </c:otherwise>
   	    </c:choose>

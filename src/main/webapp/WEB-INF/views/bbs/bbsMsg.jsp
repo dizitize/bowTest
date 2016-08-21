@@ -8,4 +8,6 @@
            {%> 
                 location.replace("${location}");
          <%}%>
+        
 </script>
+

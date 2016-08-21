@@ -12,10 +12,31 @@ public class CommentDTO {
 	private int password;
 	private int list_idx;
 	
+	private int ref;
+	private int lev;
+	
 	public CommentDTO() {
 		// TODO Auto-generated constructor stub
 	}
 	
+	
+	
+	public CommentDTO(int comment_board_idx, int board_idx, String content, String writer, Date writedate, int password,
+			int list_idx, int ref, int lev) {
+		super();
+		this.comment_board_idx = comment_board_idx;
+		this.board_idx = board_idx;
+		this.content = content;
+		this.writer = writer;
+		this.writedate = writedate;
+		this.password = password;
+		this.list_idx = list_idx;
+		this.ref = ref;
+		this.lev = lev;
+	}
+
+
+
 	protected CommentDTO(int comment_board_idx, int board_idx, String content, String writer, Date writedate,
 			int password, int list_idx) {
 		super();
@@ -93,6 +114,30 @@ public class CommentDTO {
 
 	public void setPassword(int password) {
 		this.password = password;
+	}
+
+
+
+	public int getRef() {
+		return ref;
+	}
+
+
+
+	public void setRef(int ref) {
+		this.ref = ref;
+	}
+
+
+
+	public int getLev() {
+		return lev;
+	}
+
+
+
+	public void setLev(int lev) {
+		this.lev = lev;
 	}
 
 }

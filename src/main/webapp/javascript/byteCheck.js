@@ -94,6 +94,10 @@ function fnChkByte(obj, maxByte, writeByte, num){
 						    writeByte!=null?document.getElementById(writeByte).innerText = rbyte:'';
 						    alert("숫자 "+maxByte+"자를 초과 입력할 수 없습니다.");
 						   
+						    /*재귀의 이유는 글자수는 이미 유효범위까지의 길이를 통해 잘라 보냈다  허용 범위를 넘어서는 글자수를 계산 하기는 쉽지만 이미 잘라내버린 글자들의 바이트 수를 체크 하였기에 
+						     * 
+						     * */
+						    console.log("obj.length: ");
 						   fnChkByte(obj, maxByte,writeByte, num);
 					}else
 					{
