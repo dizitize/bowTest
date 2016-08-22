@@ -207,7 +207,6 @@
 		            				    	   }
 			            				   }
 				            		   }
-				            		   
 				           	    	 }
 				           	    	 else
 				           	    	 {
@@ -228,190 +227,122 @@
 			              else if(result && delOrUpdate=='update')
 			              {
 			            	  pwdValue=pwdValue.replace(/\s/g,"");
-			            	 
+	/* *** 코멘트 업데이트 진입  *********************/		            	 
 			            	  if(cmt_idx!="")
 		            		  {
-		            		           alert("코멘트 업데이트 입니다.");
+					              /* SPAN   writer_span_id
+						          /* DIV   content_id 
+						           cmt_idx == 실제 comment_idx 값 */       		           
 		            		           
-		            	   /* li 태그 내용물이 들어있는 최상위 노드 nodeInfo */    
-		            		           var nodeInfo = document.getElementById(target_elem);
-		            	  /*                  alert(nodeInfo.children.length);
-		            	        for(var a = 0 ; a , nodeInfo.children.length ; a++)
-		            		   {
-		            	        	alert(nodeInfo.children[a].attributes.length);
-		            	        	for(var b = 0 ; b < nodeInfo.children[a].attributes.length; b++)
-	            	        		{
-		            	        		alert(nodeInfo.children[a].attribut.nodaName);
-	            	        		}
-		            	        	
-		            		   } */
-		            	       
-		            		           var child =nodeInfo.childNodes;
-           		           /* SPAN  writer_span_id
-           		           /* DIV   content_id 
-           		              cmt_idx == 실제 comment_idx 값 
-           		           */
-           		           /* 기존 span 및 div 에 담긴 내용물을 가져오기 위해 node 방식으로 접근 하여 내용물 추출  */
-		            		           var writer_id =value.writer_span_id,
-		            		               content_id = value.content_id;
-           		                           
-           		                       var writer_id_dom =document.getElementById(writer_id);
-           		                           content_id_dom =document.getElementById(content_id);
-		            		           
-           		                       var writer_id_value=writer_id_dom.innerText;
-		            		               content_id_value=content_id_dom.innerText;
+		   /* li 태그  최상위 노드 nodeInfo */    
+         		                var nodeInfo  = document.getElementById(target_elem),
+         		                    child     = nodeInfo.childNodes;
+           		         
+              /* 기존 span 및 div 에 담긴 내용물을 가져오기 위해 node 방식으로 접근 하여 내용물 추출  */
+           		
+                                var writer_id  = value.writer_span_id,
+           		                    content_id = value.content_id;
+        		               
+             /*content & writer DOM info  */
+   		                        
+           		                var writer_id_dom  = document.getElementById(writer_id),
+   		                            content_id_dom = document.getElementById(content_id);
+   		                  
+        	/*content & writer DOM attribute.innerText  */
+   		                   
+           		                var writer_id_value  = writer_id_dom.innerText;
+           		                    content_id_value = content_id_dom.innerText;
+           		               
+           /*content & writer parent NODE */
+           		                    
+           		                var writer_id_motherNode =writer_id_dom.parentNode,
+           		                    content_id_motherNode = content_id_dom.parentNode;
 		            		               
-		            		               var writer_id_motherNode =writer_id_dom.parentNode;
-		            		               var content_id_motherNode = content_id_dom.parentNode;
-		            		               
-		            		              /*  write_target.remove(); */
 		            		                   
-		            		 /* start* 기존 value 값을 담은 새로운input & textArea field CREATE */       
+      /* start* 기존 value 값을 담은 새로운input & textArea field CREATE */       
 		            		          
-		            		         /* form으로 바로 동기식 처리해 버릴꺼임  */  
+		         /* 정보가 담길   form으로 바로 동기식 처리해 버릴꺼임    */  
 		            		           var newForm = document.createElement("FORM");
-		            		               newForm.setAttribute("action", "bbsCommentWriteNormal.bow");
+		            		               newForm.setAttribute("action",cmtUpdate_command);
 		            		               newForm.setAttribute("method", "POST");
-		            		          
+		            		               
+		        /* hidden 에  comment_board_idx */
+		            		               var comment_board_idx = document.createElement("INPUT");
+		            		                   comment_board_idx.setAttribute("type","hidden");
+		            		                   comment_board_idx.setAttribute("name","comment_board_idx");
+		            		                   comment_board_idx.setAttribute("value",cmt_idx);
+		            		               newForm.appendChild(comment_board_idx);
+		            		             
+          	   /* hidden 에  option update */
+		            		               var option_cmt= document.createElement("INPUT");
+		            		                   option_cmt.setAttribute("type","hidden");
+		            		                   option_cmt.setAttribute("name","option");
+		            		                   option_cmt.setAttribute("value","update");
+		            		              newForm.appendChild(option_cmt);
 		            		               
 		            		               
-		            		           /*     alert(newForm.attribute[0].name); */
-		            		               
-		            		          /* 작성자 Input */
+		              /* 작성자 Input   기존  writer 정보가 담긴 span 을 input 으로 */
 		            		           var new_writer_input = document.createElement("INPUT");
 		            		               new_writer_input.setAttribute("name", "writer");
 		            		               new_writer_input.setAttribute("maxlength", 10);
 		            		               new_writer_input.setAttribute("oninput", "fnChkByte(this,30,'ci',null)"); 
 		            		               new_writer_input.setAttribute("value", writer_id_value);
-		            		              
 		            		               
-		            		              var spanz = nodeInfo.getElementsByTagName("SPAN");
-		            		                
-		            		                /*  nodeInfo.append=new_writer_input;  */
-		            		                 /* spanz[0].nextSibling. */
+		            		               /* 작성자 부분 글자수 체크  */
+		            		               var writer_span =document.createElement("SPAN");
+		            		                   writer_span.setAttribute("id","ci");
+		            		                   writer_span.setAttribute("value",writer_id_value);
+		            		               
+		            		                   var writer_span_after_txt =document.createTextNode("/30");
 		            		               
 		            		               
-		            		              writer_id_motherNode.insertBefore(new_writer_input, writer_id_dom );
+            		               /*  새로만든 input은 부모노드의 자식으로 들어감  */
+            		               writer_id_motherNode.insertBefore(new_writer_input, writer_id_dom);
 		            		              
 		            		               /*childNode  text 노드를 무시한다  */  
 		            		               /*children   text 노드를 포함한다.  */  
+		            		               
+		            		      /*기존   input password 및   span 태그  writer 정보를 삭제  */
 		            		                writer_id_motherNode.children[2].remove(); 
 		            		                writer_id_motherNode.children[3].children[0].remove();
-		            		                writer_id_motherNode.children[3].children[1].remove();
-		            		                
+		            		     
+		            		     /*기존   input 버튼 2개를  취소=location.reload  및  수정 완료 버튼 submit 으로 만듬  */          
 		            		                writer_id_motherNode.children[3].children[0].value="수정 완료";
 		            		                writer_id_motherNode.children[3].children[0].setAttribute("type","submit");
-		            		                
-		            		               
-		            		              /*    alert(writer_id_motherNode.children[3].childNodes[0].nodeName);  */
-		            		              /*    spanz[1].remove(); */
-		            		                
-		            		                 /* nodeInfo.insertBefore(new_writer_input,nodeInfo.childNodes[1]); */
-		            		                 
+		            		                writer_id_motherNode.children[3].children[0].removeAttribute("onclick");
+			            		                writer_id_motherNode.children[3].children[1].value="취소";
+			            		                writer_id_motherNode.children[3].children[1].setAttribute("type","button");
+			            		                writer_id_motherNode.children[3].children[1].setAttribute("onclick","window.location.reload();");
 		            		               
 		            		               
-		            		            /*    var item = document.getElementById("myList").childNodes[0];
-		            		            // Replace the first child node of <ul> with the newly created text node
-		            		            item.replaceChild(textnode, item.childNodes[0]);    */
-		            		               
-		            		            
-		            		            
-		            		           var writer_span =document.createElement("SPAN");
-		            		               writer_span.setAttribute("id","ci");
-		            		               writer_span.setAttribute("value",0);
-		            		               
-		            		               
-		            		               
-		            		/* 집에서 보자~~~~ */               
-		            		          /* 컨텐츠 Textarea */     
+		            		   /* 컨텐츠  Textarea 위와 같은 형태의 작업  value 뽑아 버린 tag 버리고 바꿈  */     
 		            		           var new_txtArea = document.createElement("TEXTAREA");
 		            		               new_txtArea.setAttribute("name", "content"); 
+		            		               new_txtArea.setAttribute("style", "width:100%"); 
 		            		               new_txtArea.setAttribute("oninput", "fnChkByte(this,100,'ct',null)");
-		            		               new_txtArea.setAttribute("value", content_id_value); 
+		            		               new_txtArea.value=content_id_value;
 		            		               
+		            		               var br =document.createElement("BR");
+		            		           
 		            		           var txt_span =document.createElement("SPAN");
 			            		           txt_span.setAttribute("id","ct");
-			            		           txt_span.setAttribute("value",0);     
-		            		               
-		            		           
-			            		           /* content_id_motherNode.children[1].remove(); */
-			            		           content_id_motherNode.insertBefore(new_txtArea,content_id_dom);
-        		   		/* 집에서 보자~~~~ */    		/* 집에서 보자~~~~ */    		/* 집에서 보자~~~~ */    		           
+			            		           txt_span.innerText=content_id_value.length; 
+			            		          
+			            		           var span_after_txt =document.createTextNode("/100");
 			            		           
-			            		           
-       		                 /* end* 기존 value 값을 담은 새로운input & textArea field CREATE */          
 		            		           
+           		           content_id_dom.firstChild.remove();
+           		           content_id_dom.appendChild(new_txtArea);
+           		           content_id_dom.appendChild(br);
+           		           content_id_dom.appendChild(txt_span);
+           		           content_id_dom.appendChild(span_after_txt);
        		            
-       		                 
-       		                 
-				            		           console.log("writer_span_id : "+writer_id); 
-				            		           console.log("content_id : "+content_id); 
-			            		           
-			            		       /* 작성 내용 제목과 컨텐츠 내용을 받음  */
-			
-			            		       
-			            		       
-	            <%-- 	         <div class="comment-main-level">
-				            				   *---------  content 코멘트 문자 정보  box START  --------------
-				      		                 <div class="comment-box">
-				      		       -*-1---  comment header  기능들  :  1.작성자  , 2.댓글에 답변 달기  , 3. 수정및 삭제  --- ---
-				      		                     	<div class="comment-head">
-				      			                      
-				      			                        <span>No.&nbsp;${cmt.list_idx}&nbsp;&nbsp;</span>
-				      			                        <span id="comment_writer${cmt.list_idx}">${cmt.writer}</span> 
-				      			                  
-				      			                        작성 후 경과 시간 작성  지금은 주석 처리 중   
-				      			                        <span>hace 20 minutes </span>
-				      			                       
-				      			                         아래 글 수정 hidden area DIV id 값을 전달  보이게 해 주는 onClick event   
-				      			                        <i class="fa fa-cogs" aria-hidden="true" onclick="comment_modify('${i.index}_comment_modify')"></i>
-				      			                   <!--      <i class="fa fa-commenting" aria-hidden="true"></i> -->
-				      			                        
-				                             hidden 글 수정  hidden start default = display none & visibility hidden
-				                                <div class="comment-modify-hidden" id="${i.index}_comment_modify" style="display: none;"> 
-				                                  <input type="password"  oninput="validNumb(this);" required="required" maxlength="10" id="${i.index}_password" placeholder="password">
-				      							<input type="button" value="수정" onclick="sendSubmit( {cmt_idx : '${cmt.comment_board_idx}' ,command_option : 'update', index_password : '${i.index}_password',target_tr :'${i.index}_content', writer_span_id : 'comment_writer${cmt.list_idx}' , content_id : 'comment-content${cmt.list_idx}' })">
-				      							<input type="button" value="삭제" onclick="sendSubmit( {cmt_idx : '${cmt.comment_board_idx}' ,command_option : 'delete', index_password : '${i.index}_password',target_tr :'${i.index}_content'})">
-				                                </div>
-				      	          		  hidden 글 수정 hidden start default = display none & visibility hidden                     
-				      		                        </div>
-				      		        -*-1---  comment header  END  --------------------------------------- ---
-				      		                   comment content 글 내용            --------------------------------------  
-				                              		 <div class="comment-content" id="comment-content${cmt.list_idx}"> ${cmt.content} </div>
-				                                comment content 글 내용  END ---------------------------------------
-				      		                  </div> --%>
-			            		           
-				      		                  
-				      		                  
-				      		                  
-				      		                  
-            		               /* input tag & textArea 로 변경 시킨다.  */
-		            		         
-   /*   var changeTagWrtier  =   document.createElement("INPUT"), 
-         changeTagContent =   document.createElement("TEXTAREA");            		                
-		            		               
-         changeTagWrtier.setAttribute( "value", writer_span_id_value);		            		               
-         changeTagWrtier.setAttribute( "name", "writer");
-         
-         writer_span_tag.
-         
-         changeTagContent.setAttribute("value", content_id_value);
-         changeTagWrtier.setAttribute( "name", "content"); */
-            
-        
-		            		           
-		            		        /*    params+="&option=update&writer="+writer+"&content="+content; */
-		            		           method="POST";
-		            		           console.log(params+" method="+method);
-					            	  
-		            		           
-		            		           /* sendRequest(cmtUpdate_command, params, cmtUpdate_command, method); */
-		            		           /* 삭제 하고나서 코멘트 div에 ajax로 코멘트 리스트를 다시 뿌려준다*/
+       		             newForm.appendChild(nodeInfo.childNodes[1]);
+       		             nodeInfo.appendChild(newForm);
+       		            
 		            		  }
 			            	  else
 			            	  {
-			            		   /* alert(result); */
-				            	   /* alert(pwd.value); */
 				            	  resultSend(updateCommand, board_idx, pwdValue,'POST'); 
 			            	  }	  
 			              }
@@ -430,7 +361,6 @@
 				                  pwd.placeholder="비밀번호가 틀립니다.";  
 				                  document.getElementById("p").innerText=0;
 				                  alert('비밀번호가 틀립니다.');
-				                   /*   pwd.focus(); */
 			            	  }
 		            	  }
 		    	}

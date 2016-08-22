@@ -558,7 +558,7 @@ public class BbsControllerNormal {
 			   									{
 			   	   							        mav.addObject("result","true");
 			   	   							        mav.setViewName("bbs/bbsMsg");
-			   										/*mav.setViewName("redirect:/bbsContentNormal.bow?board_idx="+dto.getBoard_idx());*/										  
+			   										mav.setViewName("redirect:/bbsContentNormal.bow?board_idx="+dto.getBoard_idx());										  
 			   									}
 			   									else
 			   									{
