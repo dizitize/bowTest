@@ -39,3 +39,13 @@ drop table board
          )
    
 drop table board
+  
+   create sequence file_idx_seq 
+
+  create table file 
+  {
+    file_idx number(38) primary key,
+    file_name varchar2(300),
+    board_idx number(38)
+  }
+
