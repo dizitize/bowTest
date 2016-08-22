@@ -134,3 +134,71 @@
               </c:when>
 	     </c:choose>
 	</div>   
+	
+	
+	
+	
+	
+	
+	<!-- 아래 콜랩스 버튼과 코멘트 입력 폼   -->
+	
+	    <c:if test="${comments!=null&&dto.password==1}">
+             <%-- 삭제된 컨텐츠 일 경우 댓글 달기 버튼이 없음      dto.password==1 : 살아있는 게시물  --%>
+            <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#comment-collapse" >코멘트 남기기</button>
+        </c:if>
+	
+	
+	      <div id="comment-collapse" class="collapse" align="left">
+		   <c:choose>
+			    <c:when test="${dto.password==1}">
+			       <form action="bbsCommentWriteNormal.bow" method="post" name="comment_area">
+			              <div class="comment-main-level">
+		            <%--------- 작성자 아이콘     -----------------------%>
+		   <%--*---------  content 코멘트 문자 정보  box START  ----------------%>
+		                 <div class="comment-box">
+		       <%---*-1---  comment header  기능들  :  1.작성자  , 2.댓글에 답변 달기  , 3. 수정및 삭제  --- -----%>
+		                     	<div class="comment-head">
+			                         <input type="text" class="input-writer" name="writer" oninput="fnChkByte(this,30,null,null)" required>
+			                         <input type="password" name="password" oninput="fnChkByte(this,'9',null,'num')" maxlength="10" required style="display: block;">
+				                     <input type="submit" value="덧글입력">
+                                           
+		                        </div>
+		        <%---*-1---  comment header  END  --------------------------------------- -----%>
+		                   <%-- comment content 글 내용            ----------------------------------------%>  
+                        		<div class="comment-content">
+                        		   <textarea name="content" style="width: 100%;" oninput="fnChkByte(this,'2000','t',null)" required></textarea>
+						           <br><span id="t" style="display: inline-block;">0</span>/2000
+                        		</div>
+                          <%-- comment content 글 내용  END -----------------------------------------%>
+		                  </div>
+         <%--*------   content 코멘트 문자 정보  box END  ------------------%>
+                          <input type="hidden" name="board_idx" value="${dto.board_idx}">  
+		             </div>
+			    </form>
+			    
+			    
+				   <%--  <form action="bbsCommentWriteNormal.bow" method="post" name="comment_area">
+				      <div class="container" align="left">
+					       <div align="left">
+						      <span style="display: block;">제목 :</span><input type="text" class="input-writer" name="writer" oninput="fnChkByte(this,30,null,null)" required>
+						   </div>
+						   <div align="left">
+						      <textarea name="content" style="width: 600px;" oninput="fnChkByte(this,'2000','t',null)" required></textarea>
+						      <br><span id="t" style="display: inline-block;">0</span>/2000
+						   </div>    
+						   <div align="left">
+						       <span>비밀번호</span>
+						        <input type="password" name="password" oninput="fnChkByte(this,'9',null,'num')" maxlength="10" required style="display: block;">
+				                <input type="submit" value="덧글입력">
+						   </div>  
+						<input type="hidden" name="board_idx" value="${dto.board_idx}">
+					 </div>	
+				    </form> --%>
+		      </c:when>
+		  </c:choose>
+	  </div>   
+	  
+	
+	
+	
+	

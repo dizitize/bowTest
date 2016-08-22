@@ -31,9 +31,11 @@ drop table board
            comment_board_idx number(38) primary key,
            board_idx number(38) not null,
            content varchar2(2000),
-           writer varchar2(30),
+           writer varchar2(100),
            writedate date,
            password number(10) not null
+           ref number(38) ,
+           lev number(38)
          )
    
 drop table board

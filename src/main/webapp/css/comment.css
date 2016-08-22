@@ -185,7 +185,7 @@ body {
 }
 .comment-box .comment-head {
 	background: #FCFCFC;
-	padding: 10px 12px;
+	padding: 10px 12px 20px;
 	border-bottom: 1px solid #E5E5E5;
 	overflow: hidden;
 	-webkit-border-radius: 4px 4px 0 0;
@@ -265,6 +265,17 @@ body {
    position: relative;
    float: right;
 }
+
+/*hidden list 정보 숨긴 class  */
+
+ .hidden-list
+ {
+ 
+ } 
+
+/*hidden list 정보 여는 trigger class  */
+
+
 
 
 /** =====================

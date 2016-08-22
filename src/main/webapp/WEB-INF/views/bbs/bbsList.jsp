@@ -275,7 +275,7 @@
 <%--***  SUBJECT-LEV0  start line ***** 답글이 아닌 LEV=0 SUBJECT 만약 코멘트 글일 있다면 해당 코멘트 갯수를 달기위한  if statement ****--%>
 	                                   <c:choose>
 		                             <%-- lev=0 이면서 답글이  있다면 --%>
-		                                   <c:when test="${dto.news>=1}">
+		                                   <c:when test="${dto.news>0 && dto.news>0}">
 				                                 <span style="font-size: 17px;" class="subject_after" id="${dto.news}">
 				                                       ${dto.subject}
 				                                 </span>
@@ -317,10 +317,22 @@
                                    </c:choose>
                                      
                                    <font style="font-size: 13px; color: gray;"><b>${dto.list_idx_pointer}</b>번 답글&nbsp;&nbsp;</font> 
-                                   <div style="display: inline-block; font-size: 17px;" class="subject_after" 
-                                   id="<c:if test="${dto.news>=1}">${dto.news}</c:if>">
-                                         
-                                      :&nbsp;&nbsp;${dto.subject}</div> 
+                                     <%--***  SUBJECT-LEV0  start line ***** 답글이 아닌 LEV=0 SUBJECT 만약 코멘트 글일 있다면 해당 코멘트 갯수를 달기위한  if statement ****--%>
+	                                   <c:choose>
+		                             <%-- lev!=0 이면서 답글이 있다면 --%>
+		                                   <c:when test="${dto.news>=1}">
+				                                 <span style="font-size: 17px;" class="subject_after" id="${dto.news}">
+				                                       :&nbsp;&nbsp;${dto.subject}
+				                                 </span>
+		                                   </c:when>
+		                            <%-- lev!=0 이면서 답글이 없다면 --%>
+		                                   <c:otherwise>
+			                                     <span style="font-size: 17px;">
+				                                       :&nbsp;&nbsp;${dto.subject}
+				                                 </span>
+		                                   </c:otherwise>
+	                                   </c:choose>
+<%--***  SUBJECT-LEV0  end line ***** 답글이 아닌 LEV=0 SUBJECT 만약 코멘트 글일 있다면 해당 코멘트 갯수를 달기위한  if statement ****--%>    
                                 </c:when>
                              </c:choose>
                         </c:if> 
