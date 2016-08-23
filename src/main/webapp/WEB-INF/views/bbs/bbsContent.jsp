@@ -295,7 +295,6 @@
 		            		               
 		            		                   var writer_span_after_txt =document.createTextNode("/30");
 		            		               
-		            		               
             		               /*  새로만든 input은 부모노드의 자식으로 들어감  */
             		               writer_id_motherNode.insertBefore(new_writer_input, writer_id_dom);
 		            		              
@@ -349,11 +348,9 @@
 			              else
 		            	  {
 			            	  if(isIE){
-			            		  
 			            		   alert('비밀번호가 틀립니다.');
 			            		   document.getElementById("p").innerText=0;
 			            		   pwd.value="";
-			            	   
 			            	  }
 			            	  else
 			            	  {
@@ -432,8 +429,28 @@
 				<td>작성일 :  ${dto.datechar}</td>		
 			</tr>
 			<tr>
-			 <td colspan="2"><span>제&nbsp;&nbsp;&nbsp;목 : </span>${dto.subject}</td>
+			   <td colspan="2"><span>제&nbsp;&nbsp;&nbsp;목 : </span>${dto.subject}</td>
 			</tr>
+<!-- File File File File File File File File File File File File File File File File File File   -->			
+			<c:choose>
+			   <c:when test="${filez ne null}">
+				 <tr>
+				    <td colspan="3">
+				      <c:forEach var="file" items="${filez}">
+				       <form>
+				          <span>파일명 : </span>
+				          <a href="#">
+	                          <span>${file.origin_file_name}</span>				      
+	                          <span>${file.file_size} byte</span>		
+                          </a>
+                          <input type="hidden" name="file_idx" value="${file.file_idx}">		      
+				      </form>
+				      </c:forEach>
+				   </td> 
+				</tr>
+			   </c:when>
+			</c:choose>
+<!-- File File File File File File File File File File File File File File File File File File  -->
 			<tr>
 				<td colspan="3" class="col-md-2"><pre style="word-wrap: break-word;white-space: pre-wrap;white-space: -moz-pre-wrap;white-space: -pre-wrap;white-space: -o-pre-wrap;word-break:break-all;">${dto.content}</pre></td>
 			</tr>

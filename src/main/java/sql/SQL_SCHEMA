@@ -42,10 +42,36 @@ drop table board
   
    create sequence file_idx_seq 
 
-  create table file 
-  {
-    file_idx number(38) primary key,
-    file_name varchar2(300),
-    board_idx number(38)
-  }
+	create table mp_file
+	(
+	  file_idx number(38), 
+	  board_idx number(38),
+	  origin_file_name varchar2(260),
+	  stored_file_name varchar2(36),
+	  file_size number(38),
+	  create_date date default sysdate not null,
+	  create_id varchar2(30),
+	  del_gb varchar2(1) default 'n' not null,
+	  primary key(file_idx)
+	)
+
+
+
+http://addio3305.tistory.com/83
+
+  ORIGINAL_FILE_NAME과 STORED_FILE_NAME 컬럼은 각각 원본 파일 이름과 변경된 파일 이름을 저장한다. 
+
+파일을 업로드하면 그 파일을 서버의 어딘가에 저장이 되어야하는데 만약 파일 이름이 같을 경우, 
+
+저장 중 문제가 발생하거나 파일 이름이 변경될 수 있다. 
+
+따라서 파일을 저장할 때, 원본파일의 이름을 저장해놓고 서버에는 변경된 파일이름으로 파일을 저장한다. 
+
+나중에 파일 다운로드를 할때에는, 파일의 이름을 통해서 해당 파일에 접근하기 때문에 겹치지 않는 파일이름은 필수이다.
+
+여기서 ORIGINAL_FILE_NAME은 260byte, STORED_FILE_NAME은 36byte로 잡았는데, 이유는 간단하다. 
+
+원본파일명은 windows에서는 최대 256글자 + 확장자인 260글자이고, STORED_FILE_NAME은 32글자 + 확장자로 저장할 계획이다.
+
+여기서는 32글자의 랜덤문자를 생성할건데, 변경된 파일이름을 해당 날짜+시간 등으로 한다면 그에 해당하는 길이로 잡으면 된다.
 

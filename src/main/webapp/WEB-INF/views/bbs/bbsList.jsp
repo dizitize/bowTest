@@ -130,8 +130,6 @@
 	   
 	 }
  }
- 
- 
 	 var option_value='${option_value}';
 	 
 	function onFocus(){
@@ -176,6 +174,9 @@
  <div class="container" style="width:1500px;">
  <!-- <input type="text" name="escape_val" placeholder="unicode_test"> <input type="button" name="escape_bt" value="escape_test_bt"> -->  
     <h5>BOW-TECH_BBS_TEST_1</h5>
+  <!-- Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel -->
+    <div></div>
+  <!-- Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel --> 
     <table class="table table-bordered" style="table-layout:fixed;">
 	  <tr>
 		  <th colspan="7" align="center" style="padding-top:10px;">
@@ -280,11 +281,18 @@
 				                                       ${dto.subject}
 				                                 </span>
 		                                   </c:when>
-		                                   
 		                             <%-- lev=0 이면서 답글이 없다면 --%>
 		                                   <c:otherwise>
 			                                     <span style="font-size: 17px;">
 				                                       ${dto.subject}
+				                                       <c:choose>
+					                                         <c:when test="${dto.files eq 1}">
+					                                         &nbsp;&nbsp;<i class="fa fa-file-o" aria-hidden="true" style="color: red;"></i>
+					                                         </c:when>
+					                                         <c:when test="${dto.files > 1}">
+					                                          &nbsp;&nbsp;<i class="fa fa-files-o" aria-hidden="true" style="color: red;"></i>
+					                                         </c:when>
+				                                       </c:choose>
 				                                 </span>
 		                                   </c:otherwise>
 	                                   </c:choose>
@@ -292,6 +300,14 @@
 	                            </c:when>
 	                          <c:when test="${dto.list_se_idx==0 && dto.lev!=0}">
                                   <font style="font-size: 19px;">&nbsp;&nbsp;${dto.subject}</font>
+                                      <c:choose>
+	                                          <c:when test="${dto.files eq 1}">
+	                                          &nbsp;&nbsp;<i class="fa fa-file-o" aria-hidden="true" style="color: red;"></i>
+	                                          </c:when>
+	                                          <c:when test="${dto.files > 1}">
+	                                          &nbsp;&nbsp;<i class="fa fa-files-o" aria-hidden="true" style="color: red;"></i>
+	                                          </c:when>
+				                      </c:choose>
 	                          </c:when>
 	                     </c:choose>
 	           
@@ -322,14 +338,30 @@
 		                             <%-- lev!=0 이면서 답글이 있다면 --%>
 		                                   <c:when test="${dto.news>=1}">
 				                                 <span style="font-size: 17px;" class="subject_after" id="${dto.news}">
-				                                       :&nbsp;&nbsp;${dto.subject}
-				                                 </span>
+															:&nbsp;&nbsp;${dto.subject} 
+											    </span>
+											          <c:choose>
+														  <c:when test="${dto.files eq 1}">
+			                                                &nbsp;&nbsp;<i class="fa fa-file-o" aria-hidden="true" style="color: red;"></i>
+													      </c:when>
+														  <c:when test="${dto.files > 1}">
+			                                                &nbsp;&nbsp;<i class="fa fa-files-o" aria-hidden="true" style="color: red;"></i>
+													      </c:when>
+													  </c:choose>
 		                                   </c:when>
 		                            <%-- lev!=0 이면서 답글이 없다면 --%>
 		                                   <c:otherwise>
 			                                     <span style="font-size: 17px;">
 				                                       :&nbsp;&nbsp;${dto.subject}
 				                                 </span>
+				                                  <c:choose>
+														  <c:when test="${dto.files eq 1}">
+			                                                &nbsp;&nbsp;<i class="fa fa-file-o" aria-hidden="true" style="color: red;"></i>
+													      </c:when>
+														  <c:when test="${dto.files > 1}">
+			                                                &nbsp;&nbsp;<i class="fa fa-files-o" aria-hidden="true" style="color: red;"></i>
+													      </c:when>
+													  </c:choose>
 		                                   </c:otherwise>
 	                                   </c:choose>
 <%--***  SUBJECT-LEV0  end line ***** 답글이 아닌 LEV=0 SUBJECT 만약 코멘트 글일 있다면 해당 코멘트 갯수를 달기위한  if statement ****--%>    

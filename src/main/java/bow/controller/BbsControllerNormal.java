@@ -1,7 +1,9 @@
 package bow.controller;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -12,12 +14,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import bow.bbs.BbsDAO_interface;
 import bow.bbs.BbsDTOnorm;
 import bow.bbs.CommentDTO;
+import bow.bbs.FileDTO;
+import bow.bbs.FileUtil;
 import bow.bbs.Paging;
 import bow.bbs.service.BbsService;
 
@@ -36,6 +42,8 @@ public class BbsControllerNormal {
 	
 	@Autowired
 	BbsService bbsService;
+	
+	    
 
 	//	어떤 페이지에서도 정적변수 current page 정보를 파라미터값으로 불러들일 수 있도록 modelAttribute 설정
 /*	@ModelAttribute("cp")
@@ -103,17 +111,62 @@ public class BbsControllerNormal {
    		return "bbs/bbsWriteform";
    	}
     
+ 
+    
+    
     @RequestMapping("/bbsWriteNormal.bow")
-   	public ModelAndView write(HttpServletRequest req, BbsDTOnorm dto, RedirectAttributes rt)
+   	public ModelAndView write(HttpServletRequest req, BbsDTOnorm dto, RedirectAttributes rt) throws Exception
    	{
+    	
    		ModelAndView mav = new ModelAndView();
+   		MultipartHttpServletRequest multipartHttpServletRequest =(MultipartHttpServletRequest)req;
+   		Iterator<String> iterator = multipartHttpServletRequest.getFileNames();
+   		
+   		int board_idx_animate  = 0;
+   		
+   		int counter =0;
    		
    		if(req.getMethod().equals("POST"))
    		{
-   				if(dto!=null)
-   				{
+   			if(dto!=null)
+				{
    						if(bbsDao.bbsWrite_normal(dto)==1)
    						{
+   						  board_idx_animate=bbsDao.afterWriteNavi(dto);	 
+   						  
+   						  List<Map<String,Object>> list = null;
+   						
+	   						  if(iterator.hasNext())
+	   						  {
+	   							   FileUtil fileUtil = new FileUtil();
+	   						     
+	   							   list=fileUtil.parseInsertFileInfo(req, board_idx_animate);
+	   						     
+			   						   for(int i=0, size=list.size(); i<size; i++)
+			   						   {
+			   				              bbsDao.inserFile(list.get(i));
+			   				           }
+	   						     
+	   					      }
+   					/*-------------------------------로그 기록용----------------------------------*/		
+   							MultipartFile multipartFile = null;
+   							
+   							while(iterator.hasNext())
+   				   	   		{
+   				   	   		   multipartFile = multipartHttpServletRequest.getFile(iterator.next());
+   				   	   		   
+   						   	   		  if(multipartFile.isEmpty() == false)
+   						   	   		  {
+   						   	              System.out.println("---start------");
+   						   	                  System.out.println("  파일 순번          -"+counter+++"번");
+   						   		              System.out.println("- 파일 태그          -"+multipartFile.getName());
+   						   		              System.out.println("- 사이즈             -"+multipartFile.getSize());
+   						   		              System.out.println("- 실제 파일 이름     -"+multipartFile.getSize());
+   						   		          System.out.println("---end------");
+   						   	   		  }
+   				   	   		}
+   			 /*-------------------------------로그 기록용----------------------------------*/
+   							
    						     mav.setViewName("redirect:/bbsListNormal.bow");
    						     mav.addObject("cp", 1);
    						     /* rt.addFlashAttribute("ddd", "hello");*/
@@ -195,16 +248,35 @@ public class BbsControllerNormal {
 				
 			  System.out.println("pagenavi:"+bbsDao.pageNavi(board_idx));
 			  
-			  
+			  List<FileDTO> files =bbsDao.selectFile(dto.getBoard_idx());
+			   
+			  if(files!=null)
+			   {
+				   mav.addObject("filez",files);  
+				   
+				   for(FileDTO e: files)
+				   {
+					   System.out.println(e.getOrigin_file_name());
+					   System.out.println(e.getFile_idx());
+					   System.out.println(e.getFile_size());
+				   }
+				   
+				   System.out.println(files.isEmpty());
+			   }
 		         mav.addObject("dto",dto);
 				 mav.addObject("comments",comments);
 				 System.out.println("content cp값 끝무렵:");
 			     mav.setViewName("bbs/bbsContent");
-		    
 					
 		return mav;
 		
 	}
+    
+    @RequestMapping(value="downloadFile.bow")
+    public void downloadFile(FileDTO file, HttpServletRequest req)throws Exception
+    {
+    	
+    }
 
     
     @RequestMapping("/bbsUpdateFormNormal.bow")

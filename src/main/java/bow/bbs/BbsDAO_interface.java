@@ -24,6 +24,12 @@ public interface BbsDAO_interface {
 	    public int commentDelete(int comment_board_idx);
 	    
 	    
+//	    file	    
+	    
+	    public void inserFile(Map<String,Object>map)throws Exception;
+	    public List<FileDTO> selectFile(int board_idx);
+	    
+	    
 //	    NormalVersion 
 	    
 	    public List<BbsDTOnorm> bbsList_normal(int cp );

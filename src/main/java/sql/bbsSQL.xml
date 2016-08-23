@@ -96,7 +96,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <select id="bbsListNormal" resultType="bbsDTOnorm">
  <![CDATA[
-         select  f.* ,( select  case when list_se_idx=0 then to_char(list_idx) else to_char(list_idx)||' - '||to_char(list_se_idx) end   
+         select (select count(*) from mp_file where board_idx =f.board_idx) as files,  f.* ,( select  case when list_se_idx=0 then to_char(list_idx) else to_char(list_idx)||' - '||to_char(list_se_idx) end   
 	                  from   
 				    (
 				        select 
@@ -167,6 +167,33 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	                  )    
  ]]>
 </insert>
+
+<insert id="file_insert" parameterType="hashmap">
+    <![CDATA[
+     insert into mp_file 
+     (
+       file_idx,
+       board_idx,
+       origin_file_name,
+	   stored_file_name, 
+	   file_size,
+	   create_date
+     )
+     values
+     (
+       file_idx_seq.nextval,
+       #{board_idx},
+       #{origin_file_name},
+       #{stored_file_name},
+       #{file_size},
+       sysdate
+     )
+    ]]>
+  </insert>
+
+ <select id="file_select" resultType="fileDTO">
+     select * from mp_file where board_idx = #{board_idx} 
+ </select>
 
 <select id="passwordConfirm" parameterType="map" resultType="int">
 
@@ -405,7 +432,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   
   </select>
 
-
+  
 
 </mapper>
  

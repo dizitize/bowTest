@@ -41,7 +41,7 @@
  	        for(var a =0 ,temp; a< 3 ; a++)
         	{
         	       temp= inputArr[a].value;
-        	     
+        	     alert(temp);
         	       temp=  temp.replace(/^\s*/g,"");
 	               temp=  temp.replace(/\s*$/g,"");
 	               temp=  temp.replace(/\s+/g," ");
@@ -50,6 +50,8 @@
         	    
         	     if(temp==''|| temp==null)
        	    	 {
+        	    	 var inputAttrName =inputArr[a].attributes[0].name;
+        	    	 alert(inputAttrName);
         	    	 inputArr[a].value='';
        	    	     inputArr[a].placeholder='필수 입력 사항 입니다.';
        	    	     isOk=false;
@@ -71,7 +73,7 @@
 <body>
    <div class="container">
      <h1>BOW-TECH_BBS_WRITE</h1>
-	<form action="bbsWriteNormal.bow" name="writeOk" method="post" onsubmit="return false;">
+	<form action="bbsWriteNormal.bow" name="writeOk" method="post" onsubmit="return false;" enctype="multipart/form-data">
 		<table class="table table-bordered" style="width: 1100px;">
 			<tr>
 				<td><span>작성자 : </span><input type="text" class="input-writer"  name="writer" oninput="fnChkByte(this,'30',null,null)" required  onkeypress="if(event.keyCode==13)validWrite();"></td>
@@ -87,10 +89,14 @@
 			<tr>
 				<td><span id="t">0</span>/4000</td>
 			</tr>
+		
 			<tr>
 				<td><span>비밀번호 : </span><input type="password" name="password" oninput="fnChkByte(this,'9','p','num')" maxlength="10" onkeypress="if(event.keyCode==13)validWrite();" required placeholder="숫자 9자리 입력">
 				 &nbsp;<span id="p">0</span>/9
 				</td>
+			</tr>
+		    <tr>
+			    <td><input type="file" name="file"></td>
 			</tr>
 			<tr>
 				<td><input type="button" value="작성" name="write" onclick="validWrite();"> 

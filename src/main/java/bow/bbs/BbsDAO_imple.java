@@ -264,6 +264,14 @@ public class BbsDAO_imple implements BbsDAO_interface {
 		return sqlMap.selectOne("afterWriteNaviNormal",dto);
 	}
 	
+	public void inserFile(Map<String, Object> map) throws Exception {
 	
+		 sqlMap.insert("file_insert",map);
+	}
+	
+	public List<FileDTO> selectFile(int board_idx) {
+		// TODO Auto-generated method stub
+		return sqlMap.selectList("file_select",board_idx);
+	}
 	
 }

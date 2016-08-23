@@ -18,7 +18,7 @@
   <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
   </context:component-scan>
 
-  	<mvc:annotation-driven  content-negotiation-manager="contentNegotiationManager" /> 
+  	<mvc:annotation-driven  content-negotiation-manager="contentNegotiationManager"/> 
   	
   	
 	 <bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
@@ -32,13 +32,12 @@
 	      </property>
 	 </bean>
 
-
+<!-- File up & download  -->
  <bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor" />  
   
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-		<property name="maxUploadSize">
-			<value>104857600</value>
-		</property>
+		<property name="maxUploadSize" value="10000000"/>
+		<property name="maxInMemorySize" value="10000000"/>
    </bean>	
 
   <!--oracle init -->
@@ -82,6 +81,9 @@
 			   <property name="suffix" value=".jsp" /> 
 		     
       </bean>
+      
+      
+      
 	
 		 		  
 </beans>

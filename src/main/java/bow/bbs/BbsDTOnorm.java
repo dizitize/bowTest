@@ -29,12 +29,39 @@ public class BbsDTOnorm {
 	private int sunbun;
 	private int news;
 
+	private int files;
+	
+	
 	protected BbsDTOnorm() {
 		// TODO Auto-generated constructor stub
 	}
     
-	
-	
+	protected BbsDTOnorm(int board_idx, String subject, String content, String writer, int password, Date writedate,
+			String datechar, int list_idx, int list_se_idx, String list_idx_pointer, int lev_me, int lev_point,
+			int readnum, int ref, int lev, int sunbun, int news, int files) {
+		super();
+		this.board_idx = board_idx;
+		this.subject = subject;
+		this.content = content;
+		this.writer = writer;
+		this.password = password;
+		this.writedate = writedate;
+		this.datechar = datechar;
+		this.list_idx = list_idx;
+		this.list_se_idx = list_se_idx;
+		this.list_idx_pointer = list_idx_pointer;
+		this.lev_me = lev_me;
+		this.lev_point = lev_point;
+		this.readnum = readnum;
+		this.ref = ref;
+		this.lev = lev;
+		this.sunbun = sunbun;
+		this.news = news;
+		this.files = files;
+	}
+
+
+
 
 	protected BbsDTOnorm(int board_idx, String subject, String content, String writer, int password, Date writedate,
 			String datechar, int list_idx, int list_se_idx, String list_idx_pointer, int lev_me, int lev_point,
@@ -285,6 +312,20 @@ public class BbsDTOnorm {
 
 	public void setNews(int news) {
 		this.news = news;
+	}
+
+
+
+
+	public int getFiles() {
+		return files;
+	}
+
+
+
+
+	public void setFiles(int files) {
+		this.files = files;
 	}
 
 }
