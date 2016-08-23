@@ -269,9 +269,9 @@ public class BbsDAO_imple implements BbsDAO_interface {
 		 sqlMap.insert("file_insert",map);
 	}
 	
-	public List<FileDTO> selectFile(int board_idx) {
+	public List<FileDTO> selectFile(int file_idx) {
 		// TODO Auto-generated method stub
-		return sqlMap.selectList("file_select",board_idx);
+		return sqlMap.selectList("file_select",file_idx);
 	}
 	
 }

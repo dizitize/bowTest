@@ -27,7 +27,7 @@ public interface BbsDAO_interface {
 //	    file	    
 	    
 	    public void inserFile(Map<String,Object>map)throws Exception;
-	    public List<FileDTO> selectFile(int board_idx);
+	    public List<FileDTO> selectFile(int file_idx);
 	    
 	    
 //	    NormalVersion 

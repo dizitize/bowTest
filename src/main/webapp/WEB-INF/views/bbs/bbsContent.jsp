@@ -414,6 +414,25 @@
 		   target_style.display= 'none';
 		}
  	}
+ 	
+/*  	$("a[name='file']").on("click",function(e){
+ 		
+ 		e.preventDefault();
+ 		alert();
+ 		file_down_anchor($(this));
+ 	});
+ 	
+ 	function file_down_anchor(obj)
+ 	{
+ 		  
+ 		   alert(obj.nextSibling.nodeName);
+	   var down_submit = new down_submit();
+	       down_submit.setUrl("download_file.bow");
+	       down.submit.addParam("file_idx",idx);
+	       
+ 			
+ 	}
+ 	 */
   </script>
 
 </head>
@@ -431,26 +450,35 @@
 			<tr>
 			   <td colspan="2"><span>제&nbsp;&nbsp;&nbsp;목 : </span>${dto.subject}</td>
 			</tr>
-<!-- File File File File File File File File File File File File File File File File File File   -->			
+<%-- File File File File File File File File File File File File File File File File File File   --%>			
 			<c:choose>
-			   <c:when test="${filez ne null}">
-				 <tr>
+			   <c:when test="${empty filez}">
+			     <tr>
 				    <td colspan="3">
-				      <c:forEach var="file" items="${filez}">
-				       <form>
-				          <span>파일명 : </span>
-				          <a href="#">
+				       <span>첨부파일 : 등록 된 파일이 없습니다.</span>
+				    </td>
+				 </tr>
+			   </c:when>
+			   <c:when test="${!empty filez}">
+			      <tr>
+				    <td colspan="3">
+				      <c:forEach var="file" items="${filez}" varStatus="i">
+				       <form action="fileDown.bow" id="${i.index}_down">
+				          <span>첨부파일 : </span>
+				          <a href="#" onclick="javascript:document.getElementById('${i.index}_down').submit()">
 	                          <span>${file.origin_file_name}</span>				      
 	                          <span>${file.file_size} byte</span>		
                           </a>
                           <input type="hidden" name="file_idx" value="${file.file_idx}">		      
+                          <input type="hidden" name="stored_file_name" value="${file.stored_file_name}">		      
+                          <input type="hidden" name="origin_file_name" value="${file.origin_file_name}">		      
 				      </form>
 				      </c:forEach>
 				   </td> 
 				</tr>
 			   </c:when>
 			</c:choose>
-<!-- File File File File File File File File File File File File File File File File File File  -->
+<%-- File File File File File File File File File File File File File File File File File File  --%>
 			<tr>
 				<td colspan="3" class="col-md-2"><pre style="word-wrap: break-word;white-space: pre-wrap;white-space: -moz-pre-wrap;white-space: -pre-wrap;white-space: -o-pre-wrap;word-break:break-all;">${dto.content}</pre></td>
 			</tr>
@@ -502,8 +530,6 @@
 		  </tr>
 	  </tbody>
     </table>
-     
-     
 <%-- *START* COMMENT WRITE AND TOGGLE  COMMENT WRITE AND TOGGLE  COMMENT WRITE AND TOGGLE  COMMENT WRITE AND TOGGLE  COMMENT WRITE AND TOGGLE  COMMENT WRITE AND TOGGLE  COMMENT WRITE AND TOGGLE --%>
      
       <%--&lt; or &#60; Entity name Browsers may not support all entity names, but the support for numbers is good.--%> 
@@ -561,9 +587,6 @@
 			                      
 			                        <span>No.&nbsp;${cmt.list_idx}&nbsp;&nbsp;</span>
 			                        <span id="comment_writer${cmt.list_idx}">${cmt.writer}</span> 
-			                  
-			                       <%--  작성 후 경과 시간 작성  지금은 주석 처리 중    --%>
-			                       <%--  <span>hace 20 minutes </span> --%>
 			                       
 			                        <%--  아래 글 수정 hidden area DIV id 값을 전달  보이게 해 주는 onClick event --%>   
 			                        <i class="fa fa-cogs" aria-hidden="true" onclick="comment_modify('${i.index}_comment_modify')"></i>
@@ -591,28 +614,24 @@
 <%-- Start* list 5개 이상이라면 HIDE --%>
 	         <c:if test="${i.index>4}">
 	           <li class="hidden-list" id="${i.index}_content" style="display: none;">
-			                  <div class="comment-main-level">
-				                 <div class="comment-box">
-				                     	<div class="comment-head" style="height:30px;">
-					                      
-					                        <span>No.&nbsp;${cmt.list_idx}&nbsp;&nbsp;</span>
-					                        <span id="comment_writer${cmt.list_idx}">${cmt.writer}</span> 
-					                  
-					                       <%--  작성 후 경과 시간 작성  지금은 주석 처리 중    --%>
-					                       <%--  <span>hace 20 minutes </span> --%>
-					                       
-					                        <i class="fa fa-cogs" aria-hidden="true" onclick="comment_modify('${i.index}_comment_modify')"></i>
-					                        
-		                          <div class="comment-modify-hidden" id="${i.index}_comment_modify" style="display: none;"> 
-		                            <input type="password"  oninput="validNumb(this);" required="required" maxlength="10" id="${i.index}_password" placeholder="password">
-									<input type="button" value="수정" onclick="sendSubmit( {cmt_idx : '${cmt.comment_board_idx}' ,command_option : 'update', index_password : '${i.index}_password',target_tr :'${i.index}_content', writer_span_id : 'comment_writer${cmt.list_idx}' , content_id : 'comment-content${cmt.list_idx}' })">
-									<input type="button" value="삭제" onclick="sendSubmit( {cmt_idx : '${cmt.comment_board_idx}' ,command_option : 'delete', index_password : '${i.index}_password',target_tr :'${i.index}_content' ,comment_length : '${i.index}'})">
-		                          </div>
-				                        </div>
-		                        		 <div class="comment-content" id="comment-content${cmt.list_idx}"> ${cmt.content} </div>
-		                        		     <input type="hidden" name="board_idx" value="${dto.board_idx}">   
-				                  </div>
-				             </div>
+	                  <div class="comment-main-level">
+		                 <div class="comment-box">
+		                     	<div class="comment-head" style="height:30px;">
+			                      
+			                        <span>No.&nbsp;${cmt.list_idx}&nbsp;&nbsp;</span>
+			                        <span id="comment_writer${cmt.list_idx}">${cmt.writer}</span> 
+			                        <i class="fa fa-cogs" aria-hidden="true" onclick="comment_modify('${i.index}_comment_modify')"></i>
+			                        
+                          <div class="comment-modify-hidden" id="${i.index}_comment_modify" style="display: none;"> 
+                            <input type="password"  oninput="validNumb(this);" required="required" maxlength="10" id="${i.index}_password" placeholder="password">
+							<input type="button" value="수정" onclick="sendSubmit( {cmt_idx : '${cmt.comment_board_idx}' ,command_option : 'update', index_password : '${i.index}_password',target_tr :'${i.index}_content', writer_span_id : 'comment_writer${cmt.list_idx}' , content_id : 'comment-content${cmt.list_idx}' })">
+							<input type="button" value="삭제" onclick="sendSubmit( {cmt_idx : '${cmt.comment_board_idx}' ,command_option : 'delete', index_password : '${i.index}_password',target_tr :'${i.index}_content' ,comment_length : '${i.index}'})">
+                          </div>
+		                        </div>
+                        		 <div class="comment-content" id="comment-content${cmt.list_idx}"> ${cmt.content} </div>
+                        		     <input type="hidden" name="board_idx" value="${dto.board_idx}">   
+		                  </div>
+		             </div>
 	            </li>
 	         </c:if>
 	     </c:forEach>

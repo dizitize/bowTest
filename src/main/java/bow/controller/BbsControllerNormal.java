@@ -1,12 +1,16 @@
 package bow.controller;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.FileUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -165,7 +169,7 @@ public class BbsControllerNormal {
    						   		          System.out.println("---end------");
    						   	   		  }
    				   	   		}
-   			 /*-------------------------------로그 기록용----------------------------------*/
+   			        /*-------------------------------로그 기록용----------------------------------*/
    							
    						     mav.setViewName("redirect:/bbsListNormal.bow");
    						     mav.addObject("cp", 1);
@@ -192,6 +196,23 @@ public class BbsControllerNormal {
    		
    		 return mav;
    	}
+    
+    
+    @RequestMapping(value="/fileDown.bow")
+    public void downloadFile(HttpServletResponse respo, FileDTO fileDto) throws IOException
+    {
+ 	   byte fileyte[] = FileUtils.readFileToByteArray(new File("c:\\filez\\"+fileDto.getStored_file_name()));
+ 	   
+ 	   respo.setContentType("application/octet-stream");
+ 	   respo.setContentLength(fileyte.length);
+        respo.setHeader("Content-Disposition","attachment; fileName=\""+ URLEncoder.encode(fileDto.getOrigin_file_name(),"utf-8"));
+        respo.getOutputStream().write(fileyte);
+        
+        respo.getOutputStream().flush();
+        respo.getOutputStream().close();
+        
+    }
+    
     
     
     @RequestMapping(value="/bbsContentNormal.bow",method=RequestMethod.GET)
@@ -706,6 +727,6 @@ public class BbsControllerNormal {
     	
     }
     
-  
+ 
     
 }

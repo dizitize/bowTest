@@ -21,7 +21,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 public class FileUtil {
 
 	 /*나중에 이 부분은 properties를 이용하여 로컬과 서버의 저장위치를 따로따로 관리할 예정*/
-	private static final String filePath="C:\\Users\\USER\\Desktop\\filez\\";
+	private static final String filePath="C:\\filez\\";
 	
 	public List<Map<String,Object>>parseInsertFileInfo( HttpServletRequest req , int board_idx)throws Exception
 	{
@@ -53,9 +53,9 @@ public class FileUtil {
 				originalFileExtension =  originalFileName.substring(originalFileName.lastIndexOf("."));
 			                                     /* getRandomString() 메서드를 이용하여
 			                                      * 32자리의 랜덤한 파일이름을 생성하고 원본파일의 확장자를 다시 붙여주었다. */				
-				storedFileName        =  CommonUtil.getRandomString() + originalFileExtension;
+				storedFileName        =  CommonUtil.getRandomString()+originalFileExtension;
 			
-				file    =  new File(filePath);
+				file    =  new File(filePath+storedFileName);
 				
 			/*	서버에 실제 파일을 저장하는 부분이다. 
 				multipartFile.transferTo() 메서드를 이용 
