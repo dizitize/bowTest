@@ -76,13 +76,18 @@
       <bean id="jsonResolver" class="org.springframework.web.servlet.view.json.MappingJacksonJsonView"/>
                           
 	  <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">		  
-			   <property name="order" value="1"/>		  
+			   <property name="order" value="2"/>		  
 			   <property name="prefix" value="/WEB-INF/views/" /> 
 			   <property name="suffix" value=".jsp" /> 
 		     
       </bean>
+      <bean class="org.springframework.web.servlet.view.BeanNameViewResolver">
+         <property name="order" value="1"/>
+      </bean>
       
+      <!-- EXcel view resolver  -->
       
+      <bean id="excelView" class="bow.bbs.Excel"/>
       
 	
 		 		  

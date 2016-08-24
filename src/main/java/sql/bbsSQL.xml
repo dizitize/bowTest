@@ -195,6 +195,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
      select * from mp_file where board_idx = #{board_idx} 
  </select>
 
+ <delete id="file_delete" parameterType="int">
+     delete from mp_file where file_idx = #{file_idx} 
+ </delete>
+
+
 <select id="passwordConfirm" parameterType="map" resultType="int">
 
    select count(*) from board where password = #{password} and board_idx =#{board_idx}
@@ -326,8 +331,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  <![CDATA[
      select * from 
      (
-      select rownum as rr , rn as list_idx, board_idx , subject , writer , readnum , lev ,writedate , datechar,
-       (select count(*) from comment_board where board_idx = b.board_idx ) as news 
+      select rownum as rr , rn as list_idx, board_idx , subject , writer , readnum , lev ,writedate , datechar, 
+       (select count(*) from comment_board where board_idx = b.board_idx ) as news ,
+       (select count(*) from mp_file where board_idx =b.board_idx) as files
 		from 
 		(
 		    select rownum as rn ,a.*, to_char(a.writedate,'yyyy-mm-dd hh24:mm') as datechar

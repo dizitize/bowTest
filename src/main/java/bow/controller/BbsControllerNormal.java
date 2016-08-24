@@ -47,8 +47,6 @@ public class BbsControllerNormal {
 	@Autowired
 	BbsService bbsService;
 	
-	    
-
 	//	어떤 페이지에서도 정적변수 current page 정보를 파라미터값으로 불러들일 수 있도록 modelAttribute 설정
 /*	@ModelAttribute("cp")
 	public int currentPage()
@@ -115,8 +113,6 @@ public class BbsControllerNormal {
    		return "bbs/bbsWriteform";
    	}
     
- 
-    
     
     @RequestMapping("/bbsWriteNormal.bow")
    	public ModelAndView write(HttpServletRequest req, BbsDTOnorm dto, RedirectAttributes rt) throws Exception
@@ -139,11 +135,12 @@ public class BbsControllerNormal {
    						  board_idx_animate=bbsDao.afterWriteNavi(dto);	 
    						  
    						  List<Map<String,Object>> list = null;
-   						
+   						     
+   						  int count = 0 ;
 	   						  if(iterator.hasNext())
 	   						  {
 	   							   FileUtil fileUtil = new FileUtil();
-	   						     
+	   						       System.out.println("들어온 파일 갯수"+ ++count);
 	   							   list=fileUtil.parseInsertFileInfo(req, board_idx_animate);
 	   						     
 			   						   for(int i=0, size=list.size(); i<size; i++)
@@ -198,22 +195,22 @@ public class BbsControllerNormal {
    	}
     
     
+    
+    
     @RequestMapping(value="/fileDown.bow")
     public void downloadFile(HttpServletResponse respo, FileDTO fileDto) throws IOException
     {
  	   byte fileyte[] = FileUtils.readFileToByteArray(new File("c:\\filez\\"+fileDto.getStored_file_name()));
  	   
- 	   respo.setContentType("application/octet-stream");
- 	   respo.setContentLength(fileyte.length);
+ 	    respo.setContentType("application/octet-stream");
+ 	    respo.setContentLength(fileyte.length);
         respo.setHeader("Content-Disposition","attachment; fileName=\""+ URLEncoder.encode(fileDto.getOrigin_file_name(),"utf-8"));
         respo.getOutputStream().write(fileyte);
         
         respo.getOutputStream().flush();
         respo.getOutputStream().close();
-        
     }
-    
-    
+   
     
     @RequestMapping(value="/bbsContentNormal.bow",method=RequestMethod.GET)
 	public ModelAndView content(HttpServletRequest req){
@@ -227,8 +224,6 @@ public class BbsControllerNormal {
 		 String cp = req.getParameter("cp");
 		 System.out.println("content cp값:"+cp);
 		 BbsDTOnorm dto =null;
-		 
-		 
 		
 		 if(option_value!= null && option!=null )
 		 {
@@ -256,13 +251,6 @@ public class BbsControllerNormal {
 				   }
                System.out.println("dao 들어가기 전입니다");
 			  
-              
-           /*   System.out.println("pwd:>>");
-              System.out.println("pwd:"+dto.getPassword());
-	          	
-			  System.out.println("dao 들어간 후 입니다.");
-			  System.out.println(board_idx);*/
-			
 			  List<CommentDTO> comments =bbsDao.commentList(board_idx);
 			  
 			  System.out.println("코멘트 dao 들어간 후 입니다.");
@@ -282,7 +270,6 @@ public class BbsControllerNormal {
 					   System.out.println(e.getFile_size());
 				   }
 				   
-				   System.out.println(files.isEmpty());
 			   }
 		         mav.addObject("dto",dto);
 				 mav.addObject("comments",comments);
@@ -293,24 +280,35 @@ public class BbsControllerNormal {
 		
 	}
     
-    @RequestMapping(value="downloadFile.bow")
-    public void downloadFile(FileDTO file, HttpServletRequest req)throws Exception
-    {
-    	
-    }
-
-    
     @RequestMapping("/bbsUpdateFormNormal.bow")
     public ModelAndView contentUpdateForm(HttpServletRequest req , BbsDTOnorm dto){
     
     	ModelAndView mav = new ModelAndView();
     
     	System.out.println("updateForm>>>>>>>"+dto.getBoard_idx());
-    /*    currPage=bbsDao.pageNavi(dto.getBoard_idx());*/
     	
     	if(req.getMethod().equals("POST"))
 		{	
-    		 mav.addObject("dto", bbsService.content_for_edit(dto.getBoard_idx()));		        	
+    		
+    		 mav.addObject("dto", bbsService.content_for_edit(dto.getBoard_idx()));		
+    		 
+    		  List<FileDTO> files =bbsDao.selectFile(dto.getBoard_idx());
+			   
+			  if(files!=null)
+			   {
+				   mav.addObject("filez",files);  
+				   
+				   for(FileDTO e: files)
+				   {
+					   System.out.println(e.getOrigin_file_name());
+					   System.out.println(e.getFile_idx());
+					   System.out.println(e.getFile_size());
+				   }
+				   
+				   System.out.println(files.isEmpty());
+			   }
+    		 
+    		 
         	 mav.setViewName("bbs/bbsUpdateForm");
 		}
       return mav;
@@ -345,10 +343,11 @@ public class BbsControllerNormal {
     
     
     @RequestMapping("/bbsUpdateNormal.bow")
-	public ModelAndView contentUpdate(HttpServletRequest req, BbsDTOnorm dto)
+	public ModelAndView contentUpdate(HttpServletRequest req, BbsDTOnorm dto, FileDTO fileDto) throws Exception
 	{
 		ModelAndView mav = new ModelAndView();
-		
+		MultipartHttpServletRequest multipartHttpServletRequest =(MultipartHttpServletRequest)req;
+   		
 		                              
 				if(req.getMethod().equals("POST"))
 				{	
@@ -356,6 +355,47 @@ public class BbsControllerNormal {
 						{ 
 							   mav.addObject("cp", bbsDao.pageNavi(dto.getBoard_idx()));
 							   
+							   /*삭제요청이 있는 file 내역 삭제 */
+							   String delete_idx = req.getParameter("deleted_file_idx");
+							   
+                               if(delete_idx!=null)
+                               {
+                                    List<FileDTO> fileList =bbsDao.selectFile(dto.getBoard_idx());                	   
+                               
+                                    String filePath = "C:\\filez\\";
+                                    
+                                    for(FileDTO f : fileList)
+                                    {
+                                    	String deleteTarget =filePath+f.getStored_file_name();
+                                    	
+                                      	File deleteFile = new File(deleteTarget);
+                                    	
+                                    	deleteFile.delete();
+                                    }
+                                    
+                                     bbsDao.deleteFile(Integer.parseInt(delete_idx));
+                               
+                               }
+								   /*해당 board_idx 의 파일 정보 가져온다 
+								           해당 정보는 db에서 삭제 */
+                               Iterator<String> iterator = multipartHttpServletRequest.getFileNames();
+                               List<Map<String,Object>> list = null;
+     						     
+        						  int count = 0 ;
+     	   						  if(iterator.hasNext())
+     	   						  {
+     	   							  System.out.println("있구낭`~~");
+     	   							   FileUtil generator = new FileUtil();
+                                       list =generator.parseInsertFileInfo(req, dto.getBoard_idx());
+     	   						       
+                                       System.out.println("들어온 파일 갯수"+ ++count);
+     	   						     
+     			   						   for(int i=0, size=list.size(); i<size; i++)
+     			   						   {
+     			   				              bbsDao.inserFile(list.get(i));
+     			   				           }
+     	   					      }
+							
 									if(bbsDao.updateContent_normal(dto)==1)
 									{
 										mav.addObject("cp", bbsDao.pageNavi(dto.getBoard_idx()));
@@ -421,6 +461,25 @@ public class BbsControllerNormal {
 	           {
 	        	  
 	        	  result =bbsDao.deleteContent_normal(board_idx);
+	        	  
+	        	  List<FileDTO> fileList =bbsDao.selectFile(board_idx);                	   
+                  
+                  String filePath = "C:\\filez\\";
+                  
+                  for(FileDTO f : fileList)
+                  {
+                  	String deleteTarget =filePath+f.getStored_file_name();
+                  	
+                    	File deleteFile = new File(deleteTarget);
+                  	
+                  	deleteFile.delete();
+                  	bbsDao.deleteFile(f.getFile_idx());
+                  }
+                  
+                   
+	        	  
+	        	  
+	        	  
 	        	  switch(result)
 		          {
 			          case 1 : mav.addObject("msg", "삭제가 완료 되었습니다."); 

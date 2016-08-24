@@ -9,7 +9,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -28,6 +27,8 @@ public class FileUtil {
 		MultipartHttpServletRequest  multipartHttpServletRequest = (MultipartHttpServletRequest)req;
 		Iterator<String> iterator = multipartHttpServletRequest.getFileNames();
 		
+		System.out.println("파일유틸왔음");
+		
 		MultipartFile multipartFile   = null;
 		String originalFileName       = null;
 		String originalFileExtension  = null;
@@ -45,6 +46,7 @@ public class FileUtil {
 		
 		while(iterator.hasNext())
 		{
+			System.out.println(":hasnext");
 			multipartFile = multipartHttpServletRequest.getFile(iterator.next());
 			
 			if(multipartFile.isEmpty() == false )
@@ -74,4 +76,6 @@ public class FileUtil {
 		
 		return list;
 	}
+	
+
 }

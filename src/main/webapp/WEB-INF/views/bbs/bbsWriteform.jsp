@@ -96,7 +96,7 @@
 				</td>
 			</tr>
 		    <tr>
-			    <td><input type="file" name="file"></td>
+			    <td><input type="file" name="file" multiple></td>
 			</tr>
 			<tr>
 				<td><input type="button" value="작성" name="write" onclick="validWrite();"> 

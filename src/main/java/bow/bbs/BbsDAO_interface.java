@@ -28,6 +28,7 @@ public interface BbsDAO_interface {
 	    
 	    public void inserFile(Map<String,Object>map)throws Exception;
 	    public List<FileDTO> selectFile(int file_idx);
+	    public int deleteFile(int delete_file);
 	    
 	    
 //	    NormalVersion 

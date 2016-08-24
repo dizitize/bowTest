@@ -274,4 +274,8 @@ public class BbsDAO_imple implements BbsDAO_interface {
 		return sqlMap.selectList("file_select",file_idx);
 	}
 	
+	public int deleteFile(int delete_file)
+	{
+		return sqlMap.delete("file_delete", delete_file);
+	}
 }
