@@ -13,10 +13,12 @@
                        <c:param name="option" value="${option}"/>
                        <c:param name="option_value" value="${option_value}"/>
                        <c:param name="option_cp" value="${option_cp}"/>
+                       <c:param name="target" value="file"/>
               </c:when>
                <%-- 일반 리스트 경우 --%>
                <c:otherwise>
                        <c:param name="cp" value="${cp}"/>
+                       <c:param name="target" value="file"/>
                </c:otherwise>
            </c:choose> 
      <%-- E 리스트가  있으면서 끝남~ --%>      

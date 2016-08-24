@@ -3,7 +3,6 @@ package bow.controller;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -789,31 +788,36 @@ public class BbsControllerNormal {
     }
     
    @RequestMapping("excelDown.bow")
-   public void writeExcelList(MultipartHttpServletRequest req)
+   public String writeExcelList(@RequestParam HttpServletRequest request ,String target , Map<String ,Object> model)throws Exception
    {
 	   
 	   List<BbsDTOnorm>dtoList=null;
+	   String excelName="";
 	   
 	/*옵션조건으로 검색된 페이지 정보 */
-	   if(req.getParameter("option_cp")!=null)
+	   if(request.getParameter("option_cp")!=null)
 	   {
-			   String option       =  req.getParameter("option");
-			   String option_value =  req.getParameter("option_value");
-			   String src_cp       =  req.getParameter("option_cp");
-		   
+			   String option       =  request.getParameter("option");
+			   String option_value =  request.getParameter("option_value");
+			   String src_cp       =  request.getParameter("option_cp");
+			   excelName=URLEncoder.encode("bowTest_bbs_게시판_"+option+":"+option_value+src_cp+"페이지 결과 입니다.","UTF-8");
+			   
 		  dtoList=bbsDao.searchingContents_normal(option,option_value,Integer.parseInt(src_cp));
 	   }
     /*일반 조건의 페이지 정보*/
 	   else
 	   {
-		      String cp = req.getParameter("cp");
+		      String cp = request.getParameter("cp");
+		      excelName=URLEncoder.encode("bowTest_bbs_게시판_"+cp+"페이지 결과 입니다.","UTF-8");
 		 
 		 dtoList =bbsDao.bbsList_normal(Integer.parseInt(cp));		
 	   }
 	   
 	   
+	   model.put("excelList", dtoList);
+	   model.put("target", excelName);
 	   
-	   
+	   return "excelView";
 	   
    }
     
