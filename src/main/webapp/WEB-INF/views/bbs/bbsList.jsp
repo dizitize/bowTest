@@ -1,7 +1,29 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+ 
+<%--URI excel down  excel down  excel down  excel down  excel down --%>
+  <c:choose>
+      <c:when test="${!empty bbsList}">
+         <c:url value="excelDown.bow" var="excelDownURI">
+        <%-- s 리스트가 있으면서~ --%>
+          <c:choose>
+            <%-- 검색 조건 경우 --%>
+              <c:when test="${!empty option_cp&&!empty option_value}">
+                       <c:param name="option" value="${option}"/>
+                       <c:param name="option_value" value="${option_value}"/>
+                       <c:param name="option_cp" value="${option_cp}"/>
+              </c:when>
+               <%-- 일반 리스트 경우 --%>
+               <c:otherwise>
+                       <c:param name="cp" value="${cp}"/>
+               </c:otherwise>
+           </c:choose> 
+     <%-- E 리스트가  있으면서 끝남~ --%>      
+       </c:url>  
+      </c:when>
+  </c:choose> 
+<%--URI excel down  excel down  excel down  excel down  excel down --%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -166,11 +188,7 @@
 <body onload="onFocus()">
  <div class="container" style="width:1500px;">
    <h5>BOW-TECH_BBS_TEST_1</h5>
-  <%-- Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel --%>
-    <div>
-        
-    </div>
-  <%-- Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel --%> 
+ 
     <table class="table table-bordered" style="table-layout:fixed;">
 	  <tr>
 		  <th colspan="7" align="center" style="padding-top:10px;">
@@ -187,6 +205,11 @@
 			                    <a href="bbsListNormal.bow"style="color:white;">검색 종료 </a>
 			            </span> 
 		           </c:if>
+		          <%-- Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel --%>
+				     <div style="display: inline-block; float: left;  ">
+				      &nbsp;&nbsp;<a href="${excelDownURI}"><i class="fa fa-file-excel-o fa-2x" aria-hidden="true"></i>&nbsp;<span>DOWNLOAD</span></a>
+				    </div>
+				  <%-- Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel --%> 
 		       </form>
 		   </th>
 	   </tr>

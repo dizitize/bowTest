@@ -3,6 +3,7 @@ package bow.controller;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -101,7 +102,7 @@ public class BbsControllerNormal {
 	     
 	     mav.addObject("pagination",pagination);
 		 mav.addObject("bbsList",dtoList);
-		 mav.addObject("option_value", null);
+		 mav.addObject("cp", currPage);
 		 mav.setViewName("bbs/bbsList");	
 		
 	   return mav;
@@ -628,6 +629,7 @@ public class BbsControllerNormal {
     	   mav.addObject("pagination", pagination);
     	   mav.addObject("option_value", option_value);
     	   mav.addObject("option", option);
+    	   mav.addObject("src_cp", src_cp);
     	   mav.addObject("option_cp", cp);
     	   mav.setViewName("bbs/bbsList");   
             	   
@@ -786,6 +788,33 @@ public class BbsControllerNormal {
     	
     }
     
- 
+   @RequestMapping("excelDown.bow")
+   public void writeExcelList(MultipartHttpServletRequest req)
+   {
+	   
+	   List<BbsDTOnorm>dtoList=null;
+	   
+	/*옵션조건으로 검색된 페이지 정보 */
+	   if(req.getParameter("option_cp")!=null)
+	   {
+			   String option       =  req.getParameter("option");
+			   String option_value =  req.getParameter("option_value");
+			   String src_cp       =  req.getParameter("option_cp");
+		   
+		  dtoList=bbsDao.searchingContents_normal(option,option_value,Integer.parseInt(src_cp));
+	   }
+    /*일반 조건의 페이지 정보*/
+	   else
+	   {
+		      String cp = req.getParameter("cp");
+		 
+		 dtoList =bbsDao.bbsList_normal(Integer.parseInt(cp));		
+	   }
+	   
+	   
+	   
+	   
+	   
+   }
     
 }
