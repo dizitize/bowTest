@@ -1,8 +1,13 @@
 package bow.bbs.service;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import bow.bbs.BbsDAO_interface;
 import bow.bbs.BbsDTOnorm;
@@ -37,7 +42,6 @@ public class BbsService_imple implements BbsService {
 
 		dto.setWriter(dto.getWriter().replaceAll("<", "&lt;"));
 		dto.setWriter(dto.getWriter().replaceAll(">", "&gt;"));
-		
 		
 		return dto;
 	}
@@ -100,4 +104,43 @@ public class BbsService_imple implements BbsService {
 		return result;
 	}
 	
+	
+	public List<Object> getAllObjects(String target,HttpServletRequest req) {
+	
+			List<Object> excelList =null;
+			String fileName="";
+		
+		if(target.equals("article")) return null;
+		if(target.equals("comment")) return null;
+		if(target.equals("file"))
+		{	
+				if(req.getParameter("option")!=null)
+				{
+						String option       =  req.getParameter("option");
+						String option_value =  req.getParameter("option_value");
+						int option_cp       =  Integer.parseInt(req.getParameter("option_cp"));
+				         
+						 System.out.println("검색 엑셀");
+						 System.out.println("검색:"+option);
+						 System.out.println("검색 조건:"+option_value);
+						 System.out.println("페이지:"+option_cp);
+						
+					  excelList =bbsDao.list_option_src_Excel(option , option_value , option_cp);	
+					
+				     fileName ="Searched in Board of "+option+".  keyword: "+option_value+" result: "+excelList.size()+" page No."+option_cp;
+				}
+				else
+				{
+				    int cp = Integer.parseInt(req.getParameter("cp"));
+					
+					excelList=bbsDao.bbsListForExcel(cp);
+					
+					 fileName ="Board"+cp+"page";
+					 System.out.println("그냥검색 엑셀");
+					 System.out.println("그냥 검색 페이지:"+cp);
+				}
+		}
+		 req.setAttribute("fileName", fileName);
+		 return  excelList;
+	}
 }

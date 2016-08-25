@@ -97,7 +97,7 @@ public class BbsControllerNormal {
 				     	 	 
 		 String pagination = new Paging().pagination(url, currPage, ps, ls, totalCnt,totalP,null,null);
 	     
-	     List<BbsDTOnorm> dtoList =bbsDao.bbsList_normal(currPage);		
+	     List<BbsDTOnorm> dtoList = bbsDao.bbsList_normal(currPage);		
 	     
 	     mav.addObject("pagination",pagination);
 		 mav.addObject("bbsList",dtoList);
@@ -475,28 +475,24 @@ public class BbsControllerNormal {
                   	deleteFile.delete();
                   	bbsDao.deleteFile(f.getFile_idx());
                   }
-                  
-                   
-	        	  
-	        	  
-	        	  
-	        	  switch(result)
-		          {
-			          case 1 : mav.addObject("msg", "삭제가 완료 되었습니다."); 
-			                   mav.addObject("location", "bbsListNormal.bow");
-			                   break;
-
-			          case 2 : mav.addObject("msg", "본문 삭제 완료"); 
-			                   mav.addObject("location", "bbsContentNormal.bow?board_idx="+board_idx);
-			                   break;
-			          
-			          case 0 : mav.addObject("msg", "삭제 실패"); 
-			                   mav.addObject("location", "bbsContentNormal.bow?board_idx="+board_idx);
-			                   break;
-			                    
-			          default: mav.addObject("msg", " 삭제 불가 고객센터 연락 요망");
-		                       mav.addObject("location", "bbsContentNormal.bow?board_idx="+board_idx);
-		          }
+	        	 
+	                  switch(result)
+			          {
+				          case 1 : mav.addObject("msg", "삭제가 완료 되었습니다."); 
+				                   mav.addObject("location", "bbsListNormal.bow");
+				                   break;
+	
+				          case 2 : mav.addObject("msg", "본문 삭제 완료"); 
+				                   mav.addObject("location", "bbsContentNormal.bow?board_idx="+board_idx);
+				                   break;
+				          
+				          case 0 : mav.addObject("msg", "삭제 실패"); 
+				                   mav.addObject("location", "bbsContentNormal.bow?board_idx="+board_idx);
+				                   break;
+				                    
+				          default: mav.addObject("msg", " 삭제 불가 고객센터 연락 요망");
+			                       mav.addObject("location", "bbsContentNormal.bow?board_idx="+board_idx);
+			          }
 	           }
 	           else
 	           {
@@ -787,38 +783,15 @@ public class BbsControllerNormal {
     	
     }
     
-   @RequestMapping("excelDown.bow")
-   public String writeExcelList(@RequestParam HttpServletRequest request ,String target , Map<String ,Object> model)throws Exception
-   {
-	   
-	   List<BbsDTOnorm>dtoList=null;
-	   String excelName="";
-	   
-	/*옵션조건으로 검색된 페이지 정보 */
-	   if(request.getParameter("option_cp")!=null)
-	   {
-			   String option       =  request.getParameter("option");
-			   String option_value =  request.getParameter("option_value");
-			   String src_cp       =  request.getParameter("option_cp");
-			   excelName=URLEncoder.encode("bowTest_bbs_게시판_"+option+":"+option_value+src_cp+"페이지 결과 입니다.","UTF-8");
-			   
-		  dtoList=bbsDao.searchingContents_normal(option,option_value,Integer.parseInt(src_cp));
-	   }
-    /*일반 조건의 페이지 정보*/
-	   else
-	   {
-		      String cp = request.getParameter("cp");
-		      excelName=URLEncoder.encode("bowTest_bbs_게시판_"+cp+"페이지 결과 입니다.","UTF-8");
-		 
-		 dtoList =bbsDao.bbsList_normal(Integer.parseInt(cp));		
-	   }
-	   
-	   
-	   model.put("excelList", dtoList);
-	   model.put("target", excelName);
-	   
-	   return "excelView";
-	   
-   }
     
+	@RequestMapping("excelDown.bow")
+    public String excelTransform(@RequestParam String target , Map<String,Object> modelMap , HttpServletRequest req )throws Exception 
+    {
+         List<Object> list=  bbsService.getAllObjects(target, req);
+        
+        modelMap.put("target", req.getParameter("file"));
+        modelMap.put("excelList",list);
+    	return "excelView";
+    }
+   
 }

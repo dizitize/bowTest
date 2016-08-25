@@ -509,8 +509,8 @@
 							      <br>
 							      </div>
 							      <div style="margin-top:5px;">
-							      <input type="button" name="updateForm"  value="수정" onclick="sendSubmit(${dto.board_idx},'update','passwordV');">
-						          <input type="button" name="del_content" value="삭제" onclick="sendSubmit(${dto.board_idx},'delete','passwordV');">
+								      <input type="button" name="updateForm"  value="수정" onclick="sendSubmit(${dto.board_idx},'update','passwordV');">
+							          <input type="button" name="del_content" value="삭제" onclick="sendSubmit(${dto.board_idx},'delete','passwordV');">
 							      </div>
 							  </div>
 			    </form>  

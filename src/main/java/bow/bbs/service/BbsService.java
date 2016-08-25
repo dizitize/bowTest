@@ -1,5 +1,11 @@
 package bow.bbs.service;
 
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.web.bind.annotation.RequestParam;
+
 import bow.bbs.BbsDTOnorm;
 
 
@@ -21,5 +27,8 @@ public interface BbsService {
 
 	
 	public int passwordCheck(String board_idx , String password);
-
+	
+	/*Excel download*/
+    public List<Object> getAllObjects(@RequestParam String target, HttpServletRequest req);
+    
 }

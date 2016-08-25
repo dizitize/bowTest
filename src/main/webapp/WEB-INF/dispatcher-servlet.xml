@@ -87,7 +87,7 @@
       
       <!-- EXcel view resolver  -->
       
-      <bean id="excelView" class="bow.bbs.Excel"/>
+      <bean id="excelView" class="bow.bbs.ExcelView"/>
       
 	
 		 		  

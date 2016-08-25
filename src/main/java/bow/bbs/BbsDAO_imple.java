@@ -122,8 +122,17 @@ public class BbsDAO_imple implements BbsDAO_interface {
 	
 		 dto.setWriter(dto.getWriter().replaceAll("<","&lt;"));
 		 dto.setWriter(dto.getWriter().replaceAll(">","&gt;"));
+		
+ 
+		dto.setContent(dto.getContent().replaceAll("<","&lt;"));
+		 dto.setContent(dto.getContent().replaceAll(">","&gt;"));
+	/*	 dto.setContent(dto.getContent().replaceAll("\r\n","<br>"));*/
+	
+		 
 		return dto;
 	}
+
+	
 	
 	public List<BbsDTOnorm> bbsList_normal(int cp) {
 		
@@ -138,11 +147,11 @@ public class BbsDAO_imple implements BbsDAO_interface {
 	     {
              e.setSubject(e.getSubject().replaceAll("<","&lt;"));
              e.setSubject(e.getSubject().replaceAll(">","&gt;"));
-             e.setSubject(e.getSubject().replaceAll("\r\n","<br>"));
+             e.setSubject(e.getSubject().replaceAll("\r\n","<br/>"));
             
              e.setWriter(e.getWriter().replaceAll("<","&lt;"));
              e.setWriter(e.getWriter().replaceAll(">","&gt;"));
-             e.setWriter(e.getWriter().replaceAll("\r\n","<br>"));
+             e.setWriter(e.getWriter().replaceAll("\r\n","<br/>"));
 	     }
 		
 		return dtoList;
@@ -220,16 +229,45 @@ public class BbsDAO_imple implements BbsDAO_interface {
 	  	     }
 		
 		return dtoList;
-	
 	}
+	
+	
+	public List<Object> bbsListForExcel(int cp) {
+		
+		Map<String, Object>map = new HashMap<String, Object>();
+		map.put("cp", cp);
+		map.put("ls", ls);
+		return sqlMap.selectList("bbsListNormalExcel", map);
+	}
+	
+	public List<Object> list_option_src_Excel(String option , String option_value , int option_cp)
+	{
+		Map<String, Object>map = new HashMap<String, Object>();
+			map.put("option", option);
+			map.put("cp", option_cp);
+			map.put("ls", ls);
+			map.put("option_value", option_value);
+		
+		return sqlMap.selectList("boardSrcListNormal",map);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	public int srcTotalCnt(String option, String option_value) {
 		// TODO Auto-generated method stub
+	
 		Map<String,String> srcVO = new HashMap<String, String>();
-		System.out.println("srcCnt option:"+option);
-		
-		System.out.println("srcCnt option_src:"+option_value);
-		srcVO.put("option",option);
+
+System.out.println("srcCnt option:"+option);
+System.out.println("srcCnt option_src:"+option_value);
+
+        srcVO.put("option",option);
 		srcVO.put("option_value",option_value);
 		
 		return sqlMap.selectOne("boardSrcCntNormal",srcVO);

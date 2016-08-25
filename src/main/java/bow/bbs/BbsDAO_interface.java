@@ -52,4 +52,7 @@ public interface BbsDAO_interface {
 	    
 	    
 	    public int cmtPwdCheck(Long cmt_idx , Long password);
+
+  public List<Object>bbsListForExcel(int cp);
+  public List<Object> list_option_src_Excel(String option , String option_value , int option_cp);
 }
