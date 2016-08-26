@@ -27,7 +27,7 @@
   </c:choose> 
 <%--URI excel down  excel down  excel down  excel down  excel down --%>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
 <meta charset="UTF-8">
 <title>게시판 </title>

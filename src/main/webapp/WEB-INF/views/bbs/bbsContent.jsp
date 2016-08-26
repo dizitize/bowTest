@@ -12,7 +12,7 @@
   <c:param name="fromWhere">${option_cp}</c:param>
 </c:url>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
 <meta charset="UTF-8">
 <title>bow-content</title>
@@ -550,7 +550,7 @@
 		                 <div class="comment-box">
 		                     	<div class="comment-head">
 			                         <input type="text" class="input-writer" name="writer" oninput="fnChkByte(this,30,null,null)" placeholder="작성자" required>
-			                         <input type="password" name="password" oninput="fnChkByte(this,'9',null,'num')" maxlength="10" required style="display: block;"  placeholder="비밀번호">
+			                         <input type="password" name="password" oninput="fnChkByte(this,'9',null,'num')" maxlength="10" required style="display: block;"  placeholder="9 자리 숫자 암호 입력">
 		                        </div>
                         		<div class="comment-content">
                         		   <textarea name="content" style="width: 100%; height: 50px;" oninput="fnChkByte(this,'100','t',null)" required></textarea>

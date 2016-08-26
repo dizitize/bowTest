@@ -26,12 +26,12 @@ public class ExcelView extends AbstractExcelView{
 	 System.out.println("ExcelView에 들어옴");
 	 
 	 	String fileName =(String)request.getAttribute("fileName");
-	
-	 sheet = workbook.createSheet(fileName+"WorkSheet");
-	 sheet.setColumnWidth(20,30); 
+	 	
+	   sheet = workbook.createSheet(fileName+"WorkSheet");
+	   sheet.setColumnWidth(20,30); 
 	 
 	    String list[] = {"게시글 고유번호","작성자","제목","작성날짜","조회수","컨텐츠"};
-	    int index[] ={0,2,5,9,10,11};
+	    int index[] ={0,2,5,9,11,13};
 	  
 	  row = sheet.createRow(0);
 	  
@@ -62,10 +62,10 @@ public class ExcelView extends AbstractExcelView{
 			  row.createCell(1).setCellValue("총 개시물 수 :"+dtoList.size());
 		  }
 	  }
-	  
-	  response.setContentType("application/ms-excel; charset=utf-8");
+	  response.setContentType("application/vnd.ms-excel; charset=UTF-8");
 	  response.setCharacterEncoding("UTF-8");
-	  response.setHeader("Content-Disposition","attachment; filename="+URLEncoder.encode(fileName, "UTF-8"));
+	  response.setHeader("Content-Disposition","attachment; filename="+new String(fileName.getBytes("UTF-8"),"8859_1")+".xls");
+	  response.setHeader("Content-Description", "JSP Generated Data"); 
 	  
 	}
 }

@@ -1,4 +1,6 @@
 package bow.bbs.service;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -105,7 +107,7 @@ public class BbsService_imple implements BbsService {
 	}
 	
 	
-	public List<Object> getAllObjects(String target,HttpServletRequest req) {
+	public List<Object> getAllObjects(String target,HttpServletRequest req) throws UnsupportedEncodingException {
 	
 			List<Object> excelList =null;
 			String fileName="";
@@ -127,20 +129,29 @@ public class BbsService_imple implements BbsService {
 						
 					  excelList =bbsDao.list_option_src_Excel(option , option_value , option_cp);	
 					
-				     fileName ="Searched in Board of "+option+".  keyword: "+option_value+" result: "+excelList.size()+" page No."+option_cp;
-				}
+					   int swit = option.equals("subject")?1:0;
+					  
+					  switch(swit)
+					  {
+					  case 1:  fileName="Bow-tech_게시판_"+option_value+"으로_제목_검색_결과_"+option_cp+"_페이지"; break;
+					  case 0:  fileName="Bow-tech_게시판_"+option_value+"으로_작성자_검색_결과_"+option_cp+"_페이지"; break;
+					  default: fileName="Bow-tech_게시판_검색_조건_페이지"+option_cp;
+					  }
+					  
+				}     
 				else
 				{
 				    int cp = Integer.parseInt(req.getParameter("cp"));
 					
 					excelList=bbsDao.bbsListForExcel(cp);
 					
-					 fileName ="Board"+cp+"page";
+					 fileName ="Bow-tech_Board_게시판_검색_"+cp+"_페이지";
 					 System.out.println("그냥검색 엑셀");
 					 System.out.println("그냥 검색 페이지:"+cp);
 				}
 		}
-		 req.setAttribute("fileName", fileName);
+		 req.setAttribute("fileName",fileName);
+		 
 		 return  excelList;
 	}
 }

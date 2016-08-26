@@ -1,5 +1,6 @@
 package bow.bbs.service;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,6 +30,6 @@ public interface BbsService {
 	public int passwordCheck(String board_idx , String password);
 	
 	/*Excel download*/
-    public List<Object> getAllObjects(@RequestParam String target, HttpServletRequest req);
+    public List<Object> getAllObjects(@RequestParam String target, HttpServletRequest req) throws UnsupportedEncodingException;
     
 }
