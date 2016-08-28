@@ -16,6 +16,9 @@ local.properties
 .loadpath
 .recommenders
 
+# Dependency Spring version problems
+pom.xml
+
 # Eclipse Core
 .project
 
