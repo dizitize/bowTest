@@ -307,6 +307,12 @@ System.out.println("srcCnt option_src:"+option_value);
 		 sqlMap.insert("file_insert",map);
 	}
 	
+	public void insertFileDTO(FileDTO dto) {
+		
+		sqlMap.insert("file_insert_dto",dto);
+		
+	}
+	
 	public List<FileDTO> selectFile(int file_idx) {
 		// TODO Auto-generated method stub
 		return sqlMap.selectList("file_select",file_idx);

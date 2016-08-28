@@ -732,8 +732,11 @@ function charTest()
 </script>
  -->
 
+  <input type="file" name="file" multiple>
+  <input type="button" onclick="findFiles()" value="fil확인">
 <input type="button" onclick="javascript:al()" value="jsonDto 확인">
 <div id ="listDiv"></div>
 <div id="commonDiv"></div>
+
 </body>
 </html>

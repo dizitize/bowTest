@@ -30,6 +30,7 @@ import bow.bbs.FileDTO;
 import bow.bbs.FileUtil;
 import bow.bbs.Paging;
 import bow.bbs.service.BbsService;
+import bow.util.file.FileManager;
 
 @Controller
 public class BbsControllerNormal {
@@ -115,7 +116,7 @@ public class BbsControllerNormal {
     
     
     @RequestMapping("/bbsWriteNormal.bow")
-   	public ModelAndView write(HttpServletRequest req, BbsDTOnorm dto, RedirectAttributes rt) throws Exception
+   	public ModelAndView write(@RequestParam("file")List<MultipartFile> upload, HttpServletRequest req, BbsDTOnorm dto, RedirectAttributes rt) throws Exception
    	{
     	
    		ModelAndView mav = new ModelAndView();
@@ -133,14 +134,26 @@ public class BbsControllerNormal {
    						if(bbsDao.bbsWrite_normal(dto)==1)
    						{
    						  board_idx_animate=bbsDao.afterWriteNavi(dto);	 
+   						 
+   						  if(upload!=null)
+   						  {
+   							  /*사용자의 idx로 폴더를 구성한다. */
+   							  FileManager uploadz = new FileManager();
+   							  
+   							  List<FileDTO> files_to_db =uploadz.fileUpload(upload, board_idx_animate);
+   							  
+   							  for(int i=0; i<files_to_db.size(); i++)
+	   						   {
+	   				              bbsDao.insertFileDTO(files_to_db.get(i));
+	   				           }
+   						  }
    						  
-   						  List<Map<String,Object>> list = null;
-   						     
-   						  int count = 0 ;
-	   						  if(iterator.hasNext())
+   						  
+	   					/*	  if(iterator.hasNext())
 	   						  {
 	   							   FileUtil fileUtil = new FileUtil();
 	   						       System.out.println("들어온 파일 갯수"+ ++count);
+	   						       
 	   							   list=fileUtil.parseInsertFileInfo(req, board_idx_animate);
 	   						     
 			   						   for(int i=0, size=list.size(); i<size; i++)
@@ -148,9 +161,9 @@ public class BbsControllerNormal {
 			   				              bbsDao.inserFile(list.get(i));
 			   				           }
 	   						     
-	   					      }
+	   					      }*/
    					/*-------------------------------로그 기록용----------------------------------*/		
-   							MultipartFile multipartFile = null;
+   							/*MultipartFile multipartFile = null;
    							
    							while(iterator.hasNext())
    				   	   		{
@@ -165,7 +178,7 @@ public class BbsControllerNormal {
    						   		              System.out.println("- 실제 파일 이름     -"+multipartFile.getSize());
    						   		          System.out.println("---end------");
    						   	   		  }
-   				   	   		}
+   				   	   		}*/
    			        /*-------------------------------로그 기록용----------------------------------*/
    							
    						     mav.setViewName("redirect:/bbsListNormal.bow");
@@ -201,14 +214,13 @@ public class BbsControllerNormal {
     public void downloadFile(HttpServletResponse respo, FileDTO fileDto) throws IOException
     {
  	   byte fileyte[] = FileUtils.readFileToByteArray(new File("c:\\filez\\"+fileDto.getStored_file_name()));
- 	   
- 	    respo.setContentType("application/octet-stream");
- 	    respo.setContentLength(fileyte.length);
-        respo.setHeader("Content-Disposition","attachment; fileName=\""+ URLEncoder.encode(fileDto.getOrigin_file_name(),"utf-8"));
-        respo.getOutputStream().write(fileyte);
-        
-        respo.getOutputStream().flush();
-        respo.getOutputStream().close();
+	 	   
+	 	    respo.setContentType("application/octet-stream");
+	 	    respo.setContentLength(fileyte.length);
+	        respo.setHeader("Content-Disposition","attachment; fileName=\""+ URLEncoder.encode(fileDto.getOrigin_file_name(),"utf-8"));
+	        respo.getOutputStream().write(fileyte);
+         respo.getOutputStream().flush();
+         respo.getOutputStream().close();
     }
    
     
@@ -269,7 +281,6 @@ public class BbsControllerNormal {
 					   System.out.println(e.getFile_idx());
 					   System.out.println(e.getFile_size());
 				   }
-				   
 			   }
 		         mav.addObject("dto",dto);
 				 mav.addObject("comments",comments);
@@ -793,5 +804,5 @@ public class BbsControllerNormal {
         modelMap.put("excelList",list);
     	return "excelView";
     }
-   
+	
 }

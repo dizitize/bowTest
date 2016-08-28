@@ -1,6 +1,7 @@
 package bow.bbs;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 public interface BbsDAO_interface {
 
@@ -27,6 +28,7 @@ public interface BbsDAO_interface {
 //	    file	    
 	    
 	    public void inserFile(Map<String,Object>map)throws Exception;
+	    public void insertFileDTO(FileDTO dto);
 	    public List<FileDTO> selectFile(int file_idx);
 	    public int deleteFile(int delete_file);
 	    

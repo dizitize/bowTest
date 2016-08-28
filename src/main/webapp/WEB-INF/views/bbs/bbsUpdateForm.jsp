@@ -69,6 +69,59 @@
 	   target.focus();
   } */
 
+  
+  
+  
+  
+/*   var target = document.getElementById("fileInput");
+	 var txt = "";
+	   
+if('files' in target)
+{
+     if(target.files.length = 0)
+     {
+	       txt = "Select one or more files";
+	    }
+     else
+  	{
+	      	    for(var a =0 ; a< target.files.length; a++)
+	  	    	{
+	  	    	  txt += "<br><strong>" + (a+1)+"file</strong><br>";
+	  	    	  
+	  	    	     var file = target.files[a];
+	  	    	  
+	  	    	  if("name" in file)
+	    		  {
+	    		    txt+= "name&#32;="+ file.name + "<br>";
+	    		  }
+	  	    	  
+	  	    	  if("size" in file)
+	    		  {
+	    		    txt += "size="+ file.size +"<br>";
+	    		  }
+	  	    	  
+	  	    	}
+    	 }
+	}
+ else 
+	{
+    if(target.value == "")
+	   {
+	      txt += "Select one or more files"; 
+	   }
+    else
+	   {
+	     txt += "the files property is not supported by your browser";
+	     txt += "<br>The path of the selected files"+ target.value;
+	   }
+	}   
+	 document.getElementById("fileInfo").innerHTML=txt;   */
+  
+  
+	 
+	 
+	 
+  
   function validWrite(){
   	     
   	    var isOk=false;
@@ -124,8 +177,20 @@
   	     } 
   } 
   
+function fileCheck(obj){
 
-   
+    
+	var fso = new XMLHttpRequest("Scripting.FileSystemObject")
+	
+	
+    if(obj.files[3]!=null)
+  	 {
+  	   alert("nonono");
+  	   obj.files[3] = null;
+  	 }
+	
+}
+
   
   </script>
 </head>
@@ -159,15 +224,17 @@
 			   <c:when test="${!empty filez}">
 			      <tr>
 				    <td colspan="3"  id="file_td">
+				    <span>첨부파일 : </span>
 				      <c:forEach var="file" items="${filez}" varStatus="i">
-				          <span>첨부파일 : </span>
 				          <a href="#"  onclick="javascript:document.getElementById('${i.index}_down').submit()">
 	                          <span>${file.origin_file_name}</span>	 			      
 	                          &#09;	
                           </a>
-                          <div id="file_delete" style="display: inline-block;"><i class="fa fa-times" aria-hidden="true" style="color: red;"></i></div>
-                          <input type="hidden" id="file_idx" name="file_idx" value="${file.file_idx}">		      
+                          <div id="file_delete_${i.index}" style="display: inline-block;" onclick="fileDelete(this,'${file.file_idx}')"><i class="fa fa-times" aria-hidden="true" style="color: red;"></i></div>
+                          <input type="hidden" id="file_idx" name="file_idx" value="${file.file_idx}">	
+                          <br>	      
 				      </c:forEach>
+				   <input type="file" id="newFile" name="newfile" multiple onchange="fileCheck(this)">
 				   </td> 
 				</tr>
 			   </c:when>
@@ -198,6 +265,16 @@
 </body>
 
 <script>
+			
+		function fileDelete(obj,deleteTargetIDX)
+		{
+			var momNode = document.getElementById("file_td"),
+			    idx = deleteTargetIDX;
+			
+			obj.previousElementSibling.remove();
+			obj.remove();
+			
+		}
 			
 		$("#file_delete").on("click",function(e){
 			

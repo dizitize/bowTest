@@ -1,6 +1,5 @@
 package bow.bbs;
 
-import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 

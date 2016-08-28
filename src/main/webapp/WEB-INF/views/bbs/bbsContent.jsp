@@ -433,6 +433,8 @@
  			
  	}
  	 */
+ 	 
+ 	 
   </script>
 
 </head>
@@ -461,12 +463,13 @@
 			   </c:when>
 			   <c:when test="${!empty filez}">
 			      <tr>
-				    <td colspan="3">
+				    <td colspan="3">    
 				      <c:forEach var="file" items="${filez}" varStatus="i">
+				      
 				       <form action="fileDown.bow" id="${i.index}_down">
-				          <span>첨부파일 : </span>
+				        <c:if test="${i.index == 0}">첨부파일:</c:if>
 				          <a href="#" onclick="javascript:document.getElementById('${i.index}_down').submit()">
-	                          <span>${file.origin_file_name}</span>				      
+	                         <span>${file.origin_file_name}</span>				      
 	                          <span>${file.file_size} byte</span>		
                           </a>
                           <input type="hidden" name="file_idx" value="${file.file_idx}">		      

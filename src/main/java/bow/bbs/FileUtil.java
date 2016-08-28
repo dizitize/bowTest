@@ -9,6 +9,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -24,7 +26,12 @@ public class FileUtil {
 	
 	public List<Map<String,Object>>parseInsertFileInfo( HttpServletRequest req , int board_idx)throws Exception
 	{
+		
 		MultipartHttpServletRequest  multipartHttpServletRequest = (MultipartHttpServletRequest)req;
+		
+		
+	    	
+		
 		Iterator<String> iterator = multipartHttpServletRequest.getFileNames();
 		
 		System.out.println("파일유틸왔음");
@@ -73,6 +80,8 @@ public class FileUtil {
 				list.add(listMap);
 			}
 		}
+		
+		
 		
 		return list;
 	}

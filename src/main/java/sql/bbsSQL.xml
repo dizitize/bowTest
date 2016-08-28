@@ -239,6 +239,29 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     ]]>
   </insert>
 
+ <insert id="file_insert_dto" parameterType="fileDTO">
+   <![CDATA[
+     insert into mp_file 
+     (
+       file_idx,
+       board_idx,
+       origin_file_name,
+	   stored_file_name, 
+	   file_size,
+	   create_date
+     )
+     values
+     (
+       file_idx_seq.nextval,
+       #{board_idx},
+       #{origin_file_name},
+       #{stored_file_name},
+       #{file_size},
+       sysdate
+     )
+    ]]>
+ </insert>
+
  <select id="file_select" resultType="fileDTO">
      select * from mp_file where board_idx = #{board_idx} 
  </select>

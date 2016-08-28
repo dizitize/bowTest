@@ -1,7 +1,5 @@
 package bow.bbs.service;
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,7 +7,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import bow.bbs.BbsDAO_interface;
 import bow.bbs.BbsDTOnorm;
