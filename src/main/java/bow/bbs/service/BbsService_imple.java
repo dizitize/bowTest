@@ -123,26 +123,47 @@ public class BbsService_imple implements BbsService {
 						 System.out.println("검색:"+option);
 						 System.out.println("검색 조건:"+option_value);
 						 System.out.println("페이지:"+option_cp);
-						
-					  excelList =bbsDao.list_option_src_Excel(option , option_value , option_cp);	
-					
-					   int swit = option.equals("subject")?1:0;
-					  
-					  switch(swit)
-					  {
-					  case 1:  fileName="Bow-tech_게시판_"+option_value+"으로_제목_검색_결과_"+option_cp+"_페이지"; break;
-					  case 0:  fileName="Bow-tech_게시판_"+option_value+"으로_작성자_검색_결과_"+option_cp+"_페이지"; break;
-					  default: fileName="Bow-tech_게시판_검색_조건_페이지"+option_cp;
-					  }
+		  
+			 /*swit 1=제목으로 검색,  0=작성자로 검색*/
+			   int swit = option.equals("subject")?1:0;
+			  switch(swit)
+			  {
+			  case 1:  fileName="Bow-tech_게시판_"+option_value+"으로_제목_검색_결과_"; break;
+			  case 0:  fileName="Bow-tech_게시판_"+option_value+"으로_작성자_검색_결과_"; break;
+			  default: fileName="Bow-tech_게시판_검색_조건_페이지";
+			  }
+						 
+				    /* 0 : 현재 페이지  1: 현재부터 끝까지  2 : 전체페이지 */	
+		            int excel_opt =Integer.parseInt(req.getParameter("excel_opt"));
+		  
+					switch(excel_opt)
+				    {
+				       case 0: excelList = bbsDao.list_option_src_Excel(option , option_value , option_cp); 
+				               fileName+=option_cp+"페이지"; break;	
+				       case 1: excelList = bbsDao.list_option_src_to_end_Excel(option , option_value , option_cp); 
+				       		   fileName+=option_cp+"페이지부터_전체"; break;
+				       case 2: excelList = bbsDao.list_option_src_All_Excel(option , option_value , option_cp); 
+				               fileName+="전체"; break;
+				       default: excelList = null;
+				    }
+		            
 					  
 				}     
 				else
 				{
 				    int cp = Integer.parseInt(req.getParameter("cp"));
+				    
+	      /* 0 : 현재 페이지  1: 현재부터 끝까지  2 : 전체페이지 */		
+		 int excel_opt =Integer.parseInt(req.getParameter("excel_opt"));	
+				
+	    switch(excel_opt)
+	    {
+	       case 0: excelList=  bbsDao.bbsListForExcel(cp);  fileName ="Bow-tech_Board_게시판_"+cp+"_페이지"; break;
+	       case 1: excelList = bbsDao.bbsListForExcelToEnd(cp); fileName ="Bow-tech_Board_게시판_검색_"+cp+"_페이지부터_전체"; break;
+	       case 2: excelList = bbsDao.bbsListForAll(cp); fileName ="Bow-tech_Board_게시판_전체페이지"; break;
+	       default: excelList = null;
+	    }
 					
-					excelList=bbsDao.bbsListForExcel(cp);
-					
-					 fileName ="Bow-tech_Board_게시판_검색_"+cp+"_페이지";
 					 System.out.println("그냥검색 엑셀");
 					 System.out.println("그냥 검색 페이지:"+cp);
 				}

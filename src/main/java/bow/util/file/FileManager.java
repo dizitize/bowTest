@@ -14,11 +14,13 @@ import org.springframework.web.multipart.MultipartFile;
 import bow.bbs.CommonUtil;
 import bow.bbs.FileDTO;
 
-@Component("fileUtil")
+/*@Component("fileUtil")*/
 public class FileManager{
 
 public List<FileDTO> fileUpload(List< MultipartFile >uploadz , int board_idx) throws IOException{
-
+	
+	System.out.println("FileManager 임무착수");
+	
 	 List<FileDTO> fileResult = new ArrayList<FileDTO>(); 
 	 String path ="C:\\filez\\";
 	 File file = new File(path);
@@ -27,11 +29,23 @@ public List<FileDTO> fileUpload(List< MultipartFile >uploadz , int board_idx) th
 		{
 		  file.mkdirs();
 		}
+	 
+	 System.out.println("FILE-manager 1 단계");
+	 
 			 for(int a = 0 ; a < uploadz.size(); a++)
 			 {
 					 String  originName  = uploadz.get(a).getOriginalFilename();
-					 String  extension   = originName.substring(originName.lastIndexOf("."));
-				     String  stored_name =  CommonUtil.getRandomString()+extension;
+					 String  stored_name = "";
+					
+					 if(originName.lastIndexOf(".") == -1)
+					 {
+						   stored_name = CommonUtil.getRandomString();
+					 }
+					 else
+					 {
+						   stored_name =  CommonUtil.getRandomString()+originName.substring(originName.lastIndexOf("."));
+					 }
+					 
 				 
 			     FileDTO tempFileDto = new FileDTO();
 				 
@@ -51,7 +65,7 @@ public List<FileDTO> fileUpload(List< MultipartFile >uploadz , int board_idx) th
 			      
 			     fileResult.add(tempFileDto);
 			 }
-	
+	System.out.println("FileManager 임무완수");
 	 return fileResult;
  }
 	

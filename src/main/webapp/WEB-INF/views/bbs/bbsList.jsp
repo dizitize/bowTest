@@ -9,22 +9,34 @@
         <%-- s 리스트가 있으면서~ --%>
           <c:choose>
             <%-- 검색 조건 경우 --%>
-              <c:when test="${!empty option_cp&&!empty option_value}">
+              <c:when test="${!empty option_cp && !empty option_value}">
                        <c:param name="option" value="${option}"/>
                        <c:param name="option_value" value="${option_value}"/>
                        <c:param name="option_cp" value="${option_cp}"/>
                        <c:param name="target" value="file"/>
+                               <c:param name="excel_opt" value="0"/>
+                        <%-- 엑셀 일반 검색과 같은 현재위치 파라미터 이름으로 만들어 페이지 알려주기 위해서 --%>
+                        <c:set var= "excel_cp" value="${option_cp}"/>
               </c:when>
                <%-- 일반 리스트 경우 --%>
                <c:otherwise>
                        <c:param name="cp" value="${cp}"/>
                        <c:param name="target" value="file"/>
+                        <%-- 엑셀 검색조건과 같은 현재위치 파라미터 이름으로 만들어 페이지 알려주기 위해서 --%>
+                       <c:param name="excel_opt" value="0"/>                    
+                        <c:set var= "excel_cp" value="${cp}"/>
                </c:otherwise>
            </c:choose> 
      <%-- E 리스트가  있으면서 끝남~ --%>      
        </c:url>  
       </c:when>
   </c:choose> 
+  <c:url value="${excelDownURI}" var="excelFromAll">
+     <c:param name="excel_opt" value="1"/>
+  </c:url>
+  <c:url value="${excelFromAll}" var="excelAll">
+        <c:param name="excel_opt" value="2"/>
+  </c:url>
 <%--URI excel down  excel down  excel down  excel down  excel down --%>
 <!DOCTYPE html>
 <html lang="ko">
@@ -185,15 +197,42 @@
     		version : navigator.appVersion,
     		online : navigator.onLine
      }
+     
+     function selectOptExcel()
+     {
+    	 var excelDownSelect = window.open("excel_go.bow","","width=600,height=300");
+    	 
+    	/*  var content = document.getElementById("excelHidden");
+    	 
+    	 var content =  content.innerHTML; */
+    	 
+    	  /*   excelDownSelect.document.write(content);  */
+    	   /*  excelDownSelect.init('${excel_cp}'); */
+    	   
+     }
+     
+     /* 자식 popup에서 담아줄꺼여~ 그럼 받은거 option 받아서 붙이고 바로 보내장~ */
+     function setValue(option) {
+    	
+    	 /* 0 : 현재 페이지  1: 현재부터 끝까지  2 : 전체페이지 */
+      
+        var elem ;
+    	
+            option==0?document.getElementById("0").click():option==1?document.getElementById("1").click():document.getElementById("2").click();
+    	 console.log("click before");
+         console.log("click after");    
+    	}
 </script>
 </head>
 <body onload="onFocus()">
+ <form action="${excelDownURI}" name="excel_data">
+ </form>
  <div class="container" style="width:1500px;">
    <h5>BOW-TECH_BBS_TEST_1</h5>
  
     <table class="table table-bordered" style="table-layout:fixed;">
 	  <tr>
-		  <th colspan="7" align="center" style="padding-top:10px;">
+		  <th colspan="7" align="center" style="padding-top:10px; height: 80px;">
 	           <form action="boardSrcNormal.bow" method="post" name="optionSrc" onsubmit="return false;">	       
 		           <select name="option" style="height: 30px;">
 					         <option value="subject">제목</option>
@@ -209,8 +248,27 @@
 		           </c:if>
 		          <%-- Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel --%>
 				     <div style="display: inline-block; float: left;  ">
-				      &nbsp;&nbsp;<a href="${excelDownURI}"><i class="fa fa-file-excel-o fa-2x" aria-hidden="true"></i>&nbsp;<span>DOWNLOAD</span></a>
+				      
+				      <a href="#" onclick="selectOptExcel();">
+				      <i class="fa fa-file-excel-o fa-2x" aria-hidden="true"></i>
+				      &nbsp;
+				      <span>DOWNLOAD</span>
+				      </a>
 				    </div>
+				   <div style=" visibility: hidden;">
+				      <a href="${excelDownURI}" id="0"></a>
+				      <a href="${excelFromAll}" id="1"></a>
+				      <a href="${excelAll}" id="2"></a>
+				   </div>
+  				      <%--    <select name="excel_down_option">
+					       <option value="${excel_cp}">현재 페이지</option>
+					       <option value="00">현재 페이지부터 전체리스트</option>
+					       <option value="11">처음부터 전체</option>
+				         </select> --%>
+				         <%--  <i class="fa fa-file-excel-o fa-6x" aria-hidden="true"></i> --%>
+			       
+				   
+				  
 				  <%-- Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel --%> 
 		       </form>
 		   </th>

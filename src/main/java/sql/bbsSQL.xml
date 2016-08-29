@@ -19,7 +19,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  
  <!-- same normalsame normalsame normalsame normalsame normalsame normalsame normalsame normalsame normal  -->
  
-<select id="bbsList" resultType="bbsDTO">
+<!-- <select id="bbsList" resultType="bbsDTO">
  <![CDATA[
 		select rn , board_idx , subject , content, writer , 
 		       readnum, ref , lev , sunbun ,writedate		      
@@ -31,7 +31,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		)
         where rn >= (#{cp}-1)*#{ls}+1 and rn <= #{cp}*#{ls} 
  ]]>
-</select>
+</select> -->
 
 
 
@@ -188,6 +188,99 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  ]]>
 </select>
 
+<select id="bbsListToEndNormalExcel" resultType="bbsDTOnorm">
+ <![CDATA[
+          select (select count(*) from mp_file where board_idx =f.board_idx) as files,  f.* ,
+         ( select  case when list_se_idx=0 then to_char(list_idx) else to_char(list_idx)||' - '||to_char(list_se_idx) end   
+	                  from   
+				    (
+				        select 
+				              a_a.board_idx , a_a.ref , a_a.lev ,a_a.lev_me , a_a.lev_point, g_g.rn as list_idx ,          
+				              (select count(ref) from board where ref =a_a.ref and sunbun>=a_a.sunbun and a_a.lev != 0)as list_se_idx
+				               from 
+				                  board a_a,
+				                  (
+				                    select row_number() over (order by ref) as rn , ref 
+				                    from (select ref from board where lev=0) 
+				                    order by rn desc
+				                   )g_g
+				               where a_a.ref =g_g.ref 
+				               order by a_a.ref desc , a_a.sunbun asc
+				    )
+				    where ref=f.ref and lev=f.lev-1 and lev_me=f.lev_point 
+                ) as list_idx_pointer  
+   from
+    (
+     select t.* ,rownum as inx 
+      from
+       (select 
+          a.content ,a.board_idx , a.subject ,a.writer, a.ref , a.lev, a.lev_me , a.lev_point, a.sunbun , g.rn as list_idx ,
+          (select count(*)from comment_board where board_idx=a.board_idx)as news,
+          (select count(ref) from board where ref =a.ref and sunbun>=a.sunbun and a.lev != 0)as list_se_idx,
+          to_char(a.writedate,'yyyy"년 "mm"월 "dd"일  " hh24"시 "mm"분"') as datechar,
+          a.writedate ,a.readnum         
+           from 
+              board a,
+              (
+                select row_number() over (order by ref) as rn , ref 
+                from (select ref from board where lev=0) 
+                order by rn desc
+               )g
+           where a.ref =g.ref 
+           order by a.ref desc , a.sunbun asc
+         )t
+       )f
+       where inx >= (#{cp}-1)*#{ls}+1  
+
+ ]]>
+</select>
+<select id="bbsListAll" resultType="bbsDTOnorm">
+ <![CDATA[
+          select (select count(*) from mp_file where board_idx =f.board_idx) as files,  f.* ,
+         ( select  case when list_se_idx=0 then to_char(list_idx) else to_char(list_idx)||' - '||to_char(list_se_idx) end   
+	                  from   
+				    (
+				        select 
+				              a_a.board_idx , a_a.ref , a_a.lev ,a_a.lev_me , a_a.lev_point, g_g.rn as list_idx ,          
+				              (select count(ref) from board where ref =a_a.ref and sunbun>=a_a.sunbun and a_a.lev != 0)as list_se_idx
+				               from 
+				                  board a_a,
+				                  (
+				                    select row_number() over (order by ref) as rn , ref 
+				                    from (select ref from board where lev=0) 
+				                    order by rn desc
+				                   )g_g
+				               where a_a.ref =g_g.ref 
+				               order by a_a.ref desc , a_a.sunbun asc
+				    )
+				    where ref=f.ref and lev=f.lev-1 and lev_me=f.lev_point 
+                ) as list_idx_pointer  
+   from
+    (
+     select t.* ,rownum as inx 
+      from
+       (select 
+          a.content ,a.board_idx , a.subject ,a.writer, a.ref , a.lev, a.lev_me , a.lev_point, a.sunbun , g.rn as list_idx ,
+          (select count(*)from comment_board where board_idx=a.board_idx)as news,
+          (select count(ref) from board where ref =a.ref and sunbun>=a.sunbun and a.lev != 0)as list_se_idx,
+          to_char(a.writedate,'yyyy"년 "mm"월 "dd"일  " hh24"시 "mm"분"') as datechar,
+          a.writedate ,a.readnum         
+           from 
+              board a,
+              (
+                select row_number() over (order by ref) as rn , ref 
+                from (select ref from board where lev=0) 
+                order by rn desc
+               )g
+           where a.ref =g.ref 
+           order by a.ref desc , a.sunbun asc
+         )t
+       )f
+        
+
+ ]]>
+</select>
+
 
 <select id="bbsContentNormal" parameterType="int" resultType="bbsDTOnorm">
     select board_idx, subject, content, ref, lev, sunbun, writer, readnum, to_char(writedate,'yyyy"년 " mm"월" dd"일   "hh24"시 "mm"분"') as datechar,
@@ -270,12 +363,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
      delete from mp_file where file_idx = #{file_idx} 
  </delete>
 
+<select id="select_file_one" parameterType="int" resultType="fileDTO">
+   select * from mp_file where file_idx=#{file_idx}
+</select>
+
 
 <select id="passwordConfirm" parameterType="map" resultType="int">
 
    select count(*) from board where password = #{password} and board_idx =#{board_idx}
 
 </select>
+
+
 
 <select id="pwdCheckNormal" parameterType="java.util.Map" resultType="int">
 
@@ -416,6 +515,44 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
       )c
       where  rr >= (( #{cp}-1)*#{ls} )+1 and rr <=#{cp}*#{ls}  
         
+ ]]>
+ </select>
+ <select id="boardSrcListToEndNormal" parameterType="map" resultType="bbsDTOnorm">
+ <![CDATA[
+     select * from 
+     (
+      select rownum as rr , rn as list_idx, board_idx , subject , writer , content, readnum , lev ,writedate , datechar, 
+       (select count(*) from comment_board where board_idx = b.board_idx ) as news ,
+       (select count(*) from mp_file where board_idx =b.board_idx) as files
+		from 
+		(
+		    select rownum as rn ,a.*, to_char(a.writedate,'yyyy-mm-dd hh24:mm') as datechar
+		    from
+		   (select * from board where ${option} like '%'||#{option_value}||'%' 
+		   order by writedate )a
+		    order by rownum desc
+		)b        
+      )c
+      where  rr >= (( #{cp}-1)*#{ls} )+1  
+        
+ ]]>
+ </select>
+ <select id="boardSrcListAllNormal" parameterType="map" resultType="bbsDTOnorm">
+ <![CDATA[
+     select * from 
+     (
+      select rownum as rr , rn as list_idx, board_idx , subject , writer , content, readnum , lev ,writedate , datechar, 
+       (select count(*) from comment_board where board_idx = b.board_idx ) as news ,
+       (select count(*) from mp_file where board_idx =b.board_idx) as files
+		from 
+		(
+		    select rownum as rn ,a.*, to_char(a.writedate,'yyyy-mm-dd hh24:mm') as datechar
+		    from
+		   (select * from board where ${option} like '%'||#{option_value}||'%' 
+		   order by writedate )a
+		    order by rownum desc
+		)b        
+      )c
  ]]>
  </select>
  

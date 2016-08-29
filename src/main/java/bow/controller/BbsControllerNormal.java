@@ -3,6 +3,7 @@ package bow.controller;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +28,6 @@ import bow.bbs.BbsDAO_interface;
 import bow.bbs.BbsDTOnorm;
 import bow.bbs.CommentDTO;
 import bow.bbs.FileDTO;
-import bow.bbs.FileUtil;
 import bow.bbs.Paging;
 import bow.bbs.service.BbsService;
 import bow.util.file.FileManager;
@@ -213,12 +213,14 @@ public class BbsControllerNormal {
     @RequestMapping(value="/fileDown.bow")
     public void downloadFile(HttpServletResponse respo, FileDTO fileDto) throws IOException
     {
- 	   byte fileyte[] = FileUtils.readFileToByteArray(new File("c:\\filez\\"+fileDto.getStored_file_name()));
+ 	   byte fileByte[] = FileUtils.readFileToByteArray(new File("c:\\filez\\"+fileDto.getStored_file_name()));
 	 	   
 	 	    respo.setContentType("application/octet-stream");
-	 	    respo.setContentLength(fileyte.length);
+	 	    respo.setContentLength(fileByte.length);
+	 	    
 	        respo.setHeader("Content-Disposition","attachment; fileName=\""+ URLEncoder.encode(fileDto.getOrigin_file_name(),"utf-8"));
-	        respo.getOutputStream().write(fileyte);
+	       
+	        respo.getOutputStream().write(fileByte);
          respo.getOutputStream().flush();
          respo.getOutputStream().close();
     }
@@ -354,59 +356,78 @@ public class BbsControllerNormal {
     
     
     @RequestMapping("/bbsUpdateNormal.bow")
-	public ModelAndView contentUpdate(HttpServletRequest req, BbsDTOnorm dto, FileDTO fileDto) throws Exception
+	public ModelAndView contentUpdate(@RequestParam("file")List<MultipartFile> upload ,HttpServletRequest req, BbsDTOnorm dto, FileDTO fileDto) throws Exception
 	{
 		ModelAndView mav = new ModelAndView();
 		MultipartHttpServletRequest multipartHttpServletRequest =(MultipartHttpServletRequest)req;
    		
-		                              
+		
+		for(MultipartFile e : upload)
+		{
+			System.out.println(e.getName());
+		}
 				if(req.getMethod().equals("POST"))
 				{	
 						if(dto!=null)
 						{ 
+							
+							
 							   mav.addObject("cp", bbsDao.pageNavi(dto.getBoard_idx()));
 							   
 							   /*삭제요청이 있는 file 내역 삭제 */
-							   String delete_idx = req.getParameter("deleted_file_idx");
+							   String[] deleteTarget = req.getParameterValues("deleted_file_idx");
+							 
+							   if(deleteTarget!=null)
+							   {
+									   for(int a = 0 ; a< deleteTarget.length; a ++ )
+									   {
+										 System.out.println("삭제 idx: "+deleteTarget[a]);
+										 
+										 FileDTO f = bbsDao.selectOnefile(Integer.parseInt(deleteTarget[a])); 
+										 
+										 String file_path ="c:\\filez\\";
+									  
+									    /*실제 파일삭제*/
+											 File deletefile = new File (file_path+f.getStored_file_name());
+											      deletefile.delete();
+									
+								       /*파일 DB 삭제*/
+											bbsDao.deleteFile(Integer.parseInt(deleteTarget[a]));
+									   }
+							   }
+                              
 							   
-                               if(delete_idx!=null)
-                               {
-                                    List<FileDTO> fileList =bbsDao.selectFile(dto.getBoard_idx());                	   
-                               
-                                    String filePath = "C:\\filez\\";
-                                    
-                                    for(FileDTO f : fileList)
-                                    {
-                                    	String deleteTarget =filePath+f.getStored_file_name();
-                                    	
-                                      	File deleteFile = new File(deleteTarget);
-                                    	
-                                    	deleteFile.delete();
-                                    }
-                                    
-                                     bbsDao.deleteFile(Integer.parseInt(delete_idx));
-                               
-                               }
-								   /*해당 board_idx 의 파일 정보 가져온다 
-								           해당 정보는 db에서 삭제 */
-                               Iterator<String> iterator = multipartHttpServletRequest.getFileNames();
-                               List<Map<String,Object>> list = null;
-     						     
-        						  int count = 0 ;
-     	   						  if(iterator.hasNext())
-     	   						  {
-     	   							  System.out.println("있구낭`~~");
-     	   							   FileUtil generator = new FileUtil();
-                                       list =generator.parseInsertFileInfo(req, dto.getBoard_idx());
-     	   						       
-                                       System.out.println("들어온 파일 갯수"+ ++count);
-     	   						     
-     			   						   for(int i=0, size=list.size(); i<size; i++)
-     			   						   {
-     			   				              bbsDao.inserFile(list.get(i));
-     			   				           }
-     	   					      }
-							
+							   List<FileDTO> list = new ArrayList<FileDTO>();
+     						   
+							   try{
+								   
+							   
+							   if(upload!=null)
+							   {
+								   
+								   FileManager manager = new FileManager();
+	     	   					
+								   for(MultipartFile e:upload)
+	     	   						{
+	     	   							System.out.println("오리지널이름: "+e.getOriginalFilename());
+	     	   						}
+								   
+	        						list= manager.fileUpload(upload , dto.getBoard_idx());    
+	        						
+	     			   						   for(int i=0, size=list.size(); i<size; i++)
+	     			   						   {
+	     			   							  System.out.println("파일이 새로 들어왔어"+list.get(i).getOrigin_file_name());
+	     			   							  bbsDao.insertFileDTO(list.get(i));   
+	     			   				           }
+							   }
+							   
+							   }
+							   catch(Exception e)
+							   {
+								   e.printStackTrace();
+								   System.out.println("문제가 터진곳은 저장하는 곳에서 이당~");
+							   }
+							   
 									if(bbsDao.updateContent_normal(dto)==1)
 									{
 										mav.addObject("cp", bbsDao.pageNavi(dto.getBoard_idx()));
@@ -793,13 +814,20 @@ public class BbsControllerNormal {
     	return returnValue ;
     	
     }
-    
+    @RequestMapping("excel_go.bow")
+    public String excelOpt(){
+    	
+    	return "bbs/excelOpt";
+    }
     
 	@RequestMapping("excelDown.bow")
     public String excelTransform(@RequestParam String target , Map<String,Object> modelMap , HttpServletRequest req )throws Exception 
     {
          List<Object> list=  bbsService.getAllObjects(target, req);
-        
+       String test =req.getParameter("excel_opt");
+       
+       System.out.println("excel_test no :"+test);
+       
         modelMap.put("target", req.getParameter("file"));
         modelMap.put("excelList",list);
     	return "excelView";

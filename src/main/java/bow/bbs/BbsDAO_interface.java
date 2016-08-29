@@ -30,6 +30,7 @@ public interface BbsDAO_interface {
 	    public void inserFile(Map<String,Object>map)throws Exception;
 	    public void insertFileDTO(FileDTO dto);
 	    public List<FileDTO> selectFile(int file_idx);
+	    public FileDTO selectOnefile(int file_idx);
 	    public int deleteFile(int delete_file);
 	    
 	    
@@ -56,5 +57,10 @@ public interface BbsDAO_interface {
 	    public int cmtPwdCheck(Long cmt_idx , Long password);
 
   public List<Object>bbsListForExcel(int cp);
+  public List<Object>bbsListForExcelToEnd(int cp);
+  public List<Object>bbsListForAll(int cp);
+  
   public List<Object> list_option_src_Excel(String option , String option_value , int option_cp);
+  public List<Object> list_option_src_to_end_Excel(String option , String option_value , int option_cp);
+  public List<Object> list_option_src_All_Excel(String option , String option_value , int option_cp);
 }

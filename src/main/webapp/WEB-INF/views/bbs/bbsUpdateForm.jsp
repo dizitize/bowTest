@@ -230,18 +230,17 @@ function fileCheck(obj){
 	                          <span>${file.origin_file_name}</span>	 			      
 	                          &#09;	
                           </a>
-                          <div id="file_delete_${i.index}" style="display: inline-block;" onclick="fileDelete(this,'${file.file_idx}')"><i class="fa fa-times" aria-hidden="true" style="color: red;"></i></div>
-                          <input type="hidden" id="file_idx" name="file_idx" value="${file.file_idx}">	
-                          <br>	      
+                          <div id="file_delete_${i.index}" style="display: inline-block;" onclick="fileDelete(this,'${file.file_idx}','${i.index}')"><i class="fa fa-times" aria-hidden="true" style="color: red;"></i></div>
+                            
 				      </c:forEach>
-				   <input type="file" id="newFile" name="newfile" multiple onchange="fileCheck(this)">
+				   <input type="file" id="newFile" name="file" onchange="fileCheck(this)" multiple >
 				   </td> 
 				</tr>
 			   </c:when>
 			   <c:otherwise>
 			     <tr>
 				    <td colspan="3" >
-			          <input type="file" name="file">
+			          <input type="file" name="file" multiple>
 			        </td>
 			     </tr>
 			   </c:otherwise>
@@ -268,19 +267,28 @@ function fileCheck(obj){
 			
 		function fileDelete(obj,deleteTargetIDX)
 		{
+			
 			var momNode = document.getElementById("file_td"),
 			    idx = deleteTargetIDX;
 			
 			obj.previousElementSibling.remove();
 			obj.remove();
 			
+			var deleted_idx_element = document.createElement("INPUT");
+			    deleted_idx_element.setAttribute("name", "deleted_file_idx");
+			    deleted_idx_element.setAttribute("type", "hidden");
+			    deleted_idx_element.setAttribute("value",deleteTargetIDX);
+			    
+			    momNode.appendChild(deleted_idx_element);
+			    
+			   
 		}
-			
+	/* 		
 		$("#file_delete").on("click",function(e){
 			
 			e.preventDefault();
 			
-			/*삭제 의사를 물어봄 true or false  */
+		
 			var bool =confirm("첨부 파일을 삭제 하시겠습니까?");
 			
 			if(bool)
@@ -307,8 +315,8 @@ function fileCheck(obj){
 		           momNode.appendChild(deleted_idx);
 			}
           			
-		});	  
-			
+		});	   
+		*/	
 </script>
 
  <script>

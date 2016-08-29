@@ -239,6 +239,19 @@ public class BbsDAO_imple implements BbsDAO_interface {
 		map.put("ls", ls);
 		return sqlMap.selectList("bbsListNormalExcel", map);
 	}
+	public List<Object> bbsListForExcelToEnd(int cp) {
+		Map<String, Object>map = new HashMap<String, Object>();
+		map.put("cp", cp);
+		map.put("ls", ls);
+		return sqlMap.selectList("bbsListToEndNormalExcel",map);
+	}
+	public List<Object> bbsListForAll(int cp) {
+		Map<String, Object>map = new HashMap<String, Object>();
+		map.put("cp", cp);
+		map.put("ls", ls);
+		return sqlMap.selectList("bbsListAll",map);
+	}
+	
 	
 	public List<Object> list_option_src_Excel(String option , String option_value , int option_cp)
 	{
@@ -251,10 +264,25 @@ public class BbsDAO_imple implements BbsDAO_interface {
 		return sqlMap.selectList("boardSrcListNormal",map);
 	}
 	
+	public List<Object> list_option_src_to_end_Excel(String option, String option_value, int option_cp) {
+		Map<String, Object>map = new HashMap<String, Object>();
+		map.put("option", option);
+		map.put("cp", option_cp);
+		map.put("ls", ls);
+		map.put("option_value", option_value);
 	
+	return sqlMap.selectList("boardSrcListToEndNormal",map);
+	}
 	
+	public List<Object> list_option_src_All_Excel(String option, String option_value, int option_cp) {
+		Map<String, Object>map = new HashMap<String, Object>();
+		map.put("option", option);
+		map.put("cp", option_cp);
+		map.put("ls", ls);
+		map.put("option_value", option_value);
 	
-	
+	return sqlMap.selectList("boardSrcListAllNormal",map);
+	}
 	
 	
 	
@@ -310,12 +338,18 @@ System.out.println("srcCnt option_src:"+option_value);
 	public void insertFileDTO(FileDTO dto) {
 		
 		sqlMap.insert("file_insert_dto",dto);
-		
 	}
+
+	
 	
 	public List<FileDTO> selectFile(int file_idx) {
 		// TODO Auto-generated method stub
 		return sqlMap.selectList("file_select",file_idx);
+	}
+	
+	public FileDTO selectOnefile(int file_idx) {
+		// TODO Auto-generated method stub
+		return sqlMap.selectOne("select_file_one",file_idx);
 	}
 	
 	public int deleteFile(int delete_file)
