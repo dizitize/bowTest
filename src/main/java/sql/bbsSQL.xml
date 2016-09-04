@@ -143,8 +143,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <select id="bbsListNormalExcel" resultType="bbsDTOnorm">
  <![CDATA[
-          select (select count(*) from mp_file where board_idx =f.board_idx) as files,  f.* ,
-         ( select  case when list_se_idx=0 then to_char(list_idx) else to_char(list_idx)||' - '||to_char(list_se_idx) end   
+          select f.* ,
+         ( select case when list_se_idx=0 then to_char(list_idx) else to_char(list_idx)||' - '||to_char(list_se_idx) end as numbering
 	                  from   
 				    (
 				        select 
@@ -190,8 +190,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <select id="bbsListToEndNormalExcel" resultType="bbsDTOnorm">
  <![CDATA[
-          select (select count(*) from mp_file where board_idx =f.board_idx) as files,  f.* ,
-         ( select  case when list_se_idx=0 then to_char(list_idx) else to_char(list_idx)||' - '||to_char(list_se_idx) end   
+          select  f.* ,
+         ( select  case when list_se_idx=0 then to_char(list_idx) else to_char(list_idx)||' - '||to_char(list_se_idx) end  as list_idx_pointer
 	                  from   
 				    (
 				        select 
@@ -236,8 +236,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 </select>
 <select id="bbsListAll" resultType="bbsDTOnorm">
  <![CDATA[
-          select (select count(*) from mp_file where board_idx =f.board_idx) as files,  f.* ,
-         ( select  case when list_se_idx=0 then to_char(list_idx) else to_char(list_idx)||' - '||to_char(list_se_idx) end   
+          select   f.* ,
+         ( select  case when list_se_idx=0 then to_char(list_idx) else to_char(list_idx)||' - '||to_char(list_se_idx) end as list_idx_pointer
 	                  from   
 				    (
 				        select 
@@ -592,6 +592,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  
     select board_idx from board 
     where subject=#{subject} 
+          and content=#{content}
           and writer=#{writer} 
           and password=#{password}
  </select>

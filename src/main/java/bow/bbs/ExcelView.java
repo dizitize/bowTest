@@ -45,7 +45,22 @@ public class ExcelView extends AbstractExcelView{
 	  for(int rownum = 1 ,b =0; b < dtoList.size(); b++)
 	  {
           row = sheet.createRow(rownum++); 		  
-		  row.createCell(index[0]).setCellValue(dtoList.get(b).getBoard_idx());
+          
+          
+          /*  게시글 고유 번호가 아닌 view 에 뿌려지는 번호로
+           *   ${dto.list_idx}-${dto.list_se_idx}*/
+                  String numbering ="";
+          
+		          if(dtoList.get(b).getList_se_idx()!=0)
+		          {
+		        	  numbering=dtoList.get(b).getList_idx()+"-"+dtoList.get(b).getList_se_idx();
+		          }
+		          else
+		          {
+		        	  numbering +=dtoList.get(b).getList_idx();
+		          }
+          
+		  row.createCell(index[0]).setCellValue(numbering);
 		  row.createCell(index[1]).setCellValue(dtoList.get(b).getWriter());
 		  row.createCell(index[2]).setCellValue(dtoList.get(b).getSubject());
 		  row.createCell(index[3]).setCellValue(dtoList.get(b).getDatechar());

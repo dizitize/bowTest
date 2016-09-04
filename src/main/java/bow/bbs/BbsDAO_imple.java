@@ -356,4 +356,9 @@ System.out.println("srcCnt option_src:"+option_value);
 	{
 		return sqlMap.delete("file_delete", delete_file);
 	}
+	
+	public int deleteSFile(int delete_file) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

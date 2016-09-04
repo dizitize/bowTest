@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
  
 <%--URI excel down  excel down  excel down  excel down  excel down --%>
   <c:choose>
@@ -42,7 +43,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>게시판 </title>
+<title>게시판</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
@@ -200,8 +201,15 @@
      
      function selectOptExcel()
      {
-    	 var excelDownSelect = window.open("excel_go.bow","","width=600,height=300");
-    	 
+    	 var contentsLength = '${fn:length(bbsList)}';
+    
+    	 if(contentsLength == 0)
+    		 {
+    		   alert("현재 출력 할 게시물이 없습니다.");
+    		     return;
+    		 }
+    	 var excelDownSelect = window.open("excel_go.bow?cp=${excel_cp}","","width=500,height=400");
+    	     
     	/*  var content = document.getElementById("excelHidden");
     	 
     	 var content =  content.innerHTML; */
@@ -238,8 +246,8 @@
 					         <option value="subject">제목</option>
 					         <option value="writer">작성자</option>
 		            </select>
-		            <input type="text" name="option_value" style="height:30px; width:300px;" onkeypress="if(event.keyCode==13)validation();" value="${option_value}" onfocus="this.value=this.value" placeholder="빈칸없는 keyword 검색">     
-		            <input type="button" style="height:30px; width:70px;" id="submitBtn" value="검색" onclick="validation()">
+		 <input type="text" name="option_value" style="height:30px; width:300px;" onkeypress="if(event.keyCode==13)validation();" value="${option_value}" onfocus="this.value=this.value" placeholder="빈칸없는 keyword 검색">     
+		 <input type="button" style="height:30px; width:70px;" id="submitBtn" value="검색" onclick="validation()">
 		          
 				    <c:if test="${option_value ne null}">
 			            <span class="badge" style="background-color:red;font-size:15px;">
@@ -266,9 +274,6 @@
 					       <option value="11">처음부터 전체</option>
 				         </select> --%>
 				         <%--  <i class="fa fa-file-excel-o fa-6x" aria-hidden="true"></i> --%>
-			       
-				   
-				  
 				  <%-- Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel  Excel --%> 
 		       </form>
 		   </th>
@@ -335,7 +340,7 @@
                     </c:choose>
                      <c:choose>
                            <c:when test="${dto.news>0}">
-                           <span style="font-size: 17px;" class="subject_after" id="${dto.news}">
+                           <span style="font-size: 17px;" class="subject_after" id="subject_after_${dto.news}">
                                     ${dto.subject}
                                   <c:choose>
                                     <c:when test="${dto.files eq 1}">

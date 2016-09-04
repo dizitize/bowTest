@@ -4,7 +4,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>BBS write</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
@@ -41,7 +41,7 @@
  	        for(var a =0 ,temp; a< 3 ; a++)
         	{
         	       temp= inputArr[a].value;
-        	     alert(temp);
+        	    /*  alert(temp); */
         	       temp=  temp.replace(/^\s*/g,"");
 	               temp=  temp.replace(/\s*$/g,"");
 	               temp=  temp.replace(/\s+/g," ");
@@ -51,7 +51,7 @@
         	     if(temp==''|| temp==null)
        	    	 {
         	    	 var inputAttrName =inputArr[a].attributes[0].name;
-        	    	 alert(inputAttrName);
+        	    	/*  alert(inputAttrName); */
         	    	 inputArr[a].value='';
        	    	     inputArr[a].placeholder='필수 입력 사항 입니다.';
        	    	     isOk=false;

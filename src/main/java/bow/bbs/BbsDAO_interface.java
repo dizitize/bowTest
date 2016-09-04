@@ -32,6 +32,7 @@ public interface BbsDAO_interface {
 	    public List<FileDTO> selectFile(int file_idx);
 	    public FileDTO selectOnefile(int file_idx);
 	    public int deleteFile(int delete_file);
+	    public int deleteSFile(int delete_file);
 	    
 	    
 //	    NormalVersion 

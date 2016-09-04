@@ -3,7 +3,6 @@ package bow.controller;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -116,16 +114,13 @@ public class BbsControllerNormal {
     
     
     @RequestMapping("/bbsWriteNormal.bow")
-   	public ModelAndView write(@RequestParam("file")List<MultipartFile> upload, HttpServletRequest req, BbsDTOnorm dto, RedirectAttributes rt) throws Exception
+   	public ModelAndView write(@RequestParam(value="file" , required= false)List<MultipartFile> upload, HttpServletRequest req, BbsDTOnorm dto, RedirectAttributes rt) throws Exception
    	{
-    	
-   		ModelAndView mav = new ModelAndView();
-   		MultipartHttpServletRequest multipartHttpServletRequest =(MultipartHttpServletRequest)req;
-   		Iterator<String> iterator = multipartHttpServletRequest.getFileNames();
-   		
-   		int board_idx_animate  = 0;
-   		
-   		int counter =0;
+   		 ModelAndView mav = new ModelAndView();
+   		 Iterator<MultipartFile> iter = upload.iterator();
+   		 
+   		 int count =0 ;
+   		 int board_idx_animate  = 0;
    		
    		if(req.getMethod().equals("POST"))
    		{
@@ -135,52 +130,39 @@ public class BbsControllerNormal {
    						{
    						  board_idx_animate=bbsDao.afterWriteNavi(dto);	 
    						 
-   						  if(upload!=null)
-   						  {
-   							  /*사용자의 idx로 폴더를 구성한다. */
-   							  FileManager uploadz = new FileManager();
-   							  
-   							  List<FileDTO> files_to_db =uploadz.fileUpload(upload, board_idx_animate);
-   							  
-   							  for(int i=0; i<files_to_db.size(); i++)
-	   						   {
-	   				              bbsDao.insertFileDTO(files_to_db.get(i));
-	   				           }
-   						  }
+   						List<FileDTO> files_to_db = null;
    						  
-   						  
-	   					/*	  if(iterator.hasNext())
-	   						  {
-	   							   FileUtil fileUtil = new FileUtil();
-	   						       System.out.println("들어온 파일 갯수"+ ++count);
-	   						       
-	   							   list=fileUtil.parseInsertFileInfo(req, board_idx_animate);
-	   						     
-			   						   for(int i=0, size=list.size(); i<size; i++)
-			   						   {
-			   				              bbsDao.inserFile(list.get(i));
-			   				           }
-	   						     
-	   					      }*/
-   					/*-------------------------------로그 기록용----------------------------------*/		
-   							/*MultipartFile multipartFile = null;
-   							
-   							while(iterator.hasNext())
-   				   	   		{
-   				   	   		   multipartFile = multipartHttpServletRequest.getFile(iterator.next());
-   				   	   		   
-   						   	   		  if(multipartFile.isEmpty() == false)
-   						   	   		  {
-   						   	              System.out.println("---start------");
-   						   	                  System.out.println("  파일 순번          -"+counter+++"번");
-   						   		              System.out.println("- 파일 태그          -"+multipartFile.getName());
-   						   		              System.out.println("- 사이즈             -"+multipartFile.getSize());
-   						   		              System.out.println("- 실제 파일 이름     -"+multipartFile.getSize());
-   						   		          System.out.println("---end------");
-   						   	   		  }
-   				   	   		}*/
-   			        /*-------------------------------로그 기록용----------------------------------*/
-   							
+		   						while(iter.hasNext())
+		   				   		{
+		   				   		     System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
+		   				   		     System.out.println("파일이 들어왔음 빈 값으로 들어 올 수 도 있음"+ ++count+"개");
+		   				             
+		   				   	/*isEmpty = List 안에 Multipartfile 안에 내용이 있냐 없냐 null 체크로 안 되는 부분을 해결함*/
+		   				   		     if(iter.next().isEmpty())
+		   				   		     {
+		   				   		    	 System.out.println("MultipartFile isEmpty() true");
+		   				   		     }
+		   				   		     else
+		   				   		     {
+		   				   		    	 FileManager uploadz = new FileManager();
+		   				   		    	 /*리스트를 받아서 로컬경로에 저장하도록 보내줌*/
+		   				   		    	files_to_db =uploadz.fileUpload(upload, board_idx_animate); 
+		   				   		     }
+		   				   	         System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
+		   				   	         
+		   				   		}
+		   					/*fileManager가 업로드 할 데이터를 처리 하였다면 files_to_db는 NOT NULL 
+		   					데이커가 있다면 데이터 베이스 적재*/
+		   						if(files_to_db!=null)
+		   						{
+		   							for(int a = 0 ; a<files_to_db.size(); a++)
+						   		     {
+						   		       /*저장하고 나서 List<FileDTO>형식으로 전해 받은 정보를 데이터 베이스에 적재함*/ 
+						   		    	bbsDao.insertFileDTO(files_to_db.get(a));
+						   		     }
+		   						}
+		   						
+		   						 
    						     mav.setViewName("redirect:/bbsListNormal.bow");
    						     mav.addObject("cp", 1);
    						     /* rt.addFlashAttribute("ddd", "hello");*/
@@ -245,11 +227,10 @@ public class BbsControllerNormal {
              	mav.addObject("option_value", option_value);
              	mav.addObject("option",option);
 		 }
-		
 				try {
 					  board_idx= Integer.parseInt(req.getParameter("board_idx"));
 					   
-					  dto =bbsService.content_for_show(board_idx);
+					   dto =bbsService.content_for_show(board_idx);
 					  
 					   System.out.println(dto.getBoard_idx());
 					  
@@ -272,18 +253,9 @@ public class BbsControllerNormal {
 			  System.out.println("pagenavi:"+bbsDao.pageNavi(board_idx));
 			  
 			  List<FileDTO> files =bbsDao.selectFile(dto.getBoard_idx());
-			   
-			  if(files!=null)
-			   {
-				   mav.addObject("filez",files);  
 				   
-				   for(FileDTO e: files)
-				   {
-					   System.out.println(e.getOrigin_file_name());
-					   System.out.println(e.getFile_idx());
-					   System.out.println(e.getFile_size());
-				   }
-			   }
+				 mav.addObject("filez",files);  
+			  
 		         mav.addObject("dto",dto);
 				 mav.addObject("comments",comments);
 				 System.out.println("content cp값 끝무렵:");
@@ -356,80 +328,69 @@ public class BbsControllerNormal {
     
     
     @RequestMapping("/bbsUpdateNormal.bow")
-	public ModelAndView contentUpdate(@RequestParam("file")List<MultipartFile> upload ,HttpServletRequest req, BbsDTOnorm dto, FileDTO fileDto) throws Exception
+	public ModelAndView contentUpdate( @RequestParam(value="deleted_file_idx", required=false)String[] deleteTarget, 
+			                           @RequestParam(value="file",required=false)List<MultipartFile> upload ,
+			                           HttpServletRequest req, BbsDTOnorm dto, FileDTO fileDto ) throws Exception
 	{
 		ModelAndView mav = new ModelAndView();
-		MultipartHttpServletRequest multipartHttpServletRequest =(MultipartHttpServletRequest)req;
-   		
 		
-		for(MultipartFile e : upload)
-		{
-			System.out.println(e.getName());
-		}
 				if(req.getMethod().equals("POST"))
 				{	
 						if(dto!=null)
 						{ 
-							
-							
 							   mav.addObject("cp", bbsDao.pageNavi(dto.getBoard_idx()));
-							   
-							   /*삭제요청이 있는 file 내역 삭제 */
-							   String[] deleteTarget = req.getParameterValues("deleted_file_idx");
-							 
-							   if(deleteTarget!=null)
-							   {
-									   for(int a = 0 ; a< deleteTarget.length; a ++ )
-									   {
-										 System.out.println("삭제 idx: "+deleteTarget[a]);
-										 
-										 FileDTO f = bbsDao.selectOnefile(Integer.parseInt(deleteTarget[a])); 
-										 
-										 String file_path ="c:\\filez\\";
-									  
-									    /*실제 파일삭제*/
-											 File deletefile = new File (file_path+f.getStored_file_name());
-											      deletefile.delete();
-									
-								       /*파일 DB 삭제*/
-											bbsDao.deleteFile(Integer.parseInt(deleteTarget[a]));
-									   }
-							   }
-                              
-							   
-							   List<FileDTO> list = new ArrayList<FileDTO>();
-     						   
-							   try{
-								   
-							   
-							   if(upload!=null)
-							   {
-								   
-								   FileManager manager = new FileManager();
-	     	   					
-								   for(MultipartFile e:upload)
-	     	   						{
-	     	   							System.out.println("오리지널이름: "+e.getOriginalFilename());
-	     	   						}
-								   
-	        						list= manager.fileUpload(upload , dto.getBoard_idx());    
-	        						
-	     			   						   for(int i=0, size=list.size(); i<size; i++)
-	     			   						   {
-	     			   							  System.out.println("파일이 새로 들어왔어"+list.get(i).getOrigin_file_name());
-	     			   							  bbsDao.insertFileDTO(list.get(i));   
-	     			   				           }
-							   }
-							   
-							   }
-							   catch(Exception e)
-							   {
-								   e.printStackTrace();
-								   System.out.println("문제가 터진곳은 저장하는 곳에서 이당~");
-							   }
-							   
+							  
 									if(bbsDao.updateContent_normal(dto)==1)
 									{
+										 /*삭제요청이 있는 file 내역 삭제 */
+										 
+										     if(deleteTarget!=null)
+										     {
+												   for(int a = 0 ; a< deleteTarget.length; a ++ )
+												   {
+													 System.out.println("삭제 idx: "+deleteTarget[a]);
+													 
+												/*디비에 저장된 로컬 저장용 파일 이름을 select 해오는 목적*/
+													 FileDTO f = bbsDao.selectOnefile(Integer.parseInt(deleteTarget[a])); 
+													                /*위 select한 정보 추출 후 해당 파일은 삭제 한다 */
+														            bbsDao.deleteFile(Integer.parseInt(deleteTarget[a]));
+													 
+													 String file_path ="c:\\filez\\";
+												  
+											   /* 디비에서 가져온 로컬 저장 실제 파일이름을 가져와서 파일삭제*/
+														 File deletefile = new File (file_path+f.getStored_file_name());
+														      deletefile.delete();
+												   }
+										     }
+						    
+							     /*업로드 하는 파일이 있는 경우*/
+								  List<FileDTO> fileDtoz=null;	     
+								  
+								  Iterator<MultipartFile> iter = upload.iterator();
+								
+								  while(iter.hasNext())
+								  {
+									  if(!iter.next().isEmpty())
+									  {
+										  FileManager fileUploader = new FileManager();
+										  
+										  fileDtoz=fileUploader.fileUpload(upload, dto.getBoard_idx());
+									  }
+									  else
+									  {
+										  System.out.println("bbsUpdate 새로운 파일이 없습니다.");
+									  }
+								  }
+							  /*while문이 끝나고 fileManager가 local에 저장한 객체 정보를 
+							   *List<fileDto> 로반환 정보를 담았다면 데이터 베이스에 저장*/
+								  if(fileDtoz != null)
+								  {
+									  for(FileDTO e : fileDtoz)
+									  {
+                                        bbsDao.insertFileDTO(e);  											  
+									  }	
+								  }	
+										
 										mav.addObject("cp", bbsDao.pageNavi(dto.getBoard_idx()));
 										mav.setViewName("redirect:/bbsContentNormal.bow?board_idx="+dto.getBoard_idx());										  
 									}
@@ -815,15 +776,24 @@ public class BbsControllerNormal {
     	
     }
     @RequestMapping("excel_go.bow")
-    public String excelOpt(){
+    public ModelAndView excelOpt(HttpServletRequest req){
     	
-    	return "bbs/excelOpt";
+    	ModelAndView mav = new ModelAndView("bbs/excelOpt");
+    	 String cp =req.getParameter("cp");
+    	 
+    	 System.out.println("excel cp === > "+cp);
+    	 if(cp!=null)
+    	 {
+    		 mav.addObject("cp", cp);
+    	 }
+    	 
+    	return mav;
     }
     
 	@RequestMapping("excelDown.bow")
     public String excelTransform(@RequestParam String target , Map<String,Object> modelMap , HttpServletRequest req )throws Exception 
     {
-         List<Object> list=  bbsService.getAllObjects(target, req);
+         List<Object> list =  bbsService.getAllObjects(target, req);
        String test =req.getParameter("excel_opt");
        
        System.out.println("excel_test no :"+test);

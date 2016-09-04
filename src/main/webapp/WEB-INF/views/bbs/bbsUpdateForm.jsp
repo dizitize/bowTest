@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"> 
   
-<title>Insert title here</title>
+<title>BBS update</title>
 <script type="text/javascript" src="javascript/byteCheck.js"></script>
  <link rel="stylesheet" href="css/commons.css">
 <script>
